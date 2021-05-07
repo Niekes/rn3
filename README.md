@@ -1,4 +1,4 @@
-**Lucid** is a stand-alone, zero-dependency, fast and lightweight library to highlight text and find matches.
+**RN3** is a data visualization toolkit based on d3.js
 
 [![Codecov](https://img.shields.io/codecov/c/github/niekes/rn3)](https://app.codecov.io/gh/niekes/rn3)
 [![Travis (.org) branch](https://travis-ci.com/Niekes/rn3.svg?branch=master)](https://travis-ci.com/github/Niekes/rn3)
