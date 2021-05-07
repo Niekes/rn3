@@ -8,12 +8,6 @@
 [![npm bundle size](https://img.shields.io/bundlephobia/minzip/rn3)](https://bundlephobia.com/result?p=rn3)
 [![npm](https://img.shields.io/npm/v/rn3)](https://www.npmjs.com/package/rn3)
 
-<table>
-    <tr>
-        <td> <a target="_blank" href="https://codepen.io/niekes/pen/QWGJBKe"> <img src="assets/demo-1.gif"> </a> </td>
-    </tr>
-</table>
-
 # Installing
 
 ### Npm
