@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html style="height: 1000%">
+<head>
+    <title>RN3 - Data Visualization Toolkit</title>
+    <script type="text/javascript" src="./rn3.min.js"></script>
+</head>
+<body style="height: 1000%">
+    <div id="chart" style="height: 500px; width: 750px; border: 1px solid;" />
+
+<script type="text/javascript">
+// eslint-disable-next-line no-undef
+const barchart = new rn3.Barchart({
+    el: '#chart',
+});
+
+barchart.update({
+    values: [
+        { id: 'ÄÄÄÄÄÄggggg', value: 3, fill: 'skyblue' },
+        { id: 'ÉgÉgÉgÉg', value: 2, fill: 'deeppink' },
+        { id: 'cl', value: 1, fill: 'crimson' },
+    ],
+});
+
+// window.setTimeout(() => {
+//     barchart.update({
+//         values: [
+//             { id: 'a', value: 1, fill: 'skyblue' },
+//             { id: 'b', value: 2, fill: 'deeppink' },
+//             { id: 'c', value: 3, fill: 'crimson' },
+//         ],
+//     });
+//     barchart.off();
+// }, 1000);
+</script>
+</body>
+</html>
