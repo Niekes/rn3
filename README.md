@@ -19,7 +19,7 @@ npm i rn3 --save
 
 ### CDN
 ```html
-<script src="https://unpkg.com/rn3/dist/rn3.min.js"></script>
+<script src="https://unpkg.com/rn3/src/rn3.min.js"></script>
 ```
 
 # Demo
