@@ -1,6 +1,6 @@
 node_modules
 dist/
 coverage/
-src/lucid-search.*.*.js
-src/lucid-search.min.js
+src/rn3.*.*.js
+src/rn3.min.js
 lucid-search-**.**.tgz
