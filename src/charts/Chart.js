@@ -43,14 +43,18 @@ export default class Super {
         this.detachedContainer = select(document.createElement('custom'));
     }
 
-    mergeSettings(oldSettings, newSetting) {
+    mergeSettings = (oldSettings, newSetting) => {
         this.settings = {
             ...oldSettings,
             ...newSetting,
         };
     }
 
-    updateCanvas() {
+    getFill = d => d.fill;
+
+    getIdentifier = d => d.id;
+
+    updateCanvas = () => {
         this.canvas = updateCanvas.call(this);
 
         this.context = this.canvas.node().getContext('2d');
@@ -58,7 +62,7 @@ export default class Super {
         this.context.scale(2, 2);
     }
 
-    ioObserve() {
+    ioObserve = () => {
         this.observer = new IntersectionObserver((entries, observer) => {
             this.dispatch('intersectionObserver', {
                 entries,
@@ -69,7 +73,7 @@ export default class Super {
         this.observer.observe(document.querySelector(this.data.el));
     }
 
-    ioDisconnect() {
+    ioDisconnect = () => {
         if (this.observer) {
             this.observer.disconnect();
         }
@@ -79,7 +83,7 @@ export default class Super {
         }
     }
 
-    off(eventName, fn) {
+    off = (eventName, fn) => {
         const event = this.events[eventName];
 
         /*
@@ -103,12 +107,12 @@ export default class Super {
         }
     }
 
-    on(eventName, fn) {
+    on = (eventName, fn) => {
         this.events[eventName] = this.events[eventName] || [];
         this.events[eventName].push(fn);
     }
 
-    dispatch(eventName, data) {
+    dispatch = (eventName, data) => {
         let returnValue = null;
 
         if (this.events[eventName]) {

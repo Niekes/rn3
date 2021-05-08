@@ -15,22 +15,25 @@ const barchart = new rn3.Barchart({
 
 barchart.update({
     values: [
-        { id: 'ÄÄÄÄÄÄggggg', value: 3, fill: 'skyblue' },
+        { id: 'a', value: 3, fill: 'skyblue' },
         { id: 'ÉgÉgÉgÉg', value: 2, fill: 'deeppink' },
         { id: 'cl', value: 1, fill: 'crimson' },
     ],
 });
 
-// window.setTimeout(() => {
-//     barchart.update({
-//         values: [
-//             { id: 'a', value: 1, fill: 'skyblue' },
-//             { id: 'b', value: 2, fill: 'deeppink' },
-//             { id: 'c', value: 3, fill: 'crimson' },
-//         ],
-//     });
-//     barchart.off();
-// }, 1000);
+window.setTimeout(() => {
+    barchart.update({
+        values: [
+            { id: 'b', value: 2, fill: 'deeppink' },
+            { id: 'a', value: 1, fill: 'skyblue' },
+            { id: 'c', value: 3, fill: 'crimson' },
+            { id: 'd', value: 4, fill: 'crimson' },
+            { id: 'e', value: 5, fill: 'crimson' },
+            { id: 'f', value: 6, fill: 'crimson' },
+        ],
+    });
+    barchart.off();
+}, 10000);
 </script>
 </body>
 </html>

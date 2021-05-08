@@ -10,6 +10,7 @@ module.exports = () => ({
         contentBase: path.join(__dirname, 'src'),
         compress: true,
         port: 9000,
+        overlay: true,
     },
     entry: {
         [`${name}.min`]: pathToEntry,
@@ -27,6 +28,13 @@ module.exports = () => ({
                 loader: 'eslint-loader',
                 enforce: 'pre',
                 exclude: /node_modules/,
+            },
+            {
+                test: /.(js|jsx)$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: 'babel-loader',
+                },
             },
         ],
     },

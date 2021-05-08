@@ -1,14 +1,26 @@
 import {
     select,
-    timer,
     scaleBand,
     scaleLinear,
-    color,
 } from 'd3';
 
 import Chart from '../Chart';
 
 import defaultSettings from './default-settings';
+
+import {
+    drawXAxis,
+    drawYAxis,
+    render,
+} from '../../utils/canvas';
+
+import {
+    updateSelection,
+} from '../../utils/update-pattern';
+
+import {
+    transparentize,
+} from '../../utils/color';
 
 export default class Barchart extends Chart {
     constructor(data) {
@@ -37,7 +49,7 @@ export default class Barchart extends Chart {
             .range([this.height, 0]);
 
         /*
-            Compute domain
+            Compute domains
         */
         const domainX = this.settings.xScale.domain(updatedData.values);
         const domainY = this.settings.yScale.domain(updatedData.values);
@@ -49,139 +61,94 @@ export default class Barchart extends Chart {
         this.yScale.domain(domainY).range([this.height, 0]);
 
         /*
-            BARS
+            Create, update and remove bars
         */
-        const bars = this.detachedContainer
-            .selectAll('custom.bars')
-            .data(updatedData.values, d => d.id);
-
-        bars
-            .enter()
-            .append('custom')
-            .attr('class', 'bars')
-            .attr('x', this.setXPositionOfBars.bind(this))
-            .attr('y', this.getYScale0.bind(this))
-            .attr('fill', d => d.fill)
-            .attr('height', 0)
-            .attr('width', this.setWidthOfBars.bind(this))
-            .merge(bars)
-            .transition()
-            .duration(this.settings.transition.duration)
-            .ease(this.settings.transition.ease)
-            .attr('x', this.setXPositionOfBars.bind(this))
-            .attr('y', this.setYPositionOfBars.bind(this))
-            .attr('fill', d => d.fill)
-            .attr('height', this.setHeightOfBars.bind(this))
-            .attr('width', this.setWidthOfBars.bind(this));
-
-        bars
-            .exit()
-            .transition()
-            .duration(this.settings.transition.duration)
-            .ease(this.settings.transition.ease)
-            .attr('height', 0)
-            .attr('y', this.getYScale0.bind(this));
-
-        /*
-            X TICKS
-        */
-        const xTicks = this.detachedContainer
-            .selectAll('custom.x-ticks')
-            .data(updatedData.values, d => d.id);
-
-        xTicks
-            .enter()
-            .append('custom')
-            .attr('class', 'x-ticks')
-            .attr('x', this.setXPositionOfXTicks.bind(this))
-            .attr('y', this.getYScale0.bind(this))
-            .attr('fill', () => {
-                const c = color('#000');
-
-                c.opacity = 0;
-
-                return c;
-            })
-            .attr('height', 0)
-            .merge(xTicks)
-            .transition()
-            .duration(this.settings.transition.duration)
-            .ease(this.settings.transition.ease)
-            .attr('x', this.setXPositionOfXTicks.bind(this))
-            .attr('y', this.setYPositionOfXTicks.bind(this))
-            .attr('fill', '#000')
-            .attr('height', d => (d.value > 0
-                ? this.settings.xAxis.tickSize
-                : this.settings.xAxis.tickSize));
-
-        xTicks
-            .exit()
-            .transition()
-            .duration(this.settings.transition.duration)
-            .ease(this.settings.transition.ease)
-            .attr('fill', () => {
-                const c = color('#000');
-
-                c.opacity = 0;
-
-                return c;
-            })
-            .remove();
-
-        /*
-            Y TICKS
-        */
-        const yTicks = this.detachedContainer
-            .selectAll('custom.y-ticks')
-            .data(this.yScale.ticks(this.settings.yAxis.ticks));
-
-        yTicks
-            .enter()
-            .append('custom')
-            .attr('class', 'y-ticks')
-            .attr('x', this.setXPositionOfYTicks.bind(this))
-            .attr('y', this.setYPositionOfYTicks.bind(this))
-            .attr('fill', () => {
-                const c = color('#000');
-
-                c.opacity = 0;
-
-                return c;
-            })
-            .attr('width', 0)
-            .merge(yTicks)
-            .transition()
-            .duration(this.settings.transition.duration)
-            .ease(this.settings.transition.ease)
-            .attr('x', this.setXPositionOfYTicks.bind(this))
-            .attr('y', this.setYPositionOfYTicks.bind(this))
-            .attr('fill', '#000')
-            .attr('width', this.settings.yAxis.tickSize);
-
-        yTicks
-            .exit()
-            .transition()
-            .duration(this.settings.transition.duration)
-            .ease(this.settings.transition.ease)
-            .attr('fill', () => {
-                const c = color('#000');
-
-                c.opacity = 0;
-
-                return c;
-            })
-            .remove();
-
-        const d3timer = timer((elapsed) => {
-            this.draw();
-
-            if (elapsed > this.settings.transition.duration) {
-                d3timer.stop();
-            }
+        updateSelection.call(this, {
+            join: {
+                cssClass: 'bars',
+                data: updatedData.values,
+            },
+            enter: {
+                fill: this.getFill,
+                height: 0,
+                width: this.setWidthOfBars,
+                x: this.getXPositionOfBars,
+                y: this.getYScale0,
+            },
+            update: {
+                fill: this.getFill,
+                height: this.getHeightOfBars,
+                width: this.setWidthOfBars,
+                x: this.getXPositionOfBars,
+                y: this.getYPositionOfBars,
+            },
+            exit: {
+                height: 0,
+                y: this.getYScale0,
+                fill: this.getTransparentizeFill,
+            },
         });
+
+        /*
+            Create, update and remove x-ticks
+        */
+        updateSelection.call(this, {
+            join: {
+                cssClass: 'x-ticks',
+                data: updatedData.values,
+            },
+            enter: {
+                fill: transparentize(this.settings.xAxis.fill),
+                height: 0,
+                x: this.setXPositionOfXTicks,
+                y: this.getYScale0,
+            },
+            update: {
+                fill: this.settings.xAxis.fill,
+                height: this.getHeightOfXTicks,
+                x: this.setXPositionOfXTicks,
+                y: this.setYPositionOfXTicks,
+            },
+            exit: {
+                fill: transparentize(this.settings.xAxis.fill),
+                height: 0,
+                y: this.getYScale0,
+            },
+        });
+
+        /*
+            Create, update and remove y-ticks
+        */
+        updateSelection.call(this, {
+            join: {
+                cssClass: 'y-ticks',
+                data: this.yScale.ticks(this.settings.yAxis.ticks),
+                identifier: null,
+            },
+            enter: {
+                fill: transparentize(this.settings.yAxis.fill),
+                width: 0,
+                x: this.setXPositionOfYTicks,
+                y: this.setYPositionOfYTicks,
+            },
+            update: {
+                fill: this.settings.yAxis.fill,
+                width: this.settings.yAxis.tickSize,
+                x: this.setXPositionOfYTicks,
+                y: this.setYPositionOfYTicks,
+            },
+            exit: {
+                fill: transparentize(this.settings.yAxis.fill),
+            },
+        });
+
+        /*
+            Render on canvas
+        */
+        render(this.draw, this.settings.transition.duration);
     }
 
-    draw() {
+    draw = () => {
         this.context.clearRect(
             -this.settings.margin.left,
             -this.settings.margin.top,
@@ -209,84 +176,36 @@ export default class Barchart extends Chart {
             this.context.fill();
         });
 
-        this.context.textBaseline = 'middle';
-        this.context.textAlign = 'center';
-
-        const xTicks = this.detachedContainer.selectAll('custom.x-ticks');
-
-        xTicks.each((d, i, nodes) => {
-            const node = select(nodes[i]);
-
-            this.context.beginPath();
-            this.context.fillStyle = node.attr('fill');
-            this.context.moveTo(+node.attr('x'), +node.attr('y'));
-            this.context.lineTo(+node.attr('x'), +node.attr('y') + +node.attr('height'));
-            this.context.strokeStyle = node.attr('fill');
-            this.context.stroke();
-            this.context.fillText(
-                d.id,
-                +node.attr('x'),
-                d.value > 0
-                    ? +node.attr('y') + +node.attr('height') + this.settings.xAxis.tickSize
-                    : +node.attr('y') + +node.attr('height') - (this.settings.xAxis.tickSize * 2),
-            );
-        });
-
-        this.context.textAlign = 'right';
-
-        const yTicks = this.detachedContainer.selectAll('custom.y-ticks');
-
-        yTicks.each((d, i, nodes) => {
-            const node = select(nodes[i]);
-            this.context.beginPath();
-            this.context.fillStyle = node.attr('fill');
-            this.context.moveTo(+node.attr('x'), +node.attr('y'));
-            this.context.lineTo(+node.attr('x') + +node.attr('width'), +node.attr('y'));
-            this.context.strokeStyle = node.attr('fill');
-            this.context.stroke();
-            this.context.fillText(
-                d,
-                +node.attr('x') - +node.attr('width'),
-                +node.attr('y'),
-            );
-        });
+        drawXAxis.call(this);
+        drawYAxis.call(this);
     }
 
-    getYScale0() {
-        return this.yScale(0);
-    }
+    getYScale0 = () => this.yScale(0);
 
-    setXPositionOfBars(d) {
-        return this.xScale(d.id);
-    }
+    getXPositionOfBars = d => this.xScale(d.id);
 
-    setYPositionOfBars(d) {
-        return Math.min(this.getYScale0(), this.yScale(d.value));
-    }
+    getYPositionOfBars = d => Math.min(this.getYScale0(), this.yScale(d.value));
 
-    setWidthOfBars() {
-        return this.xScale.bandwidth();
-    }
+    setWidthOfBars = () => this.xScale.bandwidth();
 
-    setHeightOfBars(d) {
-        return Math.abs(this.yScale(d.value) - this.getYScale0());
-    }
+    getHeightOfBars = d => Math.abs(this.yScale(d.value) - this.getYScale0());
 
-    setXPositionOfXTicks(d) {
-        return this.xScale(d.id) + this.xScale.bandwidth() / 2;
-    }
+    getTransparentizeFill = d => transparentize(this.getFill(d));
 
-    setYPositionOfXTicks(d) {
-        return d.value > 0
-            ? this.yScale(0)
-            : this.yScale(0) - this.settings.xAxis.tickSize;
-    }
+    /*
+        TICKS
+    */
+    setXPositionOfXTicks = d => this.xScale(d.id) + this.xScale.bandwidth() / 2;
 
-    setXPositionOfYTicks() {
-        return this.xScale(0);
-    }
+    setYPositionOfXTicks = d => (d.value > 0
+        ? this.yScale(0)
+        : this.yScale(0) - this.settings.xAxis.tickSize);
 
-    setYPositionOfYTicks(d) {
-        return this.yScale(d);
-    }
+    setXPositionOfYTicks = () => 0;
+
+    setYPositionOfYTicks = d => this.yScale(d);
+
+    getHeightOfXTicks = d => (d.value > 0
+        ? this.settings.xAxis.tickSize
+        : this.settings.xAxis.tickSize)
 }
