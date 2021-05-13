@@ -49,7 +49,7 @@ const barchart = new rn3.Barchart({
 ```js
 const rn3 = require('rn3');
 
-const barchart = rn3.Barchart({
+const barchart = new rn3.Barchart({
     el: '#barchart',
 });
 ```
