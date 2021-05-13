@@ -27,18 +27,35 @@ npm i rn3 --save
 
 # Usage
 
-### Default (ES6)
+### ES6
 ```js
 import {
-    barchart3d,
+    Barchart,
 } from 'rn3';
 
-/*
-    ...
-*/
+const barchart = new Barchart({
+    el: '#barchart',
+});
 ```
-### Funding
+
+### Browser
+```js
+const barchart = new rn3.Barchart({
+    el: '#barchart',
+});
+```
+
+### Node (CommonJs)
+```js
+const rn3 = require('rn3');
+
+const barchart = rn3.Barchart({
+    el: '#barchart',
+});
+```
+
+# Funding
 <a href="https://www.buymeacoffee.com/niekes" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="70"></a>
 
-### License
+# License
 [BSD-3-Clause](https://github.com/Niekes/rn3/blob/master/LICENSE) © [Stefan Nieke](https://www.niekes.com)

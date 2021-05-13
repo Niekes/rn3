@@ -9,10 +9,10 @@ import {
 } from '../utils/canvas';
 
 import {
-    computeHeight,
     computeInnerHeight,
     computeInnerWidth,
-    computeWidth,
+    getHeight,
+    getWidth,
 } from '../utils/dimension';
 
 import uuid from '../utils/uuid';
@@ -38,8 +38,8 @@ export default class Super {
         /*
             Compute height & width
         */
-        const height = computeHeight(this.data.el);
-        const width = computeWidth(this.data.el);
+        const height = getHeight(this.data.el);
+        const width = getWidth(this.data.el);
 
         /*
             Compute inner height & inner width
@@ -85,8 +85,8 @@ export default class Super {
     getIdentifier = d => d.id;
 
     updateCanvas = () => {
-        const height = computeHeight(this.data.el);
-        const width = computeWidth(this.data.el);
+        const height = getHeight(this.data.el);
+        const width = getWidth(this.data.el);
 
         this.height = computeInnerWidth(height, this.settings.margin);
         this.width = computeInnerHeight(width, this.settings.margin);

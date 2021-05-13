@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Data Visualization Toolkit",
   "private": false,
-  "main": "src/index.js",
+  "main": "index.js",
   "scripts": {
     "test": "c8 --reporter=lcov tape -r esm ./tests/setup.js ./tests/**/*-test.js | tap-spec",
     "coverage": "c8 tape -r esm ./tests/setup.js ./tests/**/*-test.js | tap-spec && c8 report",

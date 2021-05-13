@@ -14,7 +14,7 @@ export default {
     },
     transition: {
         delay: null,
-        duration: 450 * 10,
+        duration: 450,
         ease: easeCubic,
     },
     intersectionObserverOptions: null,

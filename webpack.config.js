@@ -3,7 +3,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 const pkg = require('./package.json');
 
 const { name } = pkg;
-const pathToEntry = './src/index.js';
+const pathToEntry = './index.js';
 
 module.exports = () => ({
     devServer: {
