@@ -55,7 +55,7 @@
     "yargs": "^12.0.5"
   },
   "files": [
-    "/src/**.*.js"
+    "src/*"
   ],
   "dependencies": {
     "d3": "^6.7.0"
