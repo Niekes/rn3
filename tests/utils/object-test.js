@@ -4,10 +4,12 @@ import { has, isEmpty } from '../../src/utils/object';
 test('Check weather an object contains a key or not', (t) => {
     const obj = {
         a: '1',
+        b: null,
     };
 
     t.equals(has(obj, 'a'), true);
-    t.equals(has(obj, 'b'), false);
+    t.equals(has(obj, 'b'), true);
+    t.equals(has(obj, 'c'), false);
 
     t.end();
 });

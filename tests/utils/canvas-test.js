@@ -2,7 +2,7 @@ import { test } from 'tape';
 import { select } from 'd3';
 import { createCanvas } from '../../src/utils/canvas';
 
-test.only('Create and append canvas with correct attributes', (t) => {
+test('Create and append canvas with correct attributes', (t) => {
     select('body').html(null);
 
     const el = document.createElement('div');
