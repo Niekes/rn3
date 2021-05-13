@@ -3,14 +3,32 @@ import {
 } from 'd3';
 
 import {
-    addCanvas,
+    createCanvas,
     updateCanvas,
     createVirtualCanvas,
 } from '../utils/canvas';
 
+import {
+    computeHeight,
+    computeInnerHeight,
+    computeInnerWidth,
+    computeWidth,
+} from '../utils/dimension';
+
+import uuid from '../utils/uuid';
+
 export default class Super {
     constructor(data, settings) {
+        /*
+            Set id
+        */
+        this.id = uuid(`rn3-${this.constructor.name}`).toLowerCase();
+
+        /*
+            Set data
+        */
         this.data = data;
+
 
         /*
             Merge settings
@@ -18,19 +36,31 @@ export default class Super {
         this.mergeSettings(settings, this.data.settings);
 
         /*
-            Setup pubsub
+            Compute height & width
+        */
+        const height = computeHeight(this.data.el);
+        const width = computeWidth(this.data.el);
+
+        /*
+            Compute inner height & inner width
+        */
+        this.height = computeInnerWidth(height, this.settings.margin);
+        this.width = computeInnerHeight(width, this.settings.margin);
+
+        /*
+            Setup pubsub events
         */
         this.events = [];
 
         /*
             Setup canvas
         */
-        this.canvas = addCanvas.call(this);
+        this.canvas = createCanvas(this.data.el, this.id, height, width);
 
         /*
             Setup virtual canvas
         */
-        this.virtualCanvas = createVirtualCanvas.call(this);
+        this.virtualCanvas = createVirtualCanvas(this.data.el, height, width);
 
         /*
             Setup virtual context
@@ -55,7 +85,13 @@ export default class Super {
     getIdentifier = d => d.id;
 
     updateCanvas = () => {
-        this.canvas = updateCanvas.call(this);
+        const height = computeHeight(this.data.el);
+        const width = computeWidth(this.data.el);
+
+        this.height = computeInnerWidth(height, this.settings.margin);
+        this.width = computeInnerHeight(width, this.settings.margin);
+
+        this.canvas = updateCanvas(this.data.el, this.id, height, width);
 
         this.context = this.canvas.node().getContext('2d');
         this.context.translate(this.settings.margin.left * 2, this.settings.margin.top * 2);

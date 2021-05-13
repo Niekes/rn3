@@ -1,6 +1,6 @@
 import { test } from 'tape';
 import { select } from 'd3';
-import Chart from '../src/charts/Chart';
+import Chart from '../../src/charts/Chart';
 
 test('Super class of all charts should be initialzed correctly', (t) => {
     select('body').html(null);
@@ -25,12 +25,14 @@ test('Super class of all charts should be initialzed correctly', (t) => {
 
     t.equals(chart.width, 750);
     t.equals(chart.height, 500);
+    t.equals(chart.settings.margin.bottom, 0);
     t.equals(chart.settings.margin.top, 0);
     t.equals(chart.settings.margin.left, 0);
     t.equals(chart.settings.margin.right, 0);
     t.equals(typeof chart.on, 'function');
     t.equals(typeof chart.off, 'function');
     t.equals(typeof chart.dispatch, 'function');
+    t.equals(/^rn3-super-\w{5}$/.test(chart.id), true);
 
     t.end();
 });

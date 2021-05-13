@@ -1,0 +1,24 @@
+import { test } from 'tape';
+import { has, isEmpty } from '../../src/utils/object';
+
+test('Check weather an object contains a key or not', (t) => {
+    const obj = {
+        a: '1',
+    };
+
+    t.equals(has(obj, 'a'), true);
+    t.equals(has(obj, 'b'), false);
+
+    t.end();
+});
+
+test('Check weather an object is empty', (t) => {
+    const obj = {
+        a: '1',
+    };
+
+    t.equals(isEmpty(obj), false);
+    t.equals(isEmpty({}), true);
+
+    t.end();
+});
