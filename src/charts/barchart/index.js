@@ -143,15 +143,15 @@ export default class Barchart extends Chart {
         const bars = this.detachedContainer.selectAll('custom.bars');
 
         bars.each((d, i, nodes) => {
-            const node = select(nodes[i]);
+            const bar = select(nodes[i]);
 
             this.context.beginPath();
-            this.context.fillStyle = node.attr('fill');
+            this.context.fillStyle = bar.attr('fill');
             this.context.rect(
-                +node.attr('x'),
-                +node.attr('y'),
-                +node.attr('width'),
-                +node.attr('height'),
+                +bar.attr('x'),
+                +bar.attr('y'),
+                +bar.attr('width'),
+                +bar.attr('height'),
             );
             this.context.fill();
         });
