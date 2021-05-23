@@ -1,6 +1,6 @@
 /**
     @params {string} prefix
-    @returns {string} five-charcaters random string
+    @returns {string} five-characters random string
 */
 export default function uuid(prefix) {
     const randomString = Math

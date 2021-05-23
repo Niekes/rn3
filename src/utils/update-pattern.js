@@ -1,43 +1,27 @@
 import {
-    has,
-} from './object';
+    setMultiAttributes,
+} from './selection';
 
-export function setAttributes(selection, attrs) {
-    if (!attrs) return selection;
-
-    Object.keys(attrs).forEach((key) => {
-        selection.attr(key, attrs[key]);
-    });
-
-    return selection;
-}
-
-export function updateSelection(d) {
-    const {
-        transition,
-    } = this.settings;
-
+// eslint-disable-next-line import/prefer-default-export
+export function updateSelection(d, transition) {
     const el = d.join.element || 'custom';
     const css = d.join.cssClass;
-    const identifier = has(d.join, 'identifier')
-        ? d.join.identifier
-        : this.getIdentifier;
 
-    const joined = (d.join.parent || this.detachedContainer)
+    const joined = d.join.parent
         .selectAll(`${el}.${css}`)
-        .data(d.join.data, identifier);
+        .data(d.join.data, d.join.identity);
 
-    const s = setAttributes(
+    const s = setMultiAttributes(
         joined
             .enter()
             .append(el),
         {
             ...d.enter,
-            class: datum => (has(datum, 'css') && datum.css ? `${css} ${datum.css}` : css),
+            class: css,
         },
     );
 
-    setAttributes(
+    setMultiAttributes(
         s
             .merge(joined)
             .transition()
@@ -47,7 +31,7 @@ export function updateSelection(d) {
         d.update,
     );
 
-    setAttributes(
+    setMultiAttributes(
         joined
             .exit()
             .transition()

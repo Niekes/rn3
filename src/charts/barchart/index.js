@@ -63,10 +63,12 @@ export default class Barchart extends Chart {
         /*
             Create, update and remove bars
         */
-        updateSelection.call(this, {
+        updateSelection({
             join: {
                 cssClass: 'bars',
                 data: updatedData.values,
+                identity: this.getIdentity,
+                parent: this.detachedContainer,
             },
             enter: {
                 fill: this.getFill,
@@ -87,15 +89,17 @@ export default class Barchart extends Chart {
                 y: this.getYScale0,
                 fill: this.getTransparentizeFill,
             },
-        });
+        }, this.settings.transition);
 
         /*
             Create, update and remove x-ticks
         */
-        updateSelection.call(this, {
+        updateSelection({
             join: {
                 cssClass: 'x-ticks',
                 data: updatedData.values,
+                identity: this.getIdentity,
+                parent: this.detachedContainer,
             },
             enter: {
                 fill: transparentize(this.settings.xAxis.fill),
@@ -114,16 +118,17 @@ export default class Barchart extends Chart {
                 height: 0,
                 y: this.getYScale0,
             },
-        });
+        }, this.settings.transition);
 
         /*
             Create, update and remove y-ticks
         */
-        updateSelection.call(this, {
+        updateSelection({
             join: {
                 cssClass: 'y-ticks',
                 data: this.yScale.ticks(this.settings.yAxis.ticks),
                 identifier: null,
+                parent: this.detachedContainer,
             },
             enter: {
                 fill: transparentize(this.settings.yAxis.fill),
@@ -140,7 +145,7 @@ export default class Barchart extends Chart {
             exit: {
                 fill: transparentize(this.settings.yAxis.fill),
             },
-        });
+        }, this.settings.transition);
 
         /*
             Render on canvas
@@ -176,8 +181,8 @@ export default class Barchart extends Chart {
             this.context.fill();
         });
 
-        drawXAxis.call(this);
-        drawYAxis.call(this);
+        drawXAxis(this.context, this.detachedContainer.selectAll('custom.x-ticks'), this.settings);
+        drawYAxis(this.context, this.detachedContainer.selectAll('custom.y-ticks'), this.settings, this.height);
     }
 
     getYScale0 = () => this.yScale(0);

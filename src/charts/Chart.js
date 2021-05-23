@@ -82,7 +82,7 @@ export default class Super {
 
     getFill = d => d.fill;
 
-    getIdentifier = d => d.id;
+    getIdentity = d => d[this.settings.identity];
 
     updateCanvas = () => {
         const height = getHeight(this.data.el);
