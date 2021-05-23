@@ -1,7 +1,7 @@
 import { test } from 'tape';
 import { has, isEmpty } from '../../src/utils/object';
 
-test('Check weather an object contains a key or not', (t) => {
+test('Check whether an object contains a key or not', (t) => {
     const obj = {
         a: '1',
         b: null,
@@ -14,7 +14,7 @@ test('Check weather an object contains a key or not', (t) => {
     t.end();
 });
 
-test('Check weather an object is empty', (t) => {
+test('Check whether an object is empty', (t) => {
     const obj = {
         a: '1',
     };
