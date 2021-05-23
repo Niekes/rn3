@@ -15,6 +15,10 @@ import {
     getWidth,
 } from '../utils/dimension';
 
+import {
+    transparentize,
+} from '../utils/color';
+
 import uuid from '../utils/uuid';
 
 export default class Super {
@@ -80,6 +84,8 @@ export default class Super {
     }
 
     getFill = d => d.fill;
+
+    getFillTransparentized = d => transparentize(this.getFill(d));
 
     getIdentity = d => d[this.settings.identity];
 

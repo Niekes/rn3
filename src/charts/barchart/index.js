@@ -17,10 +17,6 @@ import {
 } from '../../utils/update-pattern';
 
 import {
-    transparentize,
-} from '../../utils/color';
-
-import {
     drawXAxis,
     drawYAxis,
     bindXAxisData,
@@ -92,7 +88,7 @@ export default class Barchart extends Chart {
             exit: {
                 height: 0,
                 y: this.getYScale0,
-                fill: this.getTransparentizeFill,
+                fill: this.getFillTransparentized,
             },
         }, this.settings.transition);
 
@@ -173,6 +169,4 @@ export default class Barchart extends Chart {
     setWidthOfBars = () => this.xScale.bandwidth();
 
     getHeightOfBars = d => Math.abs(this.yScale(d.value) - this.getYScale0());
-
-    getTransparentizeFill = d => transparentize(this.getFill(d));
 }
