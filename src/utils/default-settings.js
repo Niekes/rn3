@@ -7,10 +7,10 @@ export default {
     errorMsg: 'no data',
     identity: 'id',
     margin: {
-        bottom: 30,
-        left: 50,
-        right: 30,
-        top: 30,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        top: 0,
     },
     transition: {
         delay: null,
