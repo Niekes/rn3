@@ -25,7 +25,7 @@ test('Create and append canvas with correct attributes', (t) => {
     t.end();
 });
 
-test.only('Update canvas correctly', (t) => {
+test('Update canvas correctly', (t) => {
     select('body').html(null);
 
     const el = document.createElement('div');
