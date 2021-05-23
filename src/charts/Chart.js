@@ -21,7 +21,7 @@ import {
 
 import uuid from '../utils/uuid';
 
-export default class Super {
+export default class Chart {
     constructor(data, settings) {
         /*
             Set id
