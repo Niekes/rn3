@@ -31,6 +31,13 @@ export function updateCanvas(el, id, height, width) {
         .style('height', '100%')
         .style('width', '100%');
 }
+export function updateVirtualCanvas(virtualCanvas, height, width) {
+    return virtualCanvas
+        .attr('height', height * 2)
+        .attr('width', width * 2)
+        .style('height', '100%')
+        .style('width', '100%');
+}
 
 export function clearCanvas(ctx, margin, height, width) {
     ctx.clearRect(

@@ -14,6 +14,10 @@ import {
 } from '../../utils/canvas';
 
 import {
+    has,
+} from '../../utils/object';
+
+import {
     updateSelection,
 } from '../../utils/update-pattern';
 
@@ -23,6 +27,10 @@ import {
     bindXAxisData,
     bindYAxisData,
 } from '../../utils/axis';
+
+import {
+    getUniqueColorByIndex,
+} from '../../utils/color';
 
 export default class Barchart extends Chart {
     constructor(data) {
@@ -129,6 +137,8 @@ export default class Barchart extends Chart {
     }
 
     draw = () => {
+        this.tooltipData.clear();
+
         clearCanvas(this.context, this.settings.margin, this.height, this.width);
         clearCanvas(this.virtualContext, this.settings.margin, this.height, this.width);
 
@@ -136,16 +146,30 @@ export default class Barchart extends Chart {
 
         bars.each((d, i, nodes) => {
             const bar = select(nodes[i]);
+            const datum = bar.datum();
+            const x = +bar.attr('x');
+            const y = +bar.attr('y');
+            const height = +bar.attr('height');
+            const width = +bar.attr('width');
 
             this.context.beginPath();
             this.context.fillStyle = bar.attr('fill');
-            this.context.rect(
-                +bar.attr('x'),
-                +bar.attr('y'),
-                +bar.attr('width'),
-                +bar.attr('height'),
-            );
+            this.context.rect(x, y, width, height);
             this.context.fill();
+
+            /*
+                Draw to virtual context
+            */
+            if (has(datum, 'tooltip')) {
+                const uniqueColor = getUniqueColorByIndex(i);
+
+                this.tooltipData.set(uniqueColor, datum.tooltip);
+
+                this.virtualContext.beginPath();
+                this.virtualContext.fillStyle = uniqueColor;
+                this.virtualContext.rect(x, y, width, height);
+                this.virtualContext.fill();
+            }
         });
 
         drawXAxis(this.context, this.detachedContainer, this.settings);

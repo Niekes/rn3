@@ -1,11 +1,14 @@
 import {
     select,
+    pointer,
+    rgb,
 } from 'd3';
 
 import {
     createCanvas,
     updateCanvas,
     createVirtualCanvas,
+    updateVirtualCanvas,
 } from '../utils/canvas';
 
 import {
@@ -18,6 +21,11 @@ import {
 import {
     transparentize,
 } from '../utils/color';
+
+import {
+    setTooltip,
+    unsetTooltip,
+} from '../utils/tooltip';
 
 import uuid from '../utils/uuid';
 
@@ -63,7 +71,7 @@ export default class Chart {
         /*
             Setup virtual canvas
         */
-        this.virtualCanvas = createVirtualCanvas(this.data.el, height, width);
+        this.virtualCanvas = createVirtualCanvas(this.id, height, width);
 
         /*
             Setup virtual context
@@ -74,6 +82,30 @@ export default class Chart {
             Create detached container
         */
         this.detachedContainer = select(document.createElement('custom'));
+
+        /*
+            Create tooltip data map
+        */
+        this.tooltipData = new Map();
+
+        /*
+            Listen on mousemoves
+        */
+        this.canvas.on('mousemove', (e) => {
+            const [x, y] = pointer(e);
+
+            const imageData = this.virtualCanvas
+                .node()
+                .getContext('2d')
+                .getImageData(x * 2, y * 2, 1, 1);
+
+            const c = rgb(...imageData.data).toString();
+            const d = this.tooltipData.get(c);
+
+            setTooltip(d, ...pointer(e, document.documentElement));
+        });
+
+        this.canvas.on('mouseleave', unsetTooltip);
     }
 
     mergeSettings = (oldSettings, newSetting) => {
@@ -97,10 +129,15 @@ export default class Chart {
         this.width = computeInnerWidth(width, this.settings.margin);
 
         this.canvas = updateCanvas(this.data.el, this.id, height, width);
+        this.virtualCanvas = updateVirtualCanvas(this.virtualCanvas, height, width);
 
         this.context = this.canvas.node().getContext('2d');
         this.context.translate(this.settings.margin.left * 2, this.settings.margin.top * 2);
         this.context.scale(2, 2);
+
+        this.virtualContext = this.virtualCanvas.node().getContext('2d');
+        this.virtualContext.translate(this.settings.margin.left * 2, this.settings.margin.top * 2);
+        this.virtualContext.scale(2, 2);
     }
 
     ioObserve = () => {
