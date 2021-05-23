@@ -42,7 +42,7 @@ test('Super class of all charts should be initialzed correctly', (t) => {
     t.equals(typeof chart.getFillTransparentized, 'function');
     t.equals(typeof chart.getIdentity, 'function');
     t.equals(typeof chart.mergeSettings, 'function');
-    t.equals(/^rn3-super-\w{5}$/.test(chart.id), true);
+    t.equals(/^rn3-chart-\w{5}$/.test(chart.id), true);
     t.equals(testReturn, 1);
 
     t.end();

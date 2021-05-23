@@ -32,6 +32,19 @@ export function updateCanvas(el, id, height, width) {
         .style('width', '100%');
 }
 
+export function clearCanvas(ctx, margin, height, width) {
+    ctx.clearRect(
+        -margin.left,
+        -margin.top,
+        width * 2,
+        height * 2,
+    );
+
+    ctx.fill();
+
+    return ctx;
+}
+
 export function render(fn, duration) {
     const t = timer((elapsed) => {
         fn();

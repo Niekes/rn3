@@ -10,6 +10,7 @@ import defaultSettings from './default-settings';
 
 import {
     render,
+    clearCanvas,
 } from '../../utils/canvas';
 
 import {
@@ -128,17 +129,8 @@ export default class Barchart extends Chart {
     }
 
     draw = () => {
-        this.context.clearRect(
-            -this.settings.margin.left,
-            -this.settings.margin.top,
-            this.width * 2,
-            this.height * 2,
-        );
-
-        this.context.fill();
-
-        this.virtualContext.clearRect(0, 0, this.width, this.height);
-        this.virtualContext.fill();
+        clearCanvas(this.context, this.settings.margin, this.height, this.width);
+        clearCanvas(this.virtualContext, this.settings.margin, this.height, this.width);
 
         const bars = this.detachedContainer.selectAll('custom.bars');
 
