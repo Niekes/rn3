@@ -98,7 +98,7 @@ export default class Barchart extends Chart {
         render(this.draw, this.settings.transition.duration);
 
         /*
-            Render x-axis on canvas
+            Bind data for x-ticks
         */
         bindXAxisData(
             {
@@ -113,7 +113,7 @@ export default class Barchart extends Chart {
         );
 
         /*
-            Render y-axis on canvas
+            Bind data for y-ticks
         */
         bindYAxisData(
             {
