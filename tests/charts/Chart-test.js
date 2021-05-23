@@ -23,6 +23,10 @@ test('Super class of all charts should be initialzed correctly', (t) => {
         },
     });
 
+    chart.on('test-event', () => 1);
+
+    const testReturn = chart.dispatch('test-event');
+
     t.equals(chart.width, 750);
     t.equals(chart.height, 500);
     t.equals(chart.settings.margin.bottom, 0);
@@ -39,6 +43,7 @@ test('Super class of all charts should be initialzed correctly', (t) => {
     t.equals(typeof chart.getIdentity, 'function');
     t.equals(typeof chart.mergeSettings, 'function');
     t.equals(/^rn3-super-\w{5}$/.test(chart.id), true);
+    t.equals(testReturn, 1);
 
     t.end();
 });
