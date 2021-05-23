@@ -9,8 +9,6 @@ import Chart from '../Chart';
 import defaultSettings from './default-settings';
 
 import {
-    drawXAxis,
-    drawYAxis,
     render,
 } from '../../utils/canvas';
 
@@ -21,6 +19,13 @@ import {
 import {
     transparentize,
 } from '../../utils/color';
+
+import {
+    drawXAxis,
+    drawYAxis,
+    bindXAxisData,
+    bindYAxisData,
+} from '../../utils/axis';
 
 export default class Barchart extends Chart {
     constructor(data) {
@@ -92,65 +97,38 @@ export default class Barchart extends Chart {
         }, this.settings.transition);
 
         /*
-            Create, update and remove x-ticks
+            Render bars on canvas
         */
-        updateSelection({
-            join: {
+        render(this.draw, this.settings.transition.duration);
+
+        /*
+            Render x-axis on canvas
+        */
+        bindXAxisData(
+            {
                 cssClass: 'x-ticks',
                 data: updatedData.values,
                 identity: this.getIdentity,
                 parent: this.detachedContainer,
             },
-            enter: {
-                fill: transparentize(this.settings.xAxis.fill),
-                height: 0,
-                x: this.setXPositionOfXTicks,
-                y: this.getYScale0,
-            },
-            update: {
-                fill: this.settings.xAxis.fill,
-                height: this.getHeightOfXTicks,
-                x: this.setXPositionOfXTicks,
-                y: this.setYPositionOfXTicks,
-            },
-            exit: {
-                fill: transparentize(this.settings.xAxis.fill),
-                height: 0,
-                y: this.getYScale0,
-            },
-        }, this.settings.transition);
+            this.xScale,
+            this.yScale,
+            this.settings,
+        );
 
         /*
-            Create, update and remove y-ticks
+            Render y-axis on canvas
         */
-        updateSelection({
-            join: {
+        bindYAxisData(
+            {
                 cssClass: 'y-ticks',
                 data: this.yScale.ticks(this.settings.yAxis.ticks),
-                identifier: null,
+                identity: null,
                 parent: this.detachedContainer,
             },
-            enter: {
-                fill: transparentize(this.settings.yAxis.fill),
-                width: 0,
-                x: this.setXPositionOfYTicks,
-                y: this.setYPositionOfYTicks,
-            },
-            update: {
-                fill: this.settings.yAxis.fill,
-                width: this.settings.yAxis.tickSize,
-                x: this.setXPositionOfYTicks,
-                y: this.setYPositionOfYTicks,
-            },
-            exit: {
-                fill: transparentize(this.settings.yAxis.fill),
-            },
-        }, this.settings.transition);
-
-        /*
-            Render on canvas
-        */
-        render(this.draw, this.settings.transition.duration);
+            this.yScale,
+            this.settings,
+        );
     }
 
     draw = () => {
@@ -160,6 +138,7 @@ export default class Barchart extends Chart {
             this.width * 2,
             this.height * 2,
         );
+
         this.context.fill();
 
         this.virtualContext.clearRect(0, 0, this.width, this.height);
@@ -181,8 +160,8 @@ export default class Barchart extends Chart {
             this.context.fill();
         });
 
-        drawXAxis(this.context, this.detachedContainer.selectAll('custom.x-ticks'), this.settings);
-        drawYAxis(this.context, this.detachedContainer.selectAll('custom.y-ticks'), this.settings, this.height);
+        drawXAxis(this.context, this.detachedContainer, this.settings);
+        drawYAxis(this.context, this.detachedContainer, this.settings);
     }
 
     getYScale0 = () => this.yScale(0);
@@ -196,21 +175,4 @@ export default class Barchart extends Chart {
     getHeightOfBars = d => Math.abs(this.yScale(d.value) - this.getYScale0());
 
     getTransparentizeFill = d => transparentize(this.getFill(d));
-
-    /*
-        TICKS
-    */
-    setXPositionOfXTicks = d => this.xScale(d.id) + this.xScale.bandwidth() / 2;
-
-    setYPositionOfXTicks = d => (d.value > 0
-        ? this.yScale(0)
-        : this.yScale(0) - this.settings.xAxis.tickSize);
-
-    setXPositionOfYTicks = () => 0;
-
-    setYPositionOfYTicks = d => this.yScale(d);
-
-    getHeightOfXTicks = d => (d.value > 0
-        ? this.settings.xAxis.tickSize
-        : this.settings.xAxis.tickSize)
 }

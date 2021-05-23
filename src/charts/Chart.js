@@ -29,7 +29,6 @@ export default class Super {
         */
         this.data = data;
 
-
         /*
             Merge settings
         */
@@ -44,8 +43,8 @@ export default class Super {
         /*
             Compute inner height & inner width
         */
-        this.height = computeInnerWidth(height, this.settings.margin);
-        this.width = computeInnerHeight(width, this.settings.margin);
+        this.height = computeInnerHeight(height, this.settings.margin);
+        this.width = computeInnerWidth(width, this.settings.margin);
 
         /*
             Setup pubsub events
@@ -88,8 +87,8 @@ export default class Super {
         const height = getHeight(this.data.el);
         const width = getWidth(this.data.el);
 
-        this.height = computeInnerWidth(height, this.settings.margin);
-        this.width = computeInnerHeight(width, this.settings.margin);
+        this.height = computeInnerHeight(height, this.settings.margin);
+        this.width = computeInnerWidth(width, this.settings.margin);
 
         this.canvas = updateCanvas(this.data.el, this.id, height, width);
 

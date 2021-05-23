@@ -10,18 +10,14 @@ export default {
         fill: '#000',
         tickFormat: d => d,
         tickSize: 6,
-        tickValues: null,
         transform: h => ({ x: 0, y: h }),
-        type: 'bottom',
     },
     yAxis: {
         fill: '#000',
         tickFormat: d => d,
         ticks: 3,
         tickSize: 6,
-        tickValues: null,
         transform: () => ({ x: 0, y: 0 }),
-        type: 'left',
     },
     xScale: {
         domain: values => values.map(d => d.id),
