@@ -7,7 +7,7 @@ import {
     computeInnerWidth,
 } from '../../src/utils/dimension';
 
-test.only('Passed color is transparentized', (t) => {
+test('Passed color is transparentized', (t) => {
     select('body').html(null);
 
     const el = document.createElement('div');
