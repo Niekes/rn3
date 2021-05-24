@@ -7,6 +7,9 @@ import {
     setMultiStyles,
 } from './selection';
 
+const TOLERANCE = 1.02;
+const SPACING = 20;
+
 export function makeRow(el, tooltip) {
     const row = create('tr')
         .attr('class', 'rn3-tooltip__row');
@@ -38,6 +41,24 @@ export function makeTooltip(tooltip) {
     return ib;
 }
 
+export function setLeft(x, w) {
+    if ((x + w * TOLERANCE) > window.innerWidth) {
+        return `${(x - w)}px`;
+    }
+
+    return `${x}px`;
+}
+
+export function setTop(y, h) {
+    const { innerHeight } = window;
+
+    if (innerHeight - y + (h * TOLERANCE) + (SPACING * 1.25) > innerHeight) {
+        return `${(y + SPACING * 1.5)}px`;
+    }
+
+    return `${(y - h - SPACING)}px`;
+}
+
 export function setTooltip(data, x, y) {
     const tooltip = select('#rn3-tooltip');
 
@@ -45,20 +66,15 @@ export function setTooltip(data, x, y) {
         tooltip.remove();
     }
 
-    if (tooltip && data) {
+    if (data && x && y) {
         const tip = makeTooltip(data);
 
         document.body.appendChild(tip.node());
 
-        console.log(tip.node().clientWidth);
-
-        tip.style('left', `${x}px`);
-        tip.style('top', `${y - tip.node().clientHeight - 12}px`);
-
+        tip.style('left', setLeft(x, tip.node().offsetWidth));
+        tip.style('top', setTop(y, tip.node().offsetHeight));
         tip.style('display', null);
     }
-
-    return 1;
 }
 
 export function unsetTooltip() {
