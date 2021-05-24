@@ -137,8 +137,6 @@ export default class Barchart extends Chart {
     }
 
     draw = () => {
-        this.tooltipData.clear();
-
         clearCanvas(this.context, this.settings.margin, this.height, this.width);
         clearCanvas(this.virtualContext, this.settings.margin, this.height, this.width);
 

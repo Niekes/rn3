@@ -94,9 +94,7 @@ export default class Chart {
         this.canvas.on('mousemove', (e) => {
             const [x, y] = pointer(e);
 
-            const imageData = this.virtualCanvas
-                .node()
-                .getContext('2d')
+            const imageData = this.virtualContext
                 .getImageData(x * 2, y * 2, 1, 1);
 
             const c = rgb(...imageData.data).toString();
@@ -138,6 +136,10 @@ export default class Chart {
         this.virtualContext = this.virtualCanvas.node().getContext('2d');
         this.virtualContext.translate(this.settings.margin.left * 2, this.settings.margin.top * 2);
         this.virtualContext.scale(2, 2);
+
+        this.clearTooltipData();
+
+        unsetTooltip();
     }
 
     ioObserve = () => {
@@ -204,5 +206,11 @@ export default class Chart {
         }
 
         return undefined;
+    }
+
+    clearTooltipData = () => {
+        if (this.tooltipData.size > 0) {
+            this.tooltipData.clear();
+        }
     }
 }

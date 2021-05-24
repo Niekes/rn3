@@ -31,14 +31,14 @@ export function makeRow(el, tooltip) {
 }
 
 export function makeTooltip(tooltip) {
-    const ib = setMultiStyles(
+    const tt = setMultiStyles(
         create('div').attr('id', 'rn3-tooltip').style('pointer-events', 'none').style('position', 'absolute'),
         Object.assign(tooltip.styles || {}),
     );
 
-    makeRow(ib.append('table').attr('id', 'rn3-tooltip__content'), tooltip);
+    makeRow(tt.append('table').attr('id', 'rn3-tooltip__content'), tooltip);
 
-    return ib;
+    return tt;
 }
 
 export function setLeft(x, w) {
@@ -73,7 +73,6 @@ export function setTooltip(data, x, y) {
 
         tip.style('left', setLeft(x, tip.node().offsetWidth));
         tip.style('top', setTop(y, tip.node().offsetHeight));
-        tip.style('display', null);
     }
 }
 
