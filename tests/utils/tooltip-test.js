@@ -7,7 +7,7 @@ import {
     unsetTooltip,
 } from '../../src/utils/tooltip';
 
-test.only('Top offset of tooltip', (t) => {
+test('Top offset of tooltip', (t) => {
     select('body').html(null);
 
     const tooltip = {
