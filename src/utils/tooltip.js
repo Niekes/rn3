@@ -62,11 +62,11 @@ export function setTop(y, h) {
 export function setTooltip(data, x, y) {
     const tooltip = select('#rn3-tooltip');
 
-    if (!tooltip.empty() || !tooltip) {
+    if (!tooltip.empty()) {
         tooltip.remove();
     }
 
-    if (data && x && y) {
+    if (data && x !== null && y !== null) {
         const tip = makeTooltip(data);
 
         document.body.appendChild(tip.node());
