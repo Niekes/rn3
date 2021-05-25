@@ -9,7 +9,7 @@ export function isEmpty(object) {
 }
 
 export function isObject(object) {
-    return typeof object === 'object' && object !== null;
+    return typeof object === 'object' && Object.prototype.toString.call(object) === '[object Object]';
 }
 
 export function mergeDeep(source, target) {
