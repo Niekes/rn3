@@ -27,6 +27,10 @@ import {
     unsetTooltip,
 } from '../utils/tooltip';
 
+import {
+    mergeDeep,
+} from '../utils/object';
+
 import uuid from '../utils/uuid';
 
 export default class Chart {
@@ -89,7 +93,7 @@ export default class Chart {
         this.tooltipData = new Map();
 
         /*
-            Listen on mousemoves
+            Listen on mousemoves and set tooltip
         */
         this.canvas.on('mousemove', (e) => {
             const [x, y] = pointer(e);
@@ -107,11 +111,8 @@ export default class Chart {
     }
 
     mergeSettings = (oldSettings, newSetting) => {
-        this.settings = {
-            ...oldSettings,
-            ...newSetting,
-        };
-    }
+        this.settings = mergeDeep(oldSettings, newSetting);
+    };
 
     getFill = d => d.fill;
 
