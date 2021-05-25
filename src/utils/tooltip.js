@@ -42,7 +42,9 @@ export function makeTooltip(tooltip) {
 }
 
 export function setLeft(x, w) {
-    if ((x + w * TOLERANCE) > window.innerWidth) {
+    const { innerWidth } = window;
+
+    if ((x + w * TOLERANCE) > innerWidth) {
         return `${(x - w)}px`;
     }
 
