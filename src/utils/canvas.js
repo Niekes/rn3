@@ -61,3 +61,9 @@ export function render(fn, duration) {
         }
     });
 }
+
+export function renderOnVirtualCanvas(fn, duration) {
+    window.setTimeout(() => {
+        fn();
+    }, duration);
+}

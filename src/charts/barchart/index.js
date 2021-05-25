@@ -11,6 +11,7 @@ import defaultSettings from './default-settings';
 import {
     render,
     clearCanvas,
+    renderOnVirtualCanvas,
 } from '../../utils/canvas';
 
 import {
@@ -107,6 +108,11 @@ export default class Barchart extends Chart {
         render(this.draw, this.settings.transition.duration);
 
         /*
+            Render bars on virtual canvas
+        */
+        renderOnVirtualCanvas(this.drawOnVirtualCanvas, this.settings.transition.duration);
+
+        /*
             Bind data for x-ticks
         */
         bindXAxisData(
@@ -138,13 +144,11 @@ export default class Barchart extends Chart {
 
     draw = () => {
         clearCanvas(this.context, this.settings.margin, this.height, this.width);
-        clearCanvas(this.virtualContext, this.settings.margin, this.height, this.width);
 
         const bars = this.detachedContainer.selectAll('custom.bars');
 
         bars.each((d, i, nodes) => {
             const bar = select(nodes[i]);
-            const datum = bar.datum();
             const x = +bar.attr('x');
             const y = +bar.attr('y');
             const height = +bar.attr('height');
@@ -154,10 +158,27 @@ export default class Barchart extends Chart {
             this.context.fillStyle = bar.attr('fill');
             this.context.rect(x, y, width, height);
             this.context.fill();
+        });
 
+        drawXAxis(this.context, this.detachedContainer, this.settings);
+        drawYAxis(this.context, this.detachedContainer, this.settings);
+    }
+
+    drawOnVirtualCanvas = () => {
+        clearCanvas(this.virtualContext, this.settings.margin, this.height, this.width);
+
+        const bars = this.detachedContainer.selectAll('custom.bars');
+
+        bars.each((d, i, nodes) => {
+            const bar = select(nodes[i]);
+            const x = +bar.attr('x');
+            const y = +bar.attr('y');
+            const height = +bar.attr('height');
+            const width = +bar.attr('width');
+            const datum = bar.datum();
             /*
-                Draw to virtual context
-            */
+                    Draw to virtual context
+                */
             if (has(datum, 'tooltip')) {
                 const uniqueColor = getUniqueColorByIndex(i);
 
@@ -169,9 +190,6 @@ export default class Barchart extends Chart {
                 this.virtualContext.fill();
             }
         });
-
-        drawXAxis(this.context, this.detachedContainer, this.settings);
-        drawYAxis(this.context, this.detachedContainer, this.settings);
     }
 
     getYScale0 = () => this.yScale(0);
