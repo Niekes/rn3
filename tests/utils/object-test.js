@@ -27,7 +27,7 @@ test('Check whether an object is empty', (t) => {
     t.end();
 });
 
-test.only('Check whether an object is an object', (t) => {
+test('Check whether an object is an object', (t) => {
     t.equals(isObject({}), true);
     t.equals(isObject({ test: 1 }), true);
     t.equals(isObject(null), false);
