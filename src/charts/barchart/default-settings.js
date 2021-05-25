@@ -8,12 +8,14 @@ export default {
     ...defaults,
     xAxis: {
         fill: '#000',
+        font: '10px sans-serif',
         tickFormat: d => d,
         tickSize: 6,
         transform: h => ({ x: 0, y: h }),
     },
     yAxis: {
         fill: '#000',
+        font: '10px sans-serif',
         tickFormat: d => d,
         ticks: 3,
         tickSize: 6,

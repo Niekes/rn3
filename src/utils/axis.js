@@ -11,13 +11,15 @@ import {
 } from './color';
 
 export function drawXAxis(ctx, parent, settings) {
-    ctx.textBaseline = 'middle';
-    ctx.textAlign = 'center';
-
     const {
         tickSize,
         tickFormat,
+        font,
     } = settings.xAxis;
+
+    ctx.textBaseline = 'middle';
+    ctx.textAlign = 'center';
+    ctx.font = font;
 
     const axis = parent.selectAll('custom.x-axis');
     const ticks = parent.selectAll('custom.x-ticks');
@@ -63,10 +65,13 @@ export function drawXAxis(ctx, parent, settings) {
 }
 
 export function drawYAxis(ctx, parent, settings) {
-    ctx.textAlign = 'right';
+    const {
+        tickFormat,
+        font,
+    } = settings.yAxis;
 
-    const { yAxis } = settings;
-    const { tickFormat } = yAxis;
+    ctx.textAlign = 'right';
+    ctx.font = font;
 
     const axis = parent.selectAll('custom.y-axis');
     const ticks = parent.selectAll('custom.y-ticks');
