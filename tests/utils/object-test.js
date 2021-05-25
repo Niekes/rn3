@@ -32,6 +32,7 @@ test('Check whether an object is an object', (t) => {
     t.equals(isObject({ test: 1 }), true);
     t.equals(isObject(null), false);
     t.equals(isObject(1), false);
+    t.equals(isObject(new Date()), false);
     t.end();
 });
 
