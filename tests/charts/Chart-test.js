@@ -89,6 +89,10 @@ test('Super class standard methods work correctly', (t) => {
     t.equals(chart.tooltipData.size, 1);
     t.deepEquals(chart.getTooltipDataByMousePosition(0, 0), { id: '1', value: 1 });
 
+    chart.clearTooltipData();
+
+    t.equals(chart.tooltipData.size, 0);
+
     t.end();
 });
 
