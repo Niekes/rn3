@@ -1,26 +1,17 @@
 const path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
-const pkg = require('./package.json');
 
-const { name } = pkg;
-const pathToEntry = './index.js';
-
-module.exports = () => ({
-    devServer: {
-        contentBase: path.join(__dirname, 'src'),
-        compress: true,
-        port: 9000,
-        overlay: true,
-    },
-    entry: {
-        [`${name}.min`]: pathToEntry,
-    },
+module.exports = (env, options) => ({
+    entry: './index.js',
     output: {
-        library: 'rn3',
-        libraryTarget: 'umd',
-        filename: '[name].js',
         path: path.resolve(__dirname, 'src'),
+        filename: 'rn3.min.js',
+        library: {
+            name: 'rn3',
+            type: 'umd',
+        },
     },
+    watch: options.mode === 'development',
     module: {
         rules: [
             {
@@ -43,6 +34,7 @@ module.exports = () => ({
         minimizer: [new TerserPlugin({
             include: /\.min\.js$/,
             parallel: true,
+            extractComments: false,
         })],
     },
 });
