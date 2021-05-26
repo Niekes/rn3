@@ -24,18 +24,21 @@ test('Super class of all charts should be initialzed correctly', (t) => {
         },
     });
 
+    t.equals(chart instanceof Chart, true);
     t.deepEquals(chart.events, {});
     t.equals(Object.keys(chart.events).length, 0);
     t.equals(chart.canvas.attr('height'), '1000');
     t.equals(chart.canvas.attr('width'), '1500');
     t.equals(chart.canvas.empty(), false);
     t.equals(chart.canvas.size(), 1);
+    t.equals(chart.virtualContext.strokeStyle, '#000000');
     t.equals(chart.width, 750);
     t.equals(chart.height, 500);
     t.equals(chart.settings.margin.bottom, 0);
     t.equals(chart.settings.margin.top, 0);
     t.equals(chart.settings.margin.left, 0);
     t.equals(chart.settings.margin.right, 0);
+    t.equals(typeof chart.virtualContext, 'object');
     t.equals(typeof chart.on, 'function');
     t.equals(typeof chart.off, 'function');
     t.equals(typeof chart.dispatch, 'function');
