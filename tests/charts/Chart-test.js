@@ -17,6 +17,7 @@ test('Super class of all charts should be initialzed correctly', (t) => {
     const chart = new Chart({
         el: '#el',
         settings: {
+            identity: 'id',
             margin: {
                 top: 0, left: 0, right: 0, bottom: 0,
             },
@@ -44,6 +45,9 @@ test('Super class of all charts should be initialzed correctly', (t) => {
     t.equals(typeof chart.mergeSettings, 'function');
     t.equals(/^rn3-chart-\w{5}$/.test(chart.id), true);
     t.equals(testReturn, 1);
+    t.equals(chart.getFill({ fill: 'pink' }), 'pink');
+    t.equals(chart.getFillTransparentized({ fill: 'rgba(155, 33, 56, 1)' }).toString(), 'rgba(155, 33, 56, 0)');
+    t.equals(chart.getIdentity({ id: 1 }), 1);
 
     t.end();
 });
