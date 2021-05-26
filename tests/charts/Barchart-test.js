@@ -56,3 +56,43 @@ test('Barchart should be initialzed correctly', (t) => {
 
     t.end();
 });
+
+test.only('Barchart standard methods work correctly', (t) => {
+    select('body').html(null);
+
+    const el = document.createElement('div');
+
+    el.setAttribute('id', 'el');
+
+    el.style.height = '500px';
+    el.style.width = '750px';
+
+    document.body.appendChild(el);
+
+    const barchart = new Barchart({
+        el: '#el',
+        settings: {
+            identity: 'id',
+        },
+    });
+
+    barchart.update({
+        values: [
+            { id: 'b', value: 2, fill: 'deeppink' },
+            { id: 'a', value: 1, fill: 'skyblue' },
+            { id: 'c', value: 3, fill: 'crimson' },
+            { id: 'e', value: -5, fill: 'violet' },
+            { id: 'f', value: -6, fill: 'darkblue' },
+        ],
+    });
+
+    t.equals(barchart.getYScale0(), 166.66666666666669);
+    t.equals(barchart.getXPositionOfBars({ id: 'c' }), 308.8235294117647);
+    t.equals(barchart.getXPositionOfBars({ id: 'f' }), 602.9411764705882);
+    t.equals(barchart.getYPositionOfBars({ value: 1 }), 111.1111111111111);
+    t.equals(barchart.getYPositionOfBars({ value: 0 }), 166.66666666666669);
+    t.equals(barchart.getWidthOfBars(), 132.35294117647058);
+    t.equals(barchart.getHeightOfBars({ value: 1 }), 55.555555555555586);
+    t.equals(barchart.getHeightOfBars({ value: 0 }), 0);
+    t.end();
+});

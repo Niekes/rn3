@@ -84,14 +84,14 @@ export default class Barchart extends Chart {
             enter: {
                 fill: this.getFill,
                 height: 0,
-                width: this.setWidthOfBars,
+                width: this.getWidthOfBars,
                 x: this.getXPositionOfBars,
                 y: this.getYScale0,
             },
             update: {
                 fill: this.getFill,
                 height: this.getHeightOfBars,
-                width: this.setWidthOfBars,
+                width: this.getWidthOfBars,
                 x: this.getXPositionOfBars,
                 y: this.getYPositionOfBars,
             },
@@ -194,11 +194,11 @@ export default class Barchart extends Chart {
 
     getYScale0 = () => this.yScale(0);
 
-    getXPositionOfBars = d => this.xScale(d.id);
+    getXPositionOfBars = d => this.xScale(this.getIdentity(d));
 
     getYPositionOfBars = d => Math.min(this.getYScale0(), this.yScale(d.value));
 
-    setWidthOfBars = () => this.xScale.bandwidth();
+    getWidthOfBars = () => this.xScale.bandwidth();
 
     getHeightOfBars = d => Math.abs(this.yScale(d.value) - this.getYScale0());
 }
