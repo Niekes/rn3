@@ -2,7 +2,7 @@ import { test } from 'tape';
 import { select } from 'd3';
 import Chart from '../../src/charts/Chart';
 
-test.only('Super class of all charts should be initialzed correctly', (t) => {
+test('Super class of all charts should be initialzed correctly', (t) => {
     select('body').html(null);
 
     const el = document.createElement('div');
