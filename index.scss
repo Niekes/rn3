@@ -1,7 +1,8 @@
-@import './styles/variables/colors';
-@import './styles/variables/border';
-@import './styles/variables/typography';
-@import './styles/variables/shadows';
-@import './styles/variables/spacing';
+@import './styles/variables/base-colors';
+@import './styles/variables/base-border';
+@import './styles/variables/base-shadows';
+@import './styles/variables/base-spacing';
+@import './styles/variables/base-typography';
+@import './styles/variables/tooltip';
 @import './styles/tooltip';
 

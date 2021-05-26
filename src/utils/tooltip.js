@@ -32,7 +32,7 @@ export function makeRow(el, tooltip) {
 
 export function makeTooltip(tooltip) {
     const tt = setMultiStyles(
-        create('div').attr('id', 'rn3-tooltip').style('pointer-events', 'none').style('position', 'absolute'),
+        create('div').attr('id', 'rn3-tooltip'),
         Object.assign(tooltip.styles || {}),
     );
 
