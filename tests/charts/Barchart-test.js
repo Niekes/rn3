@@ -57,7 +57,7 @@ test('Barchart should be initialzed correctly', (t) => {
     t.end();
 });
 
-test.only('Barchart standard methods work correctly', (t) => {
+test('Barchart standard methods work correctly', (t) => {
     select('body').html(null);
 
     const el = document.createElement('div');
