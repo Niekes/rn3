@@ -94,5 +94,6 @@ test('Barchart standard methods work correctly', (t) => {
     t.equals(barchart.getWidthOfBars(), 132.35294117647058);
     t.equals(barchart.getHeightOfBars({ value: 1 }), 55.555555555555586);
     t.equals(barchart.getHeightOfBars({ value: 0 }), 0);
+    t.equals(barchart.getHeightOfBars({ value: 2 }), 111.11111111111111);
     t.end();
 });
