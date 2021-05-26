@@ -183,10 +183,14 @@ export default class Chart {
         if (!event) {
             this.events = {};
         }
+
+        return this.events;
     }
 
     on = (eventName, fn) => {
         this.events[eventName] = fn;
+
+        return this.events;
     }
 
     dispatch = (eventName, data) => {
@@ -194,7 +198,7 @@ export default class Chart {
             return this.events[eventName](data);
         }
 
-        return undefined;
+        return this.events;
     }
 
     clearTooltipData = () => {

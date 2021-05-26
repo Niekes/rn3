@@ -59,7 +59,7 @@ test('Super class of all charts should be initialzed correctly', (t) => {
     t.end();
 });
 
-test.only('Super class standard methods work correctly', (t) => {
+test('Super class standard methods work correctly', (t) => {
     select('body').html(null);
 
     const el = document.createElement('div');
@@ -121,20 +121,11 @@ test('Super class event bus works correctly', (t) => {
 
     t.equals(testReturn, 1);
     t.equals(Object.keys(chart.events).length, 1);
-
-    chart.off('test-event');
-
-    t.equals(Object.keys(chart.events).length, 0);
-
-    chart.on('test-event-1', d => d);
-    chart.on('test-event-2', d => d);
-    chart.on('test-event-3', d => d);
-
-    t.equals(Object.keys(chart.events).length, 3);
-
-    chart.off();
-
-    t.equals(Object.keys(chart.events).length, 0);
+    t.equals(Object.keys(chart.off('test-event')).length, 0);
+    t.equals(Object.keys(chart.on('test-event-1', d => d)).length, 1);
+    t.equals(Object.keys(chart.on('test-event-2', d => d)).length, 2);
+    t.equals(Object.keys(chart.on('test-event-3', d => d)).length, 3);
+    t.equals(Object.keys(chart.off()).length, 0);
 
     t.end();
 });
