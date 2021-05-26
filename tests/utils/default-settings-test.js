@@ -4,7 +4,6 @@ import defaultsettings from '../../src/utils/default-settings';
 
 test('Default settings are set correctly', (t) => {
     t.equals(defaultsettings.css, '');
-    t.equals(defaultsettings.errorMsg, 'no data');
     t.equals(defaultsettings.identity, 'id');
     t.equals(defaultsettings.margin.top, 0);
     t.equals(defaultsettings.margin.left, 0);

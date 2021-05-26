@@ -130,7 +130,7 @@ export function bindXAxisData(join, xScale, yScale, settings) {
         join: {
             ...join,
             cssClass: 'x-axis',
-            data: [0],
+            data: join.data.length ? [0] : [],
         },
         enter: {
             fill: transparentize(xAxis.fill),
@@ -207,7 +207,7 @@ export function bindYAxisData(join, yScale, settings) {
         join: {
             ...join,
             cssClass: 'y-axis',
-            data: [0],
+            data: join.data.length ? [0] : [],
         },
         enter: {
             fill: transparentize(yAxis.fill),

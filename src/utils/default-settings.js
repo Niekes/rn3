@@ -4,7 +4,6 @@ import {
 
 export default {
     css: '',
-    errorMsg: 'no data',
     identity: 'id',
     margin: {
         bottom: 0,
