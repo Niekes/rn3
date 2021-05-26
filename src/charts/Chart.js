@@ -154,7 +154,7 @@ export default class Chart {
             });
         }, this.settings.intersectionObserverOptions);
 
-        this.observer.observe(document.querySelector(this.data.el));
+        this.observer.observe(select(this.data.el).node());
     }
 
     ioDisconnect = () => {
@@ -171,8 +171,7 @@ export default class Chart {
         const event = this.events[eventName];
 
         /*
-            If event was passed we only remove the
-            passed function from the passed event
+            If event was passed we remove the passed event
         */
         if (event) {
             delete this.events[eventName];
