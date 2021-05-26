@@ -65,7 +65,7 @@ export default class Chart {
         /*
             Setup pubsub events
         */
-        this.events = [];
+        this.events = {};
 
         /*
             Setup canvas
@@ -164,46 +164,32 @@ export default class Chart {
         }
     }
 
-    off = (eventName, fn) => {
+    off = (eventName) => {
         const event = this.events[eventName];
 
         /*
-            If event and function was passed we only remove the
+            If event was passed we only remove the
             passed function from the passed event
         */
         if (event) {
-            for (let i = 0; i < event.length; i += 1) {
-                if (event[i] === fn) {
-                    event.splice(i, 1);
-                    break;
-                }
-            }
+            delete this.events[eventName];
         }
 
         /*
             If no event was passed we remove all events
         */
         if (!event) {
-            this.events = [];
+            this.events = {};
         }
     }
 
     on = (eventName, fn) => {
-        this.events[eventName] = this.events[eventName] || [];
-        this.events[eventName].push(fn);
+        this.events[eventName] = fn;
     }
 
     dispatch = (eventName, data) => {
-        let returnValue = null;
-
         if (this.events[eventName]) {
-            this.events[eventName].forEach((fn) => {
-                returnValue = fn(data);
-            });
-        }
-
-        if (returnValue) {
-            return returnValue;
+            return this.events[eventName](data);
         }
 
         return undefined;

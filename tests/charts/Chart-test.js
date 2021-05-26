@@ -2,7 +2,7 @@ import { test } from 'tape';
 import { select } from 'd3';
 import Chart from '../../src/charts/Chart';
 
-test('Super class of all charts should be initialzed correctly', (t) => {
+test.only('Super class of all charts should be initialzed correctly', (t) => {
     select('body').html(null);
 
     const el = document.createElement('div');
@@ -24,10 +24,12 @@ test('Super class of all charts should be initialzed correctly', (t) => {
         },
     });
 
-    chart.on('test-event', () => 1);
-
-    const testReturn = chart.dispatch('test-event');
-
+    t.deepEquals(chart.events, {});
+    t.equals(Object.keys(chart.events).length, 0);
+    t.equals(chart.canvas.attr('height'), '1000');
+    t.equals(chart.canvas.attr('width'), '1500');
+    t.equals(chart.canvas.empty(), false);
+    t.equals(chart.canvas.size(), 1);
     t.equals(chart.width, 750);
     t.equals(chart.height, 500);
     t.equals(chart.settings.margin.bottom, 0);
@@ -44,10 +46,81 @@ test('Super class of all charts should be initialzed correctly', (t) => {
     t.equals(typeof chart.getIdentity, 'function');
     t.equals(typeof chart.mergeSettings, 'function');
     t.equals(/^rn3-chart-\w{5}$/.test(chart.id), true);
-    t.equals(testReturn, 1);
+
+    t.end();
+});
+
+test('Super class standard methods work correctly', (t) => {
+    select('body').html(null);
+
+    const el = document.createElement('div');
+
+    el.setAttribute('id', 'el');
+
+    el.style.height = '500px';
+    el.style.width = '750px';
+
+    document.body.appendChild(el);
+
+    const chart = new Chart({
+        el: '#el',
+        settings: {
+            identity: 'id',
+            margin: {
+                top: 0, left: 0, right: 0, bottom: 0,
+            },
+        },
+    });
+
     t.equals(chart.getFill({ fill: 'pink' }), 'pink');
     t.equals(chart.getFillTransparentized({ fill: 'rgba(155, 33, 56, 1)' }).toString(), 'rgba(155, 33, 56, 0)');
     t.equals(chart.getIdentity({ id: 1 }), 1);
+
+    t.end();
+});
+
+test('Super class event bus works correctly', (t) => {
+    select('body').html(null);
+
+    const el = document.createElement('div');
+
+    el.setAttribute('id', 'el');
+
+    el.style.height = '500px';
+    el.style.width = '750px';
+
+    document.body.appendChild(el);
+
+    const chart = new Chart({
+        el: '#el',
+        settings: {
+            identity: 'id',
+            margin: {
+                top: 0, left: 0, right: 0, bottom: 0,
+            },
+        },
+    });
+
+    chart.on('test-event', d => d);
+
+    const testReturn = chart.dispatch('test-event', 1);
+
+    t.equals(testReturn, 1);
+    t.equals(Object.keys(chart.events).length, 1);
+
+    chart.off('test-event');
+
+    t.equals(Object.keys(chart.events).length, 0);
+
+    chart.on('test-event-1', d => d);
+    chart.on('test-event-2', d => d);
+    chart.on('test-event-3', d => d);
+
+    t.equals(Object.keys(chart.events).length, 3);
+
+    chart.off();
+
+    t.equals(Object.keys(chart.events).length, 0);
 
     t.end();
 });
