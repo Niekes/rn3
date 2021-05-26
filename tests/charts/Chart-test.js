@@ -115,11 +115,8 @@ test('Super class event bus works correctly', (t) => {
         },
     });
 
-    chart.on('test-event', d => d);
-
-    const testReturn = chart.dispatch('test-event', 1);
-
-    t.equals(testReturn, 1);
+    t.equals(Object.keys(chart.on('test-event', d => d)).length, 1);
+    t.equals(chart.dispatch('test-event', 1), 1);
     t.equals(Object.keys(chart.events).length, 1);
     t.equals(Object.keys(chart.off('test-event')).length, 0);
     t.equals(Object.keys(chart.on('test-event-1', d => d)).length, 1);
