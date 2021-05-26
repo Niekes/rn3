@@ -98,17 +98,20 @@ export default class Chart {
         this.canvas.on('mousemove', (e) => {
             const [x, y] = pointer(e);
 
-            const imageData = this.virtualContext
-                .getImageData(x * 2, y * 2, 1, 1);
-
-            const c = rgb(...imageData.data).toString();
-            const d = this.tooltipData.get(c);
+            const d = this.getTooltipDataByMousePosition(x, y);
 
             setTooltip(d, ...pointer(e, document.documentElement));
         });
 
         this.canvas.on('mouseleave', unsetTooltip);
     }
+
+    getTooltipDataByMousePosition = (x, y) => {
+        const imageData = this.virtualContext
+            .getImageData(x * 2, y * 2, 1, 1);
+
+        return this.tooltipData.get(rgb(...imageData.data).toString());
+    };
 
     mergeSettings = (oldSettings, newSetting) => {
         this.settings = mergeDeep(oldSettings, newSetting);

@@ -24,6 +24,7 @@ test('Super class of all charts should be initialzed correctly', (t) => {
         },
     });
 
+    t.equals(chart.tooltipData.size, 0);
     t.equals(chart instanceof Chart, true);
     t.deepEquals(chart.events, {});
     t.equals(Object.keys(chart.events).length, 0);
@@ -34,6 +35,11 @@ test('Super class of all charts should be initialzed correctly', (t) => {
     t.equals(chart.virtualContext.strokeStyle, '#000000');
     t.equals(chart.width, 750);
     t.equals(chart.height, 500);
+    t.equals(typeof chart.virtualContext.beginPath, 'function');
+    t.equals(typeof chart.virtualContext.moveTo, 'function');
+    t.equals(typeof chart.virtualContext.lineTo, 'function');
+    t.equals(typeof chart.virtualContext.stroke, 'function');
+    t.equals(typeof chart.virtualContext.fill, 'function');
     t.equals(chart.settings.margin.bottom, 0);
     t.equals(chart.settings.margin.top, 0);
     t.equals(chart.settings.margin.left, 0);
@@ -75,9 +81,13 @@ test('Super class standard methods work correctly', (t) => {
         },
     });
 
+    chart.tooltipData.set('rgba(0, 0, 0, 0)', { id: '1', value: 1 });
+
     t.equals(chart.getFill({ fill: 'pink' }), 'pink');
     t.equals(chart.getFillTransparentized({ fill: 'rgba(155, 33, 56, 1)' }).toString(), 'rgba(155, 33, 56, 0)');
     t.equals(chart.getIdentity({ id: 1 }), 1);
+    t.equals(chart.tooltipData.size, 1);
+    t.deepEquals(chart.getTooltipDataByMousePosition(0, 0), { id: '1', value: 1 });
 
     t.end();
 });
