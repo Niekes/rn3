@@ -201,5 +201,7 @@ export default class Chart {
         if (this.tooltipData.size > 0) {
             this.tooltipData.clear();
         }
+
+        return this.tooltipData;
     }
 }

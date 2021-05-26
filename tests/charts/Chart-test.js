@@ -59,7 +59,7 @@ test('Super class of all charts should be initialzed correctly', (t) => {
     t.end();
 });
 
-test('Super class standard methods work correctly', (t) => {
+test.only('Super class standard methods work correctly', (t) => {
     select('body').html(null);
 
     const el = document.createElement('div');
@@ -88,10 +88,7 @@ test('Super class standard methods work correctly', (t) => {
     t.equals(chart.getIdentity({ id: 1 }), 1);
     t.equals(chart.tooltipData.size, 1);
     t.deepEquals(chart.getTooltipDataByMousePosition(0, 0), { id: '1', value: 1 });
-
-    chart.clearTooltipData();
-
-    t.equals(chart.tooltipData.size, 0);
+    t.equals(chart.clearTooltipData().size, 0);
 
     t.end();
 });

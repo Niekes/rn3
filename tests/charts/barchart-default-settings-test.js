@@ -25,6 +25,9 @@ test('Barchart default settings are set correctly', (t) => {
     t.equals(defaultsettings.yAxis.ticks, 3);
     t.equals(defaultsettings.xScale.padding, 0.1);
     t.deepEquals(defaultsettings.xScale.domain([{ id: 'A' }, { id: 'B' }, { id: 'C' }]), ['A', 'B', 'C']);
-    t.deepEquals(defaultsettings.yScale.domain([{ value: 0 }, { value: 45 }, { value: 99 }]), [0, 99]);
+    t.deepEquals(
+        defaultsettings.yScale.domain([{ value: 0 }, { value: 45 }, { value: 99 }]),
+        [0, 99],
+    );
     t.end();
 });
