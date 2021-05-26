@@ -18,9 +18,6 @@ test('Barchart should be initialzed correctly', (t) => {
         el: '#el',
         settings: {
             identity: 'id',
-            margin: {
-                top: 0, left: 0, right: 0, bottom: 0,
-            },
         },
     });
 
