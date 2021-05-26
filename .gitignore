@@ -3,4 +3,6 @@ dist/
 coverage/
 src/rn3.*.*.js
 src/rn3.min.js
-lucid-search-**.**.tgz
+src/rn3.*.*.css
+src/rn3.min.css
+rn-**.**.tgz

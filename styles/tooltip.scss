@@ -1,0 +1,15 @@
+$rn3-tooltip: (
+    background: #fff,
+    border-radius: 0.15rem,
+    box-shadow: $rn3-box-shadow,
+    padding: 0.5rem,
+    font-family: $rn3-font-family,
+) !default;
+
+#rn3-tooltip {
+    background: map-get($rn3-tooltip, 'background');
+    border-radius: map-get($rn3-tooltip, 'border-radius');
+    box-shadow: map-get($rn3-tooltip, 'box-shadow');
+    font-family: map-get($rn3-tooltip, 'font-family');
+    padding: map-get($rn3-tooltip, 'padding');
+}
