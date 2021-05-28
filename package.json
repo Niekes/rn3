@@ -64,6 +64,7 @@
   "files": [
     "index.scss",
     "index.js",
+    "styles/*",
     "src/*"
   ],
   "dependencies": {
