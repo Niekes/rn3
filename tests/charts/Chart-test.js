@@ -48,8 +48,6 @@ test('Super class of all charts should be initialzed correctly', (t) => {
     t.equals(typeof chart.on, 'function');
     t.equals(typeof chart.off, 'function');
     t.equals(typeof chart.dispatch, 'function');
-    t.equals(typeof chart.ioObserve, 'function');
-    t.equals(typeof chart.ioDisconnect, 'function');
     t.equals(typeof chart.getFill, 'function');
     t.equals(typeof chart.getFillTransparentized, 'function');
     t.equals(typeof chart.getIdentity, 'function');

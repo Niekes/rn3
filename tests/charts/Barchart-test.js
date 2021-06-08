@@ -46,8 +46,6 @@ test('Barchart should be initialzed correctly', (t) => {
     t.equals(typeof barchart.on, 'function');
     t.equals(typeof barchart.off, 'function');
     t.equals(typeof barchart.dispatch, 'function');
-    t.equals(typeof barchart.ioObserve, 'function');
-    t.equals(typeof barchart.ioDisconnect, 'function');
     t.equals(typeof barchart.getFill, 'function');
     t.equals(typeof barchart.getFillTransparentized, 'function');
     t.equals(typeof barchart.getIdentity, 'function');

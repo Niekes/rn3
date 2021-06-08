@@ -1,3 +1,7 @@
+import {
+    select,
+} from 'd3';
+
 export function setMultiAttributes(selection, attrs) {
     if (!attrs) return selection;
 
@@ -16,4 +20,26 @@ export function setMultiStyles(selection, styles) {
     });
 
     return selection;
+}
+
+export function createContainer(el, id, cssClass) {
+    return select(el)
+        .append('div')
+        .attr('id', id)
+        .attr('class', cssClass)
+        .style('height', '100%')
+        .style('width', '100%');
+}
+
+export function appendSelection(parent, el, attrs, styles) {
+    let element = parent.append(el);
+
+    element = setMultiAttributes(element, attrs);
+    element = setMultiStyles(element, styles);
+
+    return element;
+}
+
+export function getChildrenFromSelection(parent, selector) {
+    return parent.selectAll(selector);
 }

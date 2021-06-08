@@ -146,27 +146,6 @@ export default class Chart {
         unsetTooltip();
     }
 
-    ioObserve = () => {
-        this.observer = new IntersectionObserver((entries, observer) => {
-            this.dispatch('intersectionObserver', {
-                entries,
-                observer,
-            });
-        }, this.settings.intersectionObserverOptions);
-
-        this.observer.observe(select(this.data.el).node());
-    }
-
-    ioDisconnect = () => {
-        if (this.observer) {
-            this.observer.disconnect();
-        }
-
-        if (this.events.intersectionObserver) {
-            this.events.intersectionObserver = [];
-        }
-    }
-
     off = (eventName) => {
         const event = this.events[eventName];
 

@@ -1,23 +1,55 @@
 <!DOCTYPE html>
-<html style="height: 1000%">
+<html style="height: 100%;width: 100%">
 <head>
     <title>RN3 - Data Visualization Toolkit</title>
     <script type="text/javascript" src="./rn3.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="./rn3.min.css">
 </head>
-<body style="height: 1000%">
-    <div id="chart" style="height: 500px; width: 750px; border: 1px solid;" />
+<body style="height: 100%;width: 80%;margin:10px auto;padding:0">
+    <div id="searchbar"></div>
+    <div id="chart" style="margin: auto; height: 200px; width: 200px; border: 1px solid; position: relative;"></div>
 
 <script type="text/javascript">
 // eslint-disable-next-line no-undef
 const barchart = new rn3.Barchart({
     el: '#chart',
+    settings: {
+        margin: {
+            top: 25,
+            left: 25,
+            right: 25,
+            bottom: 25,
+        },
+    },
+});
+
+const searchbar = new rn3.Searchbar({
+    el: '#searchbar',
 });
 
 barchart.update({
     values: [
-        { id: 'a', value: 3, fill: 'skyblue' },
+        {
+            id: 'a',
+            value: 3,
+            fill: 'skyblue',
+            tooltip: {
+                data: [
+                    [1, 2],
+                    [3, 4],
+                    [5, 6],
+                ],
+            },
+        },
         { id: 'ÉgÉgÉgÉg', value: 2, fill: 'deeppink' },
-        { id: 'cl', value: 1, fill: 'crimson' },
+        {
+            id: 'cl',
+            value: 1,
+            fill: 'crimson',
+            tooltip: {
+                data: ['lorem ipsum lorem ipsum lorem ipsum.'],
+            },
+        },
     ],
 });
 
@@ -27,13 +59,11 @@ window.setTimeout(() => {
             { id: 'b', value: 2, fill: 'deeppink' },
             { id: 'a', value: 1, fill: 'skyblue' },
             { id: 'c', value: 3, fill: 'crimson' },
-            { id: 'd', value: 4, fill: 'crimson' },
-            { id: 'e', value: 5, fill: 'crimson' },
-            { id: 'f', value: -6, fill: 'crimson' },
+            { id: 'e', value: -5, fill: 'violet' },
+            { id: 'f', value: -6, fill: 'darkblue' },
         ],
     });
-    barchart.off();
-}, 10000);
+}, 4000);
 </script>
 </body>
 </html>
