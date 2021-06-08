@@ -71,6 +71,17 @@ export default class Searchbar extends Element {
         */
         this.elements.input.area.on('click', this.focusInput);
         this.elements.input.entry.on('keyup', (e) => {
+            const value = e.target.value.trim();
+            const regex = new RegExp(/[A-Za-zÀ-ÖØ-öø-ÿ]/g);
+
+            if (!regex.test(value)) {
+                this.hideBackspace();
+                this.closeDropdown();
+                this.getDropdownItems().remove();
+
+                return;
+            }
+
             this.elements.dropdown.group
                 .html('...')
                 .classed('rn3-searchbar__dropdown-group--error', false)
@@ -107,7 +118,7 @@ export default class Searchbar extends Element {
                 const v = String(params[key]);
 
                 if (v.includes('{query}')) {
-                    u.searchParams.set(key, value.replace(/{query}/gi, () => value.trim()));
+                    u.searchParams.set(key, v.replace(/{query}/gi, () => value));
                 }
 
                 if (!v.includes('{query}')) {
@@ -118,21 +129,12 @@ export default class Searchbar extends Element {
         return u;
     };
 
-    fetchResults = async (v) => {
+    fetchResults = async (value) => {
         const {
             request,
         } = this.settings;
 
-        const value = v.trim();
         let errorOccured = false;
-
-        if (!value) {
-            this.hideBackspace();
-            this.closeDropdown();
-            this.getDropdownItems().remove();
-
-            return;
-        }
 
         this.showBackspace();
 
@@ -151,6 +153,12 @@ export default class Searchbar extends Element {
             this.responseData = null;
             errorOccured = true;
         }
+
+        this.elements.dropdown.group
+            .html(null)
+            .classed('rn3-searchbar__dropdown-group--error', false)
+            .classed('rn3-searchbar__dropdown-group--loading', false)
+            .classed('rn3-searchbar__dropdown-group--no-results', false);
 
         if (isArrayOfObjects(this.responseData)) {
             const dropdownItems = this.getDropdownItems().data(this.responseData, this.getIdentity);
@@ -198,7 +206,7 @@ export default class Searchbar extends Element {
     };
 
     fetchResultsDebounced = debounce((e) => {
-        this.fetchResults(e.target.value);
+        this.fetchResults(e.target.value.trim());
     }, 500);
 
     update = (updatedData) => {
@@ -247,10 +255,19 @@ export default class Searchbar extends Element {
             const result = event.results[i];
             if (result.isFinal) {
                 this.speechRecognition.stop();
-                this.focusInput();
+
                 this.elements.input.entry.attr('placeholder', this.settings.input.placeholder);
+
+                this.elements.dropdown.group
+                    .html('...')
+                    .classed('rn3-searchbar__dropdown-group--error', false)
+                    .classed('rn3-searchbar__dropdown-group--loading', true);
+
+                this.focusInput();
                 this.setInputvalue(result[0].transcript.trim());
-                this.fetchResults(result[0].transcript);
+                this.fetchResults(result[0].transcript.trim());
+
+                this.openDropdown();
             }
 
             if (!result.isFinal) {

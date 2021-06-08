@@ -180,6 +180,7 @@
         }
 
         &--error,
+        &--no-results,
         &--loading {
             padding: $rn3-padding-y / 2 $rn3-padding-x;
         }
