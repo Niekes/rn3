@@ -17,6 +17,7 @@ export default {
         callback: response => response.json(),
         error: 'An error occured. Please try again later',
         noResults: 'No results found',
+        loading: '...',
     },
     identity: 'osm_id',
     input: {

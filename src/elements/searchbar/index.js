@@ -17,11 +17,19 @@ import {
     isArrayOfObjects,
 } from '../../utils/array';
 
+import {
+    isKey,
+    isNavigatingVertically,
+    isNavigatingHorizontally,
+} from '../../utils/keyboard';
+
 import defaultSettings from './default-settings';
 
 export default class Searchbar extends Element {
     constructor(data) {
         super(data, defaultSettings);
+
+        this.keyCounter = 0;
 
         /*
             SpeechRecognition
@@ -33,6 +41,7 @@ export default class Searchbar extends Element {
             this.speechRecognition.continuous = true;
             this.speechRecognition.interimResults = true;
             this.speechRecognition.onresult = this.handleSpeechRecognition;
+            this.speechRecognition.lang = navigator.language;
         } catch (e) {
             this.speechRecognition = null;
         }
@@ -69,27 +78,10 @@ export default class Searchbar extends Element {
         /*
             Add event listener
         */
+        this.elements.input.pre.on('click', this.focusInput);
         this.elements.input.area.on('click', this.focusInput);
-        this.elements.input.entry.on('keyup', (e) => {
-            const value = e.target.value.trim();
-            const regex = new RegExp(/[A-Za-zÀ-ÖØ-öø-ÿ]/g);
-
-            if (!regex.test(value)) {
-                this.hideBackspace();
-                this.closeDropdown();
-                this.getDropdownItems().remove();
-
-                return;
-            }
-
-            this.elements.dropdown.group
-                .html('...')
-                .classed('rn3-searchbar__dropdown-group--error', false)
-                .classed('rn3-searchbar__dropdown-group--loading', true);
-
-            this.openDropdown();
-            this.fetchResultsDebounced(e);
-        });
+        this.elements.input.entry.on('keyup', this.handleKeyUp);
+        this.elements.input.entry.on('keydown', this.preventDefault);
 
         this.elements.input.mic.on('click', () => {
             try {
@@ -106,6 +98,11 @@ export default class Searchbar extends Element {
             this.focusInput();
             this.closeDropdown();
             this.hideBackspace();
+        });
+
+        this.elements.dropdown.group.on('mousemove', () => {
+            this.getDropdownItems()
+                .style('pointer-events', null);
         });
     }
 
@@ -168,22 +165,16 @@ export default class Searchbar extends Element {
                 .append('div')
                 .attr('class', 'rn3-searchbar__dropdown-group-item')
                 .merge(dropdownItems)
-                .on('click', (event, datum) => {
-                    this.data.values = this.data.values || [];
-
-                    const index = this.data.values
-                        .findIndex(d => this.getIdentity(d) === this.getIdentity(datum));
-
-                    if (index === -1) {
-                        this.data.values.push(datum);
-                        this.update(this.data);
-                        this.setInputvalue();
-                        this.focusInput();
-                        this.closeDropdown();
-                        this.hideBackspace();
-                    }
+                .on('click', (e, datum) => {
+                    this.addItemToInput(datum);
                 })
-                .html(d => this.settings.dropdown.item.render(d));
+                .on('mouseenter', () => {
+                    this.getPreselectedDropdownItem()
+                        .classed('rn3-searchbar__dropdown-group-item--preselected', false);
+                })
+                .html(d => this.settings.dropdown.item.render(d))
+                .style('pointer-events', 'none')
+                .classed('rn3-searchbar__dropdown-group-item--preselected', (d, i) => i === 0);
 
             dropdownItems
                 .exit()
@@ -228,8 +219,7 @@ export default class Searchbar extends Element {
                 if (isCloseBtn && datum) {
                     this.data.values = this.data.values || [];
 
-                    const index = this.data.values
-                        .findIndex(d => this.getIdentity(d) === this.getIdentity(datum));
+                    const index = this.getIndexOfDatum(datum);
 
                     this.data.values.splice(index, 1);
 
@@ -258,12 +248,8 @@ export default class Searchbar extends Element {
 
                 this.elements.input.entry.attr('placeholder', this.settings.input.placeholder);
 
-                this.elements.dropdown.group
-                    .html('...')
-                    .classed('rn3-searchbar__dropdown-group--error', false)
-                    .classed('rn3-searchbar__dropdown-group--loading', true);
-
                 this.focusInput();
+                this.setLoadingSequenceInDropdown();
                 this.setInputvalue(result[0].transcript.trim());
                 this.fetchResults(result[0].transcript.trim());
 
@@ -274,6 +260,112 @@ export default class Searchbar extends Element {
                 this.elements.input.entry.attr('placeholder', result[0].transcript.trim());
             }
         }
+    };
+
+    handleKeyUp = (e) => {
+        const keyCode = e.keyCode || e.which;
+        const value = e.target.value.trim();
+
+        /*
+            No usable input, reset everything to default
+        */
+        if (value.length === 0) {
+            this.resetKeyCounter();
+            this.hideBackspace();
+            this.closeDropdown();
+            this.getDropdownItems().remove();
+
+            return;
+        }
+
+        /*
+            User will navigate through dropdown items
+        */
+        if (isNavigatingVertically(keyCode) && this.getDropdownItems().data().length > 0) {
+            if (isKey(keyCode, 'up')) this.keyCounter -= 1;
+            if (isKey(keyCode, 'down')) this.keyCounter += 1;
+
+            const listItems = this.getDropdownItems();
+            const listItemsSize = listItems.size();
+
+            if (this.keyCounter < 0) {
+                this.keyCounter += listItemsSize;
+            }
+
+            if (this.keyCounter === listItemsSize) {
+                this.resetKeyCounter();
+            }
+
+            listItems
+                .classed('rn3-searchbar__dropdown-group-item--preselected', (d, i) => i === this.keyCounter);
+
+            const p = this.getPreselectedDropdownItem().node();
+            const h = Number.parseInt(this.elements.dropdown.group.style('height'), 10);
+
+            if (p.offsetTop + h / 2 > h) {
+                this.elements.dropdown.group.node().scrollTop = p.offsetTop - h / 2;
+                return;
+            }
+
+            this.elements.dropdown.group.node().scrollTop = 0;
+
+            return;
+        }
+
+        if (isNavigatingHorizontally(keyCode)) {
+            return;
+        }
+
+        if (isKey(keyCode, 'enter')) {
+            const datum = this.getPreselectedDropdownItem().datum();
+
+            this.addItemToInput(datum);
+
+            return;
+        }
+
+        this.openDropdown();
+        this.fetchResultsDebounced(e);
+        this.setLoadingSequenceInDropdown();
+    };
+
+    resetKeyCounter = () => {
+        this.keyCounter = 0;
+    };
+
+    addItemToInput = (datum) => {
+        this.data.values = this.data.values || [];
+
+        const index = this.getIndexOfDatum(datum);
+        const datumAlreadyExists = index !== -1;
+
+        if (!datumAlreadyExists) {
+            this.data.values.push(datum);
+            this.update(this.data);
+            this.setInputvalue();
+            this.focusInput();
+            this.closeDropdown();
+            this.hideBackspace();
+            this.resetKeyCounter();
+        }
+
+        if (datumAlreadyExists) {
+            console.log('REMOVE ITEM');
+        }
+    };
+
+    preventDefault = (e) => {
+        const keyCode = e.keyCode || e.which;
+
+        if (isKey(keyCode, 'up')) e.preventDefault();
+        if (isKey(keyCode, 'down')) e.preventDefault();
+    };
+
+    setLoadingSequenceInDropdown = () => {
+        this.elements.dropdown.group
+            .html(this.settings.request.loading)
+            .classed('rn3-searchbar__dropdown-group--error', false)
+            .classed('rn3-searchbar__dropdown-group--loading', true);
     };
 
     setInputvalue = (val = '') => {
@@ -294,6 +386,9 @@ export default class Searchbar extends Element {
         'div.rn3-searchbar__dropdown-group-item',
     );
 
+    getPreselectedDropdownItem = () => this.elements.dropdown.group
+        .select('.rn3-searchbar__dropdown-group-item--preselected');
+
     hideBackspace = () => {
         this.toggleBackspace(false);
     };
@@ -301,6 +396,9 @@ export default class Searchbar extends Element {
     showBackspace = () => {
         this.toggleBackspace(true);
     };
+
+    getIndexOfDatum = datum => this.data.values
+        .findIndex(d => this.getIdentity(d) === this.getIdentity(datum));
 
     toggleBackspace = (open) => {
         this.elements.input.suf
