@@ -172,9 +172,9 @@ export default class Searchbar extends Element {
                     this.getPreselectedDropdownItem()
                         .classed('rn3-searchbar__dropdown-group-item--preselected', false);
                 })
-                .html(d => this.settings.dropdown.item.render(d))
                 .style('pointer-events', 'none')
-                .classed('rn3-searchbar__dropdown-group-item--preselected', (d, i) => i === 0);
+                .classed('rn3-searchbar__dropdown-group-item--preselected', (d, i) => i === 0)
+                .html(d => `<span class="rn3-searchbar__dropdown-group-item-content">${this.settings.input.item.render(d)}</span>`);
 
             dropdownItems
                 .exit()
@@ -224,9 +224,11 @@ export default class Searchbar extends Element {
                     this.data.values.splice(index, 1);
 
                     this.update(this.data);
+
+                    this.dispatch('removed', datum);
                 }
             })
-            .html(d => `<span class="rn3-searchbar__input-group-item-content">${d.display_name}</span><span class="rn3-searchbar__input-group-item-close"><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path stroke="currentColor" fill="currentColor" d="M13.41 12l4.3-4.29a1 1 0 10-1.42-1.42L12 10.59l-4.29-4.3a1 1 0 00-1.42 1.42l4.3 4.29-4.3 4.29a1 1 0 000 1.42 1 1 0 001.42 0l4.29-4.3 4.29 4.3a1 1 0 001.42 0 1 1 0 000-1.42z"/></svg></span>`);
+            .html(d => `<span class="rn3-searchbar__input-group-item-content">${this.settings.input.item.render(d)}</span><span class="rn3-searchbar__input-group-item-close"><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path stroke="currentColor" fill="currentColor" d="M13.41 12l4.3-4.29a1 1 0 10-1.42-1.42L12 10.59l-4.29-4.3a1 1 0 00-1.42 1.42l4.3 4.29-4.3 4.29a1 1 0 000 1.42 1 1 0 001.42 0l4.29-4.3 4.29 4.3a1 1 0 001.42 0 1 1 0 000-1.42z"/></svg></span>`);
 
         inputItems
             .exit()
@@ -347,10 +349,11 @@ export default class Searchbar extends Element {
             this.closeDropdown();
             this.hideBackspace();
             this.resetKeyCounter();
+            this.dispatch('added', datum);
         }
 
         if (datumAlreadyExists) {
-            console.log('REMOVE ITEM');
+            this.dispatch('removed', datum);
         }
     };
 

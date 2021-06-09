@@ -4,6 +4,8 @@ import {
     rgb,
 } from 'd3';
 
+import Super from '../utils/super';
+
 import {
     createCanvas,
     updateCanvas,
@@ -27,28 +29,9 @@ import {
     unsetTooltip,
 } from '../utils/tooltip';
 
-import {
-    mergeDeep,
-} from '../utils/object';
-
-import uuid from '../utils/uuid';
-
-export default class Chart {
+export default class Chart extends Super {
     constructor(data, settings) {
-        /*
-            Set id
-        */
-        this.id = uuid(`rn3-${this.constructor.name}`).toLowerCase();
-
-        /*
-            Set data
-        */
-        this.data = data;
-
-        /*
-            Merge settings
-        */
-        this.mergeSettings(settings, this.data.settings);
+        super(data, settings);
 
         /*
             Compute height & width
@@ -61,11 +44,6 @@ export default class Chart {
         */
         this.height = computeInnerHeight(height, this.settings.margin);
         this.width = computeInnerWidth(width, this.settings.margin);
-
-        /*
-            Setup pubsub events
-        */
-        this.events = {};
 
         /*
             Setup canvas
@@ -113,15 +91,9 @@ export default class Chart {
         return this.tooltipData.get(rgb(...imageData.data).toString());
     };
 
-    mergeSettings = (oldSettings, newSetting) => {
-        this.settings = mergeDeep(oldSettings, newSetting);
-    };
-
     getFill = d => d.fill;
 
     getFillTransparentized = d => transparentize(this.getFill(d));
-
-    getIdentity = d => d[this.settings.identity];
 
     updateCanvas = () => {
         const height = getHeight(this.data.el);
@@ -144,40 +116,6 @@ export default class Chart {
         this.clearTooltipData();
 
         unsetTooltip();
-    }
-
-    off = (eventName) => {
-        const event = this.events[eventName];
-
-        /*
-            If event was passed we remove the passed event
-        */
-        if (event) {
-            delete this.events[eventName];
-        }
-
-        /*
-            If no event was passed we remove all events
-        */
-        if (!event) {
-            this.events = {};
-        }
-
-        return this.events;
-    }
-
-    on = (eventName, fn) => {
-        this.events[eventName] = fn;
-
-        return this.events;
-    }
-
-    dispatch = (eventName, data) => {
-        if (this.events[eventName]) {
-            return this.events[eventName](data);
-        }
-
-        return this.events;
     }
 
     clearTooltipData = () => {

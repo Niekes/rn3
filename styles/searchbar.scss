@@ -189,24 +189,52 @@
         }
     }
 
-    &__dropdown-group-item {
-        cursor: pointer;
-        flex: 1 0 auto;
+    &__dropdown-group-item,
+    &__dropdown-group-item-content {
         overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    &__dropdown-group-item {
+        align-items: center;
+        cursor: pointer;
+        display: flex;
+        flex: 1 0 auto;
         padding: $rn3-padding-y / 2 $rn3-padding-x;
         position: relative;
-        text-overflow: ellipsis;
         user-select: none;
-        white-space: nowrap;
 
         &:hover {
-            background-color: deeppink;
+            background-color: lightskyblue;
             color: $rn3-white;
         }
 
+        &:hover::after {
+            content: 'Click to select';
+            flex: 1;
+            font-size: 0.75rem;
+            padding-left: $rn3-padding-x / 2;
+            position: relative;
+            text-align: right;
+            text-shadow: $rn3-text-shadow;
+            text-decoration: underline;
+        }
+
         &--preselected {
-            background-color: deeppink;
+            background-color: lightskyblue;
             color: $rn3-white;
+
+            &::after {
+                content: 'Enter to select';
+                flex: 1;
+                font-size: 0.75rem;
+                padding-left: $rn3-padding-x / 2;
+                position: relative;
+                text-align: right;
+                text-decoration: underline;
+                text-shadow: $rn3-text-shadow;
+            }
         }
     }
 }

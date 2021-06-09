@@ -13,7 +13,7 @@ test('Check whether an array is an array', (t) => {
     t.end();
 });
 
-test.only('Check whether an array is emty', (t) => {
+test('Check whether an array is emty', (t) => {
     t.equals(isEmpty([]), true);
     t.equals(isEmpty([1, 2, 3]), false);
 

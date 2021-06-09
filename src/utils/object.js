@@ -19,18 +19,20 @@ export function mergeDeep(source, target) {
 
     if (isObject(target) && isObject(source)) {
         Object.keys(source).forEach((key) => {
-            if (isObject(source[key])) {
-                if ((key in target)) {
-                    merged[key] = mergeDeep(target[key], source[key]);
+            const value = source[key];
+
+            if (isObject(value)) {
+                if (has(target, key)) {
+                    merged[key] = mergeDeep(target[key], value);
                 }
 
-                if (!(key in target)) {
-                    Object.assign(merged, { [key]: source[key] });
+                if (!has(target, key)) {
+                    Object.assign(merged, { [key]: value });
                 }
             }
 
-            if (!isObject(source[key])) {
-                Object.assign(merged, { [key]: source[key] });
+            if (!isObject(value)) {
+                Object.assign(merged, { [key]: value });
             }
         });
     }

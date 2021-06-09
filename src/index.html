@@ -27,6 +27,14 @@ const searchbar = new rn3.Searchbar({
     el: '#searchbar',
 });
 
+searchbar.on('added', (d) => {
+    console.log(d, searchbar.data.values);
+});
+
+searchbar.on('removed', (d) => {
+    console.log(d, searchbar.data.values);
+});
+
 barchart.update({
     values: [
         {
