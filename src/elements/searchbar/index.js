@@ -175,7 +175,7 @@ export default class Searchbar extends Element {
                 .attr('class', 'rn3-searchbar__dropdown-group-item')
                 .merge(dropdownItems)
                 .on('click', (e, datum) => {
-                    this.addItemToInput(datum);
+                    this.manageItemInput(datum);
                 })
                 .on('mouseenter', () => {
                     this.getPreselectedDropdownItem()
@@ -183,6 +183,7 @@ export default class Searchbar extends Element {
                 })
                 .style('pointer-events', 'none')
                 .classed('rn3-searchbar__dropdown-group-item--preselected', (d, i) => i === 0)
+                .classed('rn3-searchbar__dropdown-group-item--present', d => this.getIndexOfDatum(d) !== -1)
                 .html(d => `<span class="rn3-searchbar__dropdown-group-item-content">${this.settings.input.item.render(d)}</span>`);
 
             dropdownItems
@@ -340,7 +341,7 @@ export default class Searchbar extends Element {
         if (isKey(keyCode, 'enter')) {
             const datum = this.getPreselectedDropdownItem().datum();
 
-            this.addItemToInput(datum);
+            this.manageItemInput(datum);
 
             return;
         }
@@ -354,7 +355,7 @@ export default class Searchbar extends Element {
         this.keyCounter = 0;
     };
 
-    addItemToInput = (datum) => {
+    manageItemInput = (datum) => {
         this.data.values = this.data.values || [];
 
         const index = this.getIndexOfDatum(datum);
@@ -362,19 +363,22 @@ export default class Searchbar extends Element {
 
         if (!datumAlreadyExists) {
             this.data.values.push(datum);
-            this.update(this.data);
-            this.setInputvalue();
-            this.focusInput();
-            this.closeDropdown();
-            this.hideBackspace();
 
-            this.resetKeyCounter();
             this.dispatch('added', datum);
         }
 
         if (datumAlreadyExists) {
+            this.data.values.splice(index, 1);
+
             this.dispatch('removed', datum);
         }
+
+        this.closeDropdown();
+        this.focusInput();
+        this.hideBackspace();
+        this.resetKeyCounter();
+        this.setInputvalue();
+        this.update(this.data);
     };
 
     preventDefault = (e) => {
@@ -412,7 +416,7 @@ export default class Searchbar extends Element {
     getPreselectedDropdownItem = () => this.elements.dropdown.group
         .select('.rn3-searchbar__dropdown-group-item--preselected');
 
-    getIndexOfDatum = datum => this.data.values
+    getIndexOfDatum = datum => (this.data.values || [])
         .findIndex(d => this.getIdentity(d) === this.getIdentity(datum));
 
     hideBackspace = () => {

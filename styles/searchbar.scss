@@ -247,6 +247,7 @@
             }
 
             &::after {
+                content: '';
                 flex: 1;
                 font-size: 0.75rem;
                 padding-left: $rn3-padding-x / 2;
@@ -262,9 +263,23 @@
             }
         }
 
-        &--preselected {
+        &--present {
+            &:hover {
+                &::after {
+                    content: 'Click to delete';
+                }
+            }
+        }
+
+        &--preselected:not(&--present) {
             &::after {
                 content: 'Enter to select';
+            }
+        }
+
+        &--present.rn3-searchbar__dropdown-group-item--preselected {
+            &::after {
+                content: 'Enter to delete';
             }
         }
     }
