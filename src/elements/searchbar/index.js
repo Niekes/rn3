@@ -51,18 +51,20 @@ export default class Searchbar extends Element {
         */
         const dropdownGroup = appendSelection(this.container, 'div', { class: 'rn3-searchbar__dropdown-group' });
         const inputGroup = appendSelection(this.container, 'div', { class: 'rn3-searchbar__input-group' });
-        const pre = appendSelection(inputGroup, 'div', { class: 'rn3-searchbar__input-group-pre' });
+        const icon = appendSelection(inputGroup, 'div', { class: 'rn3-searchbar__input-group-icon' });
         const area = appendSelection(inputGroup, 'div', { class: 'rn3-searchbar__input-group-area' });
-        const suf = appendSelection(inputGroup, 'div', { class: 'rn3-searchbar__input-group-suf' });
-        const mic = appendSelection(inputGroup, 'div', { class: 'rn3-searchbar__input-group-mic' });
+        const backspace = appendSelection(inputGroup, 'button', { class: 'rn3-searchbar__input-group-backspace', disabled: 'disabled' });
+        const deleteBtn = appendSelection(inputGroup, 'button', { class: 'rn3-searchbar__input-group-delete-btn', disabled: 'disabled' });
+        const mic = appendSelection(inputGroup, 'button', { class: 'rn3-searchbar__input-group-mic' });
         const entry = appendSelection(area, 'input', { class: 'rn3-searchbar__input-area-entry', placeholder: this.settings.input.placeholder });
 
         this.elements = {
             input: {
-                pre,
+                icon,
                 area,
                 group: inputGroup,
-                suf,
+                backspace,
+                deleteBtn,
                 entry,
                 mic,
             },
@@ -71,17 +73,31 @@ export default class Searchbar extends Element {
             },
         };
 
-        this.elements.input.pre.html(this.settings.input.pre);
-        this.elements.input.suf.html(this.settings.input.suf);
+        this.elements.input.icon.html(this.settings.input.icon);
+        this.elements.input.backspace.html(this.settings.input.backspace);
+        this.elements.input.deleteBtn.html(this.settings.input.deleteBtn);
         this.elements.input.mic.html(this.settings.input.mic);
 
         /*
             Add event listener
         */
-        this.elements.input.pre.on('click', this.focusInput);
+        this.elements.input.icon.on('click', this.focusInput);
         this.elements.input.area.on('click', this.focusInput);
         this.elements.input.entry.on('keyup', this.handleKeyUp);
         this.elements.input.entry.on('keydown', this.preventDefault);
+
+        this.elements.input.backspace.on('click', () => {
+            this.setInputvalue();
+            this.focusInput();
+            this.closeDropdown();
+            this.hideBackspace();
+        });
+
+        this.elements.input.deleteBtn.on('click', () => {
+            this.data.values = [];
+            this.update(this.data);
+            this.dispatch('removed', null);
+        });
 
         this.elements.input.mic.on('click', () => {
             try {
@@ -91,13 +107,6 @@ export default class Searchbar extends Element {
             } finally {
                 this.focusInput();
             }
-        });
-
-        this.elements.input.suf.on('click', () => {
-            this.setInputvalue();
-            this.focusInput();
-            this.closeDropdown();
-            this.hideBackspace();
         });
 
         this.elements.dropdown.group.on('mousemove', () => {
@@ -214,9 +223,9 @@ export default class Searchbar extends Element {
             .attr('class', 'rn3-searchbar__input-group-item')
             .merge(inputItems)
             .on('click', (e, datum) => {
-                const isCloseBtn = select(e.target).classed('rn3-searchbar__input-group-item-close');
+                const isRemoveBtn = select(e.target).classed('rn3-searchbar__input-group-item-remove');
 
-                if (isCloseBtn && datum) {
+                if (isRemoveBtn && datum) {
                     this.data.values = this.data.values || [];
 
                     const index = this.getIndexOfDatum(datum);
@@ -224,15 +233,22 @@ export default class Searchbar extends Element {
                     this.data.values.splice(index, 1);
 
                     this.update(this.data);
-
                     this.dispatch('removed', datum);
                 }
             })
-            .html(d => `<span class="rn3-searchbar__input-group-item-content">${this.settings.input.item.render(d)}</span><span class="rn3-searchbar__input-group-item-close"><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path stroke="currentColor" fill="currentColor" d="M13.41 12l4.3-4.29a1 1 0 10-1.42-1.42L12 10.59l-4.29-4.3a1 1 0 00-1.42 1.42l4.3 4.29-4.3 4.29a1 1 0 000 1.42 1 1 0 001.42 0l4.29-4.3 4.29 4.3a1 1 0 001.42 0 1 1 0 000-1.42z"/></svg></span>`);
+            .html(d => `<span class="rn3-searchbar__input-group-item-content">${this.settings.input.item.render(d)}</span><span class="rn3-searchbar__input-group-item-remove"><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path stroke="currentColor" fill="currentColor" d="M13.41 12l4.3-4.29a1 1 0 10-1.42-1.42L12 10.59l-4.29-4.3a1 1 0 00-1.42 1.42l4.3 4.29-4.3 4.29a1 1 0 000 1.42 1 1 0 001.42 0l4.29-4.3 4.29 4.3a1 1 0 001.42 0 1 1 0 000-1.42z"/></svg></span>`);
 
         inputItems
             .exit()
             .remove();
+
+        if (this.data.values.length > 0) {
+            this.showDeleteBtn();
+        }
+
+        if (this.data.values.length === 0) {
+            this.hideDeleteBtn();
+        }
     };
 
     handleSpeechRecognition = (event) => {
@@ -298,6 +314,9 @@ export default class Searchbar extends Element {
                 this.resetKeyCounter();
             }
 
+            this.getDropdownItems()
+                .style('pointer-events', 'none');
+
             listItems
                 .classed('rn3-searchbar__dropdown-group-item--preselected', (d, i) => i === this.keyCounter);
 
@@ -348,6 +367,7 @@ export default class Searchbar extends Element {
             this.focusInput();
             this.closeDropdown();
             this.hideBackspace();
+
             this.resetKeyCounter();
             this.dispatch('added', datum);
         }
@@ -392,6 +412,9 @@ export default class Searchbar extends Element {
     getPreselectedDropdownItem = () => this.elements.dropdown.group
         .select('.rn3-searchbar__dropdown-group-item--preselected');
 
+    getIndexOfDatum = datum => this.data.values
+        .findIndex(d => this.getIdentity(d) === this.getIdentity(datum));
+
     hideBackspace = () => {
         this.toggleBackspace(false);
     };
@@ -400,12 +423,22 @@ export default class Searchbar extends Element {
         this.toggleBackspace(true);
     };
 
-    getIndexOfDatum = datum => this.data.values
-        .findIndex(d => this.getIdentity(d) === this.getIdentity(datum));
+    toggleBackspace = (show) => {
+        this.elements.input.backspace
+            .attr('disabled', show === true ? null : 'disabled');
+    };
 
-    toggleBackspace = (open) => {
-        this.elements.input.suf
-            .classed('rn3-searchbar__input-group-suf--visible', open);
+    hideDeleteBtn = () => {
+        this.toggleDeleteBtn(false);
+    };
+
+    showDeleteBtn = () => {
+        this.toggleDeleteBtn(true);
+    };
+
+    toggleDeleteBtn = (show) => {
+        this.elements.input.deleteBtn
+            .attr('disabled', show === true ? null : 'disabled');
     };
 
     openDropdown = () => {

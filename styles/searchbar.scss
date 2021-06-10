@@ -1,7 +1,7 @@
 .rn3-searchbar {
-    background: $rn3-white;
+    background: transparent;
     box-sizing: border-box;
-    font-family: sans-serif;
+    font-family: $rn3-font-family;
     padding: 0;
     position: relative;
 
@@ -9,17 +9,18 @@
         INPUT
     */
     &__input-group {
-        border: 1px solid $rn3-black-25;
         border-radius: $rn3-border-radius;
+        border: 1px solid $rn3-black-25;
         box-sizing: border-box;
         display: grid;
-        grid-template-areas: "pre area suf mic";
-        grid-template-columns: minmax(0, min-content) minmax(0, 1fr) minmax(0, min-content) minmax(0, min-content);
+        grid-template-areas: "icon area backspace delete-btn mic";
+        grid-template-columns: minmax(0, min-content) minmax(0, 1fr) minmax(0, min-content) minmax(0, min-content) minmax(0, min-content);
         grid-template-rows: 1fr;
     }
 
-    &__input-group-pre,
-    &__input-group-suf,
+    &__input-group-icon,
+    &__input-group-backspace,
+    &__input-group-delete-btn,
     &__input-group-mic {
         align-items: center;
         color: $rn3-black-25;
@@ -27,8 +28,8 @@
         justify-content: center;
     }
 
-    &__input-group-pre {
-        grid-area: pre;
+    &__input-group-icon {
+        grid-area: icon;
         padding: $rn3-padding-y $rn3-padding-y / 2 $rn3-padding-x $rn3-padding-x;
     }
 
@@ -75,7 +76,7 @@
         user-select: none;
     }
 
-    &__input-group-item-close {
+    &__input-group-item-remove {
         align-items: center;
         background-color: $rn3-black-25;
         cursor: pointer;
@@ -83,35 +84,62 @@
         height: 100%;
         justify-content: center;
 
-        svg,
-        path {
+        * {
             pointer-events: none;
         }
     }
 
-    &__input-group-suf {
-        grid-area: suf;
-        opacity: 0;
+    &__input-group-backspace,
+    &__input-group-delete-btn,
+    &__input-group-mic {
+        background-color: transparent;
+        border: 0;
+        cursor: pointer;
+        margin: 0;
         padding: $rn3-padding-y $rn3-padding-x;
-        pointer-events: none;
-        transition: opacity 250ms linear;
+        position: relative;
+        transition: color 250ms linear, opacity 250ms linear;
+    }
 
-        &:hover {
+    &__input-group-backspace {
+        grid-area: backspace;
+
+        &:hover:not([disabled]) {
             color: $rn3-black-50;
+            cursor: pointer;
         }
 
-        &--visible {
+        &[disabled] {
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+    }
+
+    &__input-group-delete-btn {
+        grid-area: delete-btn;
+
+        &:hover:not([disabled]) {
+            color: $rn3-black-50;
             cursor: pointer;
-            opacity: 1;
-            pointer-events: all;
+        }
+
+        &[disabled] {
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
+        &::after {
+            background-color: $rn3-black-25;
+            content: '';
+            height: 80%;
+            left: 0;
+            position: absolute;
+            width: 1px;
         }
     }
 
     &__input-group-mic {
-        cursor: pointer;
         grid-area: mic;
-        padding: $rn3-padding-y $rn3-padding-x;
-        position: relative;
 
         &::after {
             background-color: $rn3-black-25;
@@ -205,35 +233,38 @@
         position: relative;
         user-select: none;
 
+        &--preselected,
         &:hover {
-            background-color: lightskyblue;
-            color: $rn3-white;
-        }
+            background-color: $rn3-black-10;
 
-        &:hover::after {
-            content: 'Click to select';
-            flex: 1;
-            font-size: 0.75rem;
-            padding-left: $rn3-padding-x / 2;
-            position: relative;
-            text-align: right;
-            text-shadow: $rn3-text-shadow;
-            text-decoration: underline;
-        }
-
-        &--preselected {
-            background-color: lightskyblue;
-            color: $rn3-white;
+            &::before {
+                background-color: lightskyblue;
+                content: '';
+                height: 100%;
+                left: 0;
+                position: absolute;
+                width: 2px;
+            }
 
             &::after {
-                content: 'Enter to select';
                 flex: 1;
                 font-size: 0.75rem;
                 padding-left: $rn3-padding-x / 2;
                 position: relative;
                 text-align: right;
                 text-decoration: underline;
-                text-shadow: $rn3-text-shadow;
+            }
+        }
+
+        &:hover {
+            &::after {
+                content: 'Click to select';
+            }
+        }
+
+        &--preselected {
+            &::after {
+                content: 'Enter to select';
             }
         }
     }
