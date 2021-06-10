@@ -222,6 +222,7 @@ export default class Searchbar extends Element {
             .enter()
             .insert('div', 'input.rn3-searchbar__input-area-entry')
             .attr('class', 'rn3-searchbar__input-group-item')
+            .style('opacity', 0)
             .merge(inputItems)
             .on('click', (e, datum) => {
                 const isRemoveBtn = select(e.target).classed('rn3-searchbar__input-group-item-remove');
@@ -237,10 +238,16 @@ export default class Searchbar extends Element {
                     this.dispatch('removed', datum);
                 }
             })
-            .html(d => `<span class="rn3-searchbar__input-group-item-content">${this.settings.input.item.render(d)}</span><span class="rn3-searchbar__input-group-item-remove"><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path stroke="currentColor" fill="currentColor" d="M13.41 12l4.3-4.29a1 1 0 10-1.42-1.42L12 10.59l-4.29-4.3a1 1 0 00-1.42 1.42l4.3 4.29-4.3 4.29a1 1 0 000 1.42 1 1 0 001.42 0l4.29-4.3 4.29 4.3a1 1 0 001.42 0 1 1 0 000-1.42z"/></svg></span>`);
+            .html(d => `<span class="rn3-searchbar__input-group-item-content">${this.settings.input.item.render(d)}</span><span class="rn3-searchbar__input-group-item-remove"><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path stroke="currentColor" fill="currentColor" d="M13.41 12l4.3-4.29a1 1 0 10-1.42-1.42L12 10.59l-4.29-4.3a1 1 0 00-1.42 1.42l4.3 4.29-4.3 4.29a1 1 0 000 1.42 1 1 0 001.42 0l4.29-4.3 4.29 4.3a1 1 0 001.42 0 1 1 0 000-1.42z"/></svg></span>`)
+            .transition()
+            .duration(this.settings.transition.duration)
+            .style('opacity', 1);
 
         inputItems
             .exit()
+            .transition()
+            .duration(this.settings.transition.duration)
+            .style('opacity', 0)
             .remove();
 
         if (this.data.values.length > 0) {
