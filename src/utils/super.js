@@ -5,6 +5,8 @@ import {
 } from './object';
 
 export default class Super {
+    #events;
+
     constructor(data, settings) {
         /*
             Set id
@@ -19,7 +21,7 @@ export default class Super {
         /*
             Setup pubsub events
         */
-        this.events = {};
+        this.#events = {};
 
         /*
             Merge settings
@@ -28,37 +30,37 @@ export default class Super {
     }
 
     off = (eventName) => {
-        const event = this.events[eventName];
+        const event = this.#events[eventName];
 
         /*
             If event was passed we remove the passed event
         */
         if (event) {
-            delete this.events[eventName];
+            delete this.#events[eventName];
         }
 
         /*
             If no event was passed we remove all events
         */
         if (!event) {
-            this.events = {};
+            this.#events = {};
         }
 
-        return this.events;
+        return this.#events;
     }
 
     on = (eventName, fn) => {
-        this.events[eventName] = fn;
+        this.#events[eventName] = fn;
 
-        return this.events;
+        return this.#events;
     }
 
     dispatch = (eventName, data) => {
-        if (this.events[eventName]) {
-            return this.events[eventName](data);
+        if (this.#events[eventName]) {
+            return this.#events[eventName](data);
         }
 
-        return this.events;
+        return this.#events;
     }
 
     mergeSettings = (oldSettings, newSetting) => {
