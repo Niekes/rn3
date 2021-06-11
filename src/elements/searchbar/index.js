@@ -173,7 +173,8 @@ export default class Searchbar extends Element {
             .classed('rn3-searchbar__dropdown-group--no-results', false);
 
         if (isArrayOfObjects(this.responseData)) {
-            const dropdownItems = this.#getDropdownItems().data(this.responseData, this.getIdentity);
+            const dropdownItems = this.#getDropdownItems()
+                .data(this.responseData, this.getIdentity);
 
             dropdownItems
                 .enter()

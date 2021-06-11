@@ -24,8 +24,7 @@ test('Barchart should be initialzed correctly', (t) => {
     t.equals(barchart.settings.css, '');
     t.equals(barchart.tooltipData.size, 0);
     t.equals(barchart instanceof Barchart, true);
-    t.deepEquals(barchart.events, {});
-    t.equals(Object.keys(barchart.events).length, 0);
+    t.deepEquals(barchart.events, undefined);
     t.equals(barchart.canvas.attr('height'), '1000');
     t.equals(barchart.canvas.attr('width'), '1500');
     t.equals(barchart.canvas.empty(), false);
