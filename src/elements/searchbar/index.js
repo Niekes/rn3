@@ -60,14 +60,14 @@ export default class Searchbar extends Element {
         const icon = appendSelection(form, 'div', { class: 'rn3-searchbar__form-icon' });
         const field = appendSelection(form, 'div', { class: 'rn3-searchbar__form-field' });
         const backspace = appendSelection(form, 'button', { class: 'rn3-searchbar__form-backspace', disabled: 'disabled' });
-        const deleteBtn = appendSelection(form, 'button', { class: 'rn3-searchbar__form-delete-btn', disabled: 'disabled' });
+        const clearBtn = appendSelection(form, 'button', { class: 'rn3-searchbar__form-clear-btn', disabled: 'disabled' });
         const mic = appendSelection(form, 'button', { class: 'rn3-searchbar__form-mic' });
         const input = appendSelection(field, 'input', { class: 'rn3-searchbar__form-input', placeholder: this.settings.input.placeholder });
 
         this.#elements = {
             field,
             backspace,
-            deleteBtn,
+            clearBtn,
             dropdown,
             input,
             form,
@@ -77,7 +77,7 @@ export default class Searchbar extends Element {
 
         this.#elements.icon.html(this.settings.input.icon);
         this.#elements.backspace.html(this.settings.input.backspace);
-        this.#elements.deleteBtn.html(this.settings.input.deleteBtn);
+        this.#elements.clearBtn.html(this.settings.input.clearBtn);
         this.#elements.mic.html(this.settings.input.mic);
 
         /*
@@ -95,7 +95,7 @@ export default class Searchbar extends Element {
             this.#hideBackspace();
         });
 
-        this.#elements.deleteBtn.on('click', () => {
+        this.#elements.clearBtn.on('click', () => {
             this.data.values = [];
             this.update(this.data);
             this.dispatch('removed', null);
@@ -254,11 +254,11 @@ export default class Searchbar extends Element {
             .remove();
 
         if (this.data.values.length > 0) {
-            this.#showDeleteBtn();
+            this.#showClearBtn();
         }
 
         if (this.data.values.length === 0) {
-            this.#hideDeleteBtn();
+            this.#hideClearBtn();
         }
     };
 
@@ -442,16 +442,16 @@ export default class Searchbar extends Element {
             .attr('disabled', show === true ? null : 'disabled');
     };
 
-    #hideDeleteBtn = () => {
-        this.#toggleDeleteBtn(false);
+    #hideClearBtn = () => {
+        this.#toggleClearBtn(false);
     };
 
-    #showDeleteBtn = () => {
-        this.#toggleDeleteBtn(true);
+    #showClearBtn = () => {
+        this.#toggleClearBtn(true);
     };
 
-    #toggleDeleteBtn = (show) => {
-        this.#elements.deleteBtn
+    #toggleClearBtn = (show) => {
+        this.#elements.clearBtn
             .attr('disabled', show === true ? null : 'disabled');
     };
 

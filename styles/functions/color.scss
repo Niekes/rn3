@@ -1,0 +1,25 @@
+@function color-yiq($color) {
+    $r: red($color);
+    $g: green($color);
+    $b: blue($color);
+
+    $yiq: math.div((($r * 299) + ($g * 587) + ($b * 114)), 1000);
+
+    @if ($yiq >= 150) {
+        @return #000;
+    }
+
+    @else {
+        @return #fff;
+    }
+}
+
+@function color-yiq-adjust($color1, $color2, $bg) {
+    @if color-yiq($bg) == #fff {
+        @return $color2;
+    }
+
+    @if color-yiq($bg) == #000 {
+        @return $color1;
+    }
+}
