@@ -237,6 +237,10 @@
             position: absolute;
             width: 1px;
         }
+
+        &:hover {
+            color: $rn3-black-50;
+        }
     }
 
     &__dropdown-item,
