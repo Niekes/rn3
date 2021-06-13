@@ -3,7 +3,6 @@ import {
 } from 'd3';
 
 export default {
-    css: '',
     identity: 'id',
     margin: {
         bottom: 0,
@@ -16,5 +15,4 @@ export default {
         duration: 450,
         ease: easeCubic,
     },
-    intersectionObserverOptions: null,
 };

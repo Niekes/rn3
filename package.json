@@ -7,7 +7,7 @@
     "test": "c8 --reporter=lcov tape -r esm ./tests/setup.js ./tests/**/*-test.js | tap-spec",
     "coverage": "c8 tape -r esm ./tests/setup.js ./tests/**/*-test.js | tap-spec && c8 report",
     "build": "rm -rf src/rn3.*.js && rm -rf src/rn3.*.css && webpack --mode=production",
-    "reset": "rm package-lock.json || true && rm -rf node_modules/ || true && npm install && npm dedupe && npm test",
+    "reset": "rm package-lock.json || true && rm -rf node_modules/ || true && npm install && npm dedupe && npm test",
     "prepack": "npm run build",
     "start": "webpack --mode=development"
   },
@@ -53,6 +53,7 @@
     "postcss-loader": "^5.3.0",
     "sass": "^1.34.0",
     "sass-loader": "^11.1.1",
+    "sass-recursive-map-merge": "^1.0.1",
     "style-loader": "^2.0.0",
     "tap-spec": "^5.0.0",
     "tape": "^5.2.2",

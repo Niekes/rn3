@@ -1,0 +1,33 @@
+@function reveal-value($map, $value) {
+    @if is-map($value) {
+        @return null;
+    }
+
+    @if type-of($value) == 'string' and str-index($value, '@:') == 1 {
+        $key: str-slice($value, 3);
+
+        @if str-index($key, '.') == null {
+            @return map-get($map, $key);
+        }
+
+        @else {
+            $v: map-deep-get($map, str-split($key, '.')...);
+
+            @if type-of($v) == 'string' and str-index($v, '@:') == 1 {
+                @return reveal-value($map, $v);
+            }
+
+            @else {
+                @return $v;
+            }
+
+            @return $v;
+        }
+    }
+
+    @return $value;
+}
+
+@function get-value($map, $keys...) {
+    @return reveal-value($map, map-deep-get($map, $keys...));
+}

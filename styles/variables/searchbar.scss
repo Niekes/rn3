@@ -1,0 +1,33 @@
+$rn3-searchbar-default: (
+    background-color: transparent,
+    border-radius: $rn3-border-radius,
+    border: $rn3-border,
+    color: $rn3-black,
+    font-family: $rn3-font-family,
+    font-size: $rn3-font-size,
+    form: (
+        background-color: '@:background-color',
+        border-radius: '@:border-radius',
+        border: '@:border',
+        color: '@:color',
+        font-family: '@:font-family',
+    ),
+    form-input: (
+        font-family: '@:font-family',
+        font-size: '@:font-size',
+        min-width: 6rem,
+        line-height: $rn3-line-height,
+    ),
+    dropdown: (
+        background-color: '@:background-color',
+        border: '@:border',
+        border-radius: '@:border-radius',
+        color: '@:color',
+    )
+);
+
+$rn3-searchbar-variants: (
+    default: $rn3-searchbar-default,
+) !default;
+
+$rn3-searchbar-variants: deep-merge($rn3-searchbar-default, $rn3-searchbar-variants);

@@ -45,10 +45,11 @@ test('Check whether two objects were merged deeply', (t) => {
             bottom: 5,
             right: 7.5,
         },
+        css: '',
     };
 
     const target = {
-        a: '1',
+        a: '2',
         margin: {
             left: 25,
         },
@@ -56,7 +57,8 @@ test('Check whether two objects were merged deeply', (t) => {
 
     const merged = mergeDeep(source, target);
 
-    t.equals(merged.a, '1');
+    t.equals(merged.a, '2');
+    t.equals(merged.css, '');
     t.equals(merged.margin.top, 10);
     t.equals(merged.margin.left, 25);
     t.equals(merged.margin.bottom, 5);

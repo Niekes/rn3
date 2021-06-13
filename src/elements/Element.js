@@ -4,8 +4,8 @@ import {
     createContainer,
 } from '../utils/selection';
 
-export default class Chart extends Super {
-    constructor(data, settings) {
+export default class Element extends Super {
+    constructor(data, settings = {}) {
         super(data, settings);
 
         /*
@@ -14,7 +14,7 @@ export default class Chart extends Super {
         this.container = createContainer(
             this.data.el,
             this.id,
-            `rn3-${this.constructor.name}`.toLowerCase(),
+            `rn3-${this.constructor.name} ${this.settings.css}`.toLowerCase(),
         );
     }
 }

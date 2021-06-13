@@ -26,7 +26,7 @@ export default class Super {
         /*
             Merge settings
         */
-        this.mergeSettings(settings, this.data.settings);
+        this.settings = Super.mergeSettings(settings, this.data.settings);
     }
 
     off = (eventName) => {
@@ -63,9 +63,7 @@ export default class Super {
         return this.#events;
     }
 
-    mergeSettings = (oldSettings, newSetting) => {
-        this.settings = mergeDeep(oldSettings, newSetting);
-    };
+    static mergeSettings = (oldSettings, newSetting) => mergeDeep(oldSettings, newSetting);
 
     getIdentity = d => d[this.settings.identity];
 }

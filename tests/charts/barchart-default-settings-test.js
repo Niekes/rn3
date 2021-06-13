@@ -3,7 +3,7 @@ import { easeCubic } from 'd3';
 import defaultsettings from '../../src/charts/barchart/default-settings';
 
 test('Barchart default settings are set correctly', (t) => {
-    t.equals(defaultsettings.css, '');
+    t.equals(defaultsettings.css, 'rn3-barchart--default');
     t.equals(defaultsettings.identity, 'id');
     t.equals(defaultsettings.margin.top, 0);
     t.equals(defaultsettings.margin.left, 0);
@@ -12,7 +12,6 @@ test('Barchart default settings are set correctly', (t) => {
     t.equals(defaultsettings.transition.delay, null);
     t.equals(defaultsettings.transition.duration, 450);
     t.equals(defaultsettings.transition.ease, easeCubic);
-    t.equals(defaultsettings.intersectionObserverOptions, null);
     t.equals(defaultsettings.xAxis.fill, '#000');
     t.equals(defaultsettings.xAxis.font, '10px sans-serif');
     t.equals(defaultsettings.xAxis.tickFormat(1), 1);

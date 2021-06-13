@@ -1,1 +1,6 @@
+$rn3-border-color: $rn3-black-25 !default;
 $rn3-border-radius: 0.15rem !default;
+$rn3-border-style: solid !default;
+$rn3-border-width: 0.0625rem !default;
+
+$rn3-border: $rn3-border-width $rn3-border-style $rn3-border-color !default;

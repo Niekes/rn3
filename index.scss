@@ -1,9 +1,36 @@
+$rn3-searchbar-variants: (
+    default: (),
+    test: (
+        font-family: monospace,
+        background-color: lightgreen,
+        border-radius: 20px,
+    ),
+);
+
+@use "sass:math";
+
+@import './node_modules/sass-recursive-map-merge/_recursive-map-merge.scss';
+/*
+    Functions
+*/
+@import './styles/functions/map';
+@import './styles/functions/string';
+@import './styles/functions/utils';
+
+/*
+    Variables
+*/
 @import './styles/variables/base-colors';
 @import './styles/variables/base-border';
 @import './styles/variables/base-shadows';
 @import './styles/variables/base-spacing';
 @import './styles/variables/base-typography';
+@import './styles/variables/searchbar';
 @import './styles/variables/tooltip';
+
+/*
+    Styles
+*/
 @import './styles/searchbar';
 @import './styles/tooltip';
 

@@ -43,7 +43,7 @@ export default class Barchart extends Chart {
         /*
             Merge settings
         */
-        this.mergeSettings(this.settings, updatedData.settings);
+        this.settings = Chart.mergeSettings(this.settings, updatedData.settings);
 
         /*
             Update canvas
@@ -83,35 +83,35 @@ export default class Barchart extends Chart {
                 parent: this.detachedContainer,
             },
             enter: {
-                fill: this.getFill,
+                fill: Chart.getFill,
                 height: 0,
-                width: this.getWidthOfBars,
-                x: this.getXPositionOfBars,
-                y: this.getYScale0,
+                width: this.#getWidthOfBars,
+                x: this.#getXPositionOfBars,
+                y: this.#getYScale0,
             },
             update: {
-                fill: this.getFill,
-                height: this.getHeightOfBars,
-                width: this.getWidthOfBars,
-                x: this.getXPositionOfBars,
-                y: this.getYPositionOfBars,
+                fill: Chart.getFill,
+                height: this.#getHeightOfBars,
+                width: this.#getWidthOfBars,
+                x: this.#getXPositionOfBars,
+                y: this.#getYPositionOfBars,
             },
             exit: {
                 height: 0,
-                y: this.getYScale0,
-                fill: this.getFillTransparentized,
+                y: this.#getYScale0,
+                fill: Chart.getFillTransparentized,
             },
         }, this.settings.transition);
 
         /*
             Render bars on canvas
         */
-        render(this.draw, this.settings.transition.duration);
+        render(this.#draw, this.settings.transition.duration);
 
         /*
             Render bars on virtual canvas
         */
-        renderOnVirtualCanvas(this.drawOnVirtualCanvas, this.settings.transition.duration);
+        renderOnVirtualCanvas(this.#drawOnVirtualCanvas, this.settings.transition.duration);
 
         /*
             Bind data for x-ticks
@@ -143,7 +143,7 @@ export default class Barchart extends Chart {
         );
     }
 
-    draw = () => {
+    #draw = () => {
         clearCanvas(this.context, this.settings.margin, this.height, this.width);
 
         const bars = this.detachedContainer.selectAll('custom.bars');
@@ -165,7 +165,7 @@ export default class Barchart extends Chart {
         drawYAxis(this.context, this.detachedContainer, this.settings);
     }
 
-    drawOnVirtualCanvas = () => {
+    #drawOnVirtualCanvas = () => {
         clearCanvas(this.virtualContext, this.settings.margin, this.height, this.width);
 
         const bars = this.detachedContainer.selectAll('custom.bars');
@@ -178,8 +178,8 @@ export default class Barchart extends Chart {
             const width = +bar.attr('width');
             const datum = bar.datum();
             /*
-                    Draw to virtual context
-                */
+                Draw to virtual context
+            */
             if (has(datum, 'tooltip')) {
                 const uniqueColor = getUniqueColorByIndex(i);
 
@@ -193,13 +193,13 @@ export default class Barchart extends Chart {
         });
     }
 
-    getYScale0 = () => this.yScale(0);
+    #getYScale0 = () => this.yScale(0);
 
-    getXPositionOfBars = d => this.xScale(this.getIdentity(d));
+    #getXPositionOfBars = d => this.xScale(this.getIdentity(d));
 
-    getYPositionOfBars = d => Math.min(this.getYScale0(), this.yScale(d.value));
+    #getYPositionOfBars = d => Math.min(this.#getYScale0(), this.yScale(d.value));
 
-    getWidthOfBars = () => this.xScale.bandwidth();
+    #getWidthOfBars = () => this.xScale.bandwidth();
 
-    getHeightOfBars = d => Math.abs(this.yScale(d.value) - this.getYScale0());
+    #getHeightOfBars = d => Math.abs(this.yScale(d.value) - this.#getYScale0());
 }

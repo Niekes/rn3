@@ -1,59 +1,108 @@
 .rn3-searchbar {
-    background: transparent;
     box-sizing: border-box;
-    font-family: $rn3-font-family;
     padding: 0;
     position: relative;
 
-    /*
-        INPUT
-    */
-    &__input-group {
-        border-radius: $rn3-border-radius;
-        border: 1px solid $rn3-black-25;
+    &__form {
         box-sizing: border-box;
         display: grid;
-        grid-template-areas: "icon area backspace delete-btn mic";
+        grid-template-areas: "icon field backspace delete-btn mic";
         grid-template-columns: minmax(0, min-content) minmax(0, 1fr) minmax(0, min-content) minmax(0, min-content) minmax(0, min-content);
         grid-template-rows: 1fr;
     }
 
-    &__input-group-icon,
-    &__input-group-backspace,
-    &__input-group-delete-btn,
-    &__input-group-mic {
+    &__form-input {
+        background-color: transparent;
+        border: none;
+        flex: 1;
+        margin-top: $rn3-margin-y;
+        overflow: hidden;
+        padding: math.div($rn3-padding-x, 4) math.div($rn3-padding-x, 4);
+        text-overflow: ellipsis;
+        user-select: none;
+
+        &:focus {
+            outline: none;
+        }
+
+        &::placeholder {
+            color: $rn3-black-25;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+
+    @each $name, $searchbar in $rn3-searchbar-variants {
+        &--#{$name} {
+            .rn3-searchbar__form {
+                @each $property, $value in map-get($searchbar, 'form') {
+                    #{$property}: reveal-value($searchbar, $value);
+                }
+            }
+
+            .rn3-searchbar__form-input {
+                @each $property, $value in map-get($searchbar, 'form-input') {
+                    #{$property}: reveal-value($searchbar, $value);
+                }
+            }
+
+            .rn3-searchbar__dropdown {
+                @each $property, $value in map-get($searchbar, 'dropdown') {
+                    #{$property}: reveal-value($searchbar, $value);
+                }
+
+                &--open {
+                    $br: get-value($searchbar, 'dropdown', 'border-radius');
+
+                    border-radius: 0 0 $br $br;
+
+                    + .rn3-searchbar__form {
+                        $br: get-value($searchbar, 'form', 'border-radius');
+
+                        border-radius: $br $br 0 0;
+                    }
+                }
+            }
+        }
+    }
+
+    &__form-icon,
+    &__form-backspace,
+    &__form-delete-btn,
+    &__form-mic {
         align-items: center;
         color: $rn3-black-25;
         display: flex;
         justify-content: center;
     }
 
-    &__input-group-icon {
+    &__form-icon {
         grid-area: icon;
-        padding: $rn3-padding-y $rn3-padding-y / 2 $rn3-padding-x $rn3-padding-x;
+        padding: $rn3-padding-y math.div($rn3-padding-y, 2) $rn3-padding-x $rn3-padding-x;
     }
 
-    &__input-group-area {
+    &__form-field {
         display: flex;
         flex-wrap: wrap;
-        grid-area: area;
+        grid-area: field;
         min-width: 0;
         padding-bottom: $rn3-padding-y;
-        padding-left: $rn3-padding-x / 2;
+        padding-left: math.div($rn3-padding-x, 2);
 
         &:hover {
             cursor: text;
         }
     }
 
-    &__input-group-item,
-    &__input-group-item-content {
+    &__form-item,
+    &__form-item-content {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
     }
 
-    &__input-group-item {
+    &__form-item {
         align-items: center;
         background-color: lightskyblue;
         border-radius: $rn3-border-radius;
@@ -63,20 +112,20 @@
         cursor: default;
         display: flex;
         height: 1.5rem;
-        margin-right: $rn3-margin-x / 2;
+        margin-right: math.div($rn3-margin-x, 2);
         margin-top: $rn3-margin-y;
         max-height: 1.5rem;
         user-select: none;
     }
 
-    &__input-group-item-content {
+    &__form-item-content {
         font-family: sans-serif;
-        padding: 0 $rn3-padding-x / 2;
+        padding: 0 math.div($rn3-padding-x, 2);
         text-shadow: $rn3-text-shadow;
         user-select: none;
     }
 
-    &__input-group-item-remove {
+    &__form-item-remove {
         align-items: center;
         background-color: $rn3-black-25;
         cursor: pointer;
@@ -89,9 +138,9 @@
         }
     }
 
-    &__input-group-backspace,
-    &__input-group-delete-btn,
-    &__input-group-mic {
+    &__form-backspace,
+    &__form-delete-btn,
+    &__form-mic {
         background-color: transparent;
         border: 0;
         cursor: pointer;
@@ -101,7 +150,7 @@
         transition: color 250ms linear, opacity 250ms linear;
     }
 
-    &__input-group-backspace {
+    &__form-backspace {
         grid-area: backspace;
 
         &:hover:not([disabled]) {
@@ -115,7 +164,7 @@
         }
     }
 
-    &__input-group-delete-btn {
+    &__form-delete-btn {
         grid-area: delete-btn;
 
         &:hover:not([disabled]) {
@@ -138,7 +187,7 @@
         }
     }
 
-    &__input-group-mic {
+    &__form-mic {
         grid-area: mic;
 
         &::after {
@@ -155,35 +204,10 @@
         }
     }
 
-    &__input-area-entry {
-        background-color: transparent;
-        border: none;
-        flex: 1;
-        font-size: 1rem;
-        line-height: $rn3-line-height;
-        margin-top: $rn3-margin-y;
-        min-width: 6rem;
-        overflow: hidden;
-        padding: $rn3-padding-x / 4 $rn3-padding-x / 4;
-        text-overflow: ellipsis;
-        user-select: none;
-
-        &:focus {
-            outline: none;
-        }
-
-        &::placeholder {
-            color: $rn3-black-25;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-    }
-
     /*
         DROPDOWN
     */
-    &__dropdown-group {
+    &__dropdown {
         background: $rn3-white;
         border-bottom: 1px solid $rn3-black-25;
         border-left: 1px solid $rn3-black-25;
@@ -201,35 +225,30 @@
         z-index: 1;
 
         &--open {
-            border-radius: 0 0 $rn3-border-radius $rn3-border-radius;
             display: flex;
             flex-direction: column;
-
-            + .rn3-searchbar__input-group {
-                border-radius: $rn3-border-radius $rn3-border-radius 0 0;
-            }
         }
 
         &--error,
         &--no-results,
         &--loading {
-            padding: $rn3-padding-y / 2 $rn3-padding-x;
+            padding: math.div($rn3-padding-y, 2) $rn3-padding-x;
         }
     }
 
-    &__dropdown-group-item,
-    &__dropdown-group-item-content {
+    &__dropdown-item,
+    &__dropdown-item-content {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
     }
 
-    &__dropdown-group-item {
+    &__dropdown-item {
         align-items: center;
         cursor: pointer;
         display: flex;
         flex: 1 0 auto;
-        padding: $rn3-padding-y / 2 $rn3-padding-x;
+        padding: math.div($rn3-padding-y, 2) $rn3-padding-x;
         position: relative;
         user-select: none;
 
@@ -250,7 +269,7 @@
                 content: '';
                 flex: 1;
                 font-size: 0.75rem;
-                padding-left: $rn3-padding-x / 2;
+                padding-left: math.div($rn3-padding-x, 2);
                 position: relative;
                 text-align: right;
                 text-decoration: underline;
@@ -277,7 +296,7 @@
             }
         }
 
-        &--present.rn3-searchbar__dropdown-group-item--preselected {
+        &--present.rn3-searchbar__dropdown-item--preselected {
             &::after {
                 content: 'Enter to delete';
             }

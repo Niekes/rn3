@@ -1,0 +1,35 @@
+@function map-set($map, $key, $value) {
+    $new: ($key: $value);
+
+    @return map-merge($map, $new);
+}
+
+@function is-map($var) {
+    @return type-of($var) == 'map';
+}
+
+@function is-not-map($var) {
+    @return type-of($var) != 'map';
+}
+
+@function map-deep-get($map, $keys...) {
+    @each $key in $keys {
+        $map: map-get($map, $key);
+    }
+
+    @return $map;
+}
+
+@function deep-merge($default, $variants) {
+    @if is-not-map($variants) {
+        @return $default;
+    }
+
+    $map: ();
+
+    @each $key, $variant in $variants {
+        $map: map-set($map, $key, recursive-map-merge($default, $variant));
+    }
+
+    @return $map;
+}

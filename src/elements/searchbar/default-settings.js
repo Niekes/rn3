@@ -2,6 +2,7 @@ import defaults from '../../utils/default-settings';
 
 export default {
     ...defaults,
+    css: 'rn3-searchbar--default',
     request: {
         url: 'https://nominatim.openstreetmap.org',
         options: {

@@ -47,10 +47,10 @@ test('Super class of all charts should be initialzed correctly', (t) => {
     t.equals(typeof chart.on, 'function');
     t.equals(typeof chart.off, 'function');
     t.equals(typeof chart.dispatch, 'function');
-    t.equals(typeof chart.getFill, 'function');
-    t.equals(typeof chart.getFillTransparentized, 'function');
+    t.equals(typeof chart.getFill, 'undefined');
+    t.equals(typeof chart.getFillTransparentized, 'undefined');
     t.equals(typeof chart.getIdentity, 'function');
-    t.equals(typeof chart.mergeSettings, 'function');
+    t.equals(typeof chart.mergeSettings, 'undefined');
     t.equals(/^rn3-chart-\w{5}$/.test(chart.id), true);
 
     t.end();
@@ -80,8 +80,6 @@ test('Super class standard methods work correctly', (t) => {
 
     chart.tooltipData.set('rgba(0, 0, 0, 0)', { id: '1', value: 1 });
 
-    t.equals(chart.getFill({ fill: 'pink' }), 'pink');
-    t.equals(chart.getFillTransparentized({ fill: 'rgba(155, 33, 56, 1)' }).toString(), 'rgba(155, 33, 56, 0)');
     t.equals(chart.getIdentity({ id: 1 }), 1);
     t.equals(chart.tooltipData.size, 1);
     t.deepEquals(chart.getTooltipDataByMousePosition(0, 0), { id: '1', value: 1 });

@@ -30,7 +30,9 @@ import {
 } from '../utils/tooltip';
 
 export default class Chart extends Super {
-    constructor(data, settings) {
+    #virtualCanvas;
+
+    constructor(data, settings = {}) {
         super(data, settings);
 
         /*
@@ -53,12 +55,12 @@ export default class Chart extends Super {
         /*
             Setup virtual canvas
         */
-        this.virtualCanvas = createVirtualCanvas(this.id, height, width);
+        this.#virtualCanvas = createVirtualCanvas(this.id, height, width);
 
         /*
             Setup virtual context
         */
-        this.virtualContext = this.virtualCanvas.node().getContext('2d');
+        this.virtualContext = this.#virtualCanvas.node().getContext('2d');
 
         /*
             Create detached container
@@ -91,9 +93,9 @@ export default class Chart extends Super {
         return this.tooltipData.get(rgb(...imageData.data).toString());
     };
 
-    getFill = d => d.fill;
+    static getFill = d => d.fill;
 
-    getFillTransparentized = d => transparentize(this.getFill(d));
+    static getFillTransparentized = d => transparentize(this.getFill(d));
 
     updateCanvas = () => {
         const height = getHeight(this.data.el);
@@ -103,13 +105,13 @@ export default class Chart extends Super {
         this.width = computeInnerWidth(width, this.settings.margin);
 
         this.canvas = updateCanvas(this.data.el, this.id, height, width);
-        this.virtualCanvas = updateVirtualCanvas(this.virtualCanvas, height, width);
+        this.#virtualCanvas = updateVirtualCanvas(this.#virtualCanvas, height, width);
 
         this.context = this.canvas.node().getContext('2d');
         this.context.translate(this.settings.margin.left * 2, this.settings.margin.top * 2);
         this.context.scale(2, 2);
 
-        this.virtualContext = this.virtualCanvas.node().getContext('2d');
+        this.virtualContext = this.#virtualCanvas.node().getContext('2d');
         this.virtualContext.translate(this.settings.margin.left * 2, this.settings.margin.top * 2);
         this.virtualContext.scale(2, 2);
 

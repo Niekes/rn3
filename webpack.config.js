@@ -51,6 +51,12 @@ module.exports = (env, options) => ({
                     },
                     {
                         loader: 'sass-loader',
+                        options: {
+                            sassOptions: {
+                                indentWidth: 4,
+                                sourceMap: true,
+                            },
+                        },
                     },
                 ],
             },

@@ -10,32 +10,18 @@ export function isEmpty(object) {
     return isObject(object) && Object.keys(object).length === 0;
 }
 
-export function mergeDeep(source, target) {
-    const merged = Object.assign({}, target);
-
-    if (!isObject(target) && isObject(source)) {
-        return source;
-    }
+export function mergeDeep(target, source) {
+    const output = Object.assign({}, target);
 
     if (isObject(target) && isObject(source)) {
         Object.keys(source).forEach((key) => {
-            const value = source[key];
-
-            if (isObject(value)) {
-                if (has(target, key)) {
-                    merged[key] = mergeDeep(target[key], value);
-                }
-
-                if (!has(target, key)) {
-                    Object.assign(merged, { [key]: value });
-                }
-            }
-
-            if (!isObject(value)) {
-                Object.assign(merged, { [key]: value });
+            if (isObject(source[key])) {
+                if (!(key in target)) Object.assign(output, { [key]: source[key] });
+                else output[key] = mergeDeep(target[key], source[key]);
+            } else {
+                Object.assign(output, { [key]: source[key] });
             }
         });
     }
-
-    return merged;
+    return output;
 }

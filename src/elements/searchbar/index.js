@@ -55,57 +55,53 @@ export default class Searchbar extends Element {
         /*
             Add necessary elements
         */
-        const dropdownGroup = appendSelection(this.container, 'div', { class: 'rn3-searchbar__dropdown-group' });
-        const inputGroup = appendSelection(this.container, 'div', { class: 'rn3-searchbar__input-group' });
-        const icon = appendSelection(inputGroup, 'div', { class: 'rn3-searchbar__input-group-icon' });
-        const area = appendSelection(inputGroup, 'div', { class: 'rn3-searchbar__input-group-area' });
-        const backspace = appendSelection(inputGroup, 'button', { class: 'rn3-searchbar__input-group-backspace', disabled: 'disabled' });
-        const deleteBtn = appendSelection(inputGroup, 'button', { class: 'rn3-searchbar__input-group-delete-btn', disabled: 'disabled' });
-        const mic = appendSelection(inputGroup, 'button', { class: 'rn3-searchbar__input-group-mic' });
-        const entry = appendSelection(area, 'input', { class: 'rn3-searchbar__input-area-entry', placeholder: this.settings.input.placeholder });
+        const dropdown = appendSelection(this.container, 'div', { class: 'rn3-searchbar__dropdown' });
+        const form = appendSelection(this.container, 'div', { class: 'rn3-searchbar__form' });
+        const icon = appendSelection(form, 'div', { class: 'rn3-searchbar__form-icon' });
+        const field = appendSelection(form, 'div', { class: 'rn3-searchbar__form-field' });
+        const backspace = appendSelection(form, 'button', { class: 'rn3-searchbar__form-backspace', disabled: 'disabled' });
+        const deleteBtn = appendSelection(form, 'button', { class: 'rn3-searchbar__form-delete-btn', disabled: 'disabled' });
+        const mic = appendSelection(form, 'button', { class: 'rn3-searchbar__form-mic' });
+        const input = appendSelection(field, 'input', { class: 'rn3-searchbar__form-input', placeholder: this.settings.input.placeholder });
 
         this.#elements = {
-            input: {
-                icon,
-                area,
-                group: inputGroup,
-                backspace,
-                deleteBtn,
-                entry,
-                mic,
-            },
-            dropdown: {
-                group: dropdownGroup,
-            },
+            field,
+            backspace,
+            deleteBtn,
+            dropdown,
+            input,
+            form,
+            icon,
+            mic,
         };
 
-        this.#elements.input.icon.html(this.settings.input.icon);
-        this.#elements.input.backspace.html(this.settings.input.backspace);
-        this.#elements.input.deleteBtn.html(this.settings.input.deleteBtn);
-        this.#elements.input.mic.html(this.settings.input.mic);
+        this.#elements.icon.html(this.settings.input.icon);
+        this.#elements.backspace.html(this.settings.input.backspace);
+        this.#elements.deleteBtn.html(this.settings.input.deleteBtn);
+        this.#elements.mic.html(this.settings.input.mic);
 
         /*
             Add event listener
         */
-        this.#elements.input.icon.on('click', this.#focusInput);
-        this.#elements.input.area.on('click', this.#focusInput);
-        this.#elements.input.entry.on('keyup', this.#handleKeyUp);
-        this.#elements.input.entry.on('keydown', this.#preventDefault);
+        this.#elements.icon.on('click', this.#focusInput);
+        this.#elements.field.on('click', this.#focusInput);
+        this.#elements.input.on('keyup', this.#handleKeyUp);
+        this.#elements.input.on('keydown', this.#preventDefault);
 
-        this.#elements.input.backspace.on('click', () => {
+        this.#elements.backspace.on('click', () => {
             this.#setInputvalue();
             this.#focusInput();
             this.#closeDropdown();
             this.#hideBackspace();
         });
 
-        this.#elements.input.deleteBtn.on('click', () => {
+        this.#elements.deleteBtn.on('click', () => {
             this.data.values = [];
             this.update(this.data);
             this.dispatch('removed', null);
         });
 
-        this.#elements.input.mic.on('click', () => {
+        this.#elements.mic.on('click', () => {
             try {
                 this.#speechRecognition.start();
             } catch (e) {
@@ -115,7 +111,7 @@ export default class Searchbar extends Element {
             }
         });
 
-        this.#elements.dropdown.group.on('mousemove', () => {
+        this.#elements.dropdown.on('mousemove', () => {
             this.#getDropdownItems()
                 .style('pointer-events', null);
         });
@@ -166,11 +162,11 @@ export default class Searchbar extends Element {
             errorOccured = true;
         }
 
-        this.#elements.dropdown.group
+        this.#elements.dropdown
             .html(null)
-            .classed('rn3-searchbar__dropdown-group--error', false)
-            .classed('rn3-searchbar__dropdown-group--loading', false)
-            .classed('rn3-searchbar__dropdown-group--no-results', false);
+            .classed('rn3-searchbar__dropdown--error', false)
+            .classed('rn3-searchbar__dropdown--loading', false)
+            .classed('rn3-searchbar__dropdown--no-results', false);
 
         if (isArrayOfObjects(this.responseData)) {
             const dropdownItems = this.#getDropdownItems()
@@ -179,19 +175,19 @@ export default class Searchbar extends Element {
             dropdownItems
                 .enter()
                 .append('div')
-                .attr('class', 'rn3-searchbar__dropdown-group-item')
+                .attr('class', 'rn3-searchbar__dropdown-item')
                 .merge(dropdownItems)
                 .on('click', (e, datum) => {
                     this.#manageItemInput(datum);
                 })
                 .on('mouseenter', () => {
                     this.#getPreselectedDropdownItem()
-                        .classed('rn3-searchbar__dropdown-group-item--preselected', false);
+                        .classed('rn3-searchbar__dropdown-item--preselected', false);
                 })
                 .style('pointer-events', 'none')
-                .classed('rn3-searchbar__dropdown-group-item--preselected', (d, i) => i === 0)
-                .classed('rn3-searchbar__dropdown-group-item--present', d => this.#getIndexOfDatum(d) !== -1)
-                .html(d => `<span class="rn3-searchbar__dropdown-group-item-content">${this.settings.input.item.render(d)}</span>`);
+                .classed('rn3-searchbar__dropdown-item--preselected', (d, i) => i === 0)
+                .classed('rn3-searchbar__dropdown-item--present', d => this.#getIndexOfDatum(d) !== -1)
+                .html(d => `<span class="rn3-searchbar__dropdown-item-content">${this.settings.input.item.render(d)}</span>`);
 
             dropdownItems
                 .exit()
@@ -201,16 +197,16 @@ export default class Searchbar extends Element {
         }
 
         if (!isArrayOfObjects(this.responseData) && errorOccured === true) {
-            this.#elements.dropdown.group
+            this.#elements.dropdown
                 .html(request.error)
-                .classed('rn3-searchbar__dropdown-group--error', true);
+                .classed('rn3-searchbar__dropdown--error', true);
 
             return;
         }
 
-        this.#elements.dropdown.group
+        this.#elements.dropdown
             .html(request.noResults)
-            .classed('rn3-searchbar__dropdown-group--no-results', true);
+            .classed('rn3-searchbar__dropdown--no-results', true);
     };
 
     #fetchResultsDebounced = debounce((e) => {
@@ -227,12 +223,12 @@ export default class Searchbar extends Element {
 
         inputItems
             .enter()
-            .insert('div', 'input.rn3-searchbar__input-area-entry')
-            .attr('class', 'rn3-searchbar__input-group-item')
+            .insert('div', 'input.rn3-searchbar__form-input')
+            .attr('class', 'rn3-searchbar__form-item')
             .style('opacity', 0)
             .merge(inputItems)
             .on('click', (e, datum) => {
-                const isRemoveBtn = select(e.target).classed('rn3-searchbar__input-group-item-remove');
+                const isRemoveBtn = select(e.target).classed('rn3-searchbar__form-item-remove');
 
                 if (isRemoveBtn && datum) {
                     this.data.values = this.data.values || [];
@@ -245,7 +241,7 @@ export default class Searchbar extends Element {
                     this.dispatch('removed', datum);
                 }
             })
-            .html(d => `<span class="rn3-searchbar__input-group-item-content">${this.settings.input.item.render(d)}</span><span class="rn3-searchbar__input-group-item-remove"><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path stroke="currentColor" fill="currentColor" d="M13.41 12l4.3-4.29a1 1 0 10-1.42-1.42L12 10.59l-4.29-4.3a1 1 0 00-1.42 1.42l4.3 4.29-4.3 4.29a1 1 0 000 1.42 1 1 0 001.42 0l4.29-4.3 4.29 4.3a1 1 0 001.42 0 1 1 0 000-1.42z"/></svg></span>`)
+            .html(d => `<span class="rn3-searchbar__form-item-content">${this.settings.input.item.render(d)}</span><span class="rn3-searchbar__form-item-remove"><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path stroke="currentColor" fill="currentColor" d="M13.41 12l4.3-4.29a1 1 0 10-1.42-1.42L12 10.59l-4.29-4.3a1 1 0 00-1.42 1.42l4.3 4.29-4.3 4.29a1 1 0 000 1.42 1 1 0 001.42 0l4.29-4.3 4.29 4.3a1 1 0 001.42 0 1 1 0 000-1.42z"/></svg></span>`)
             .transition()
             .duration(this.settings.transition.duration)
             .style('opacity', 1);
@@ -279,7 +275,7 @@ export default class Searchbar extends Element {
             if (result.isFinal) {
                 this.#speechRecognition.stop();
 
-                this.#elements.input.entry.attr('placeholder', this.settings.input.placeholder);
+                this.#elements.input.attr('placeholder', this.settings.input.placeholder);
 
                 this.#focusInput();
                 this.#setLoadingSequenceInDropdown();
@@ -290,7 +286,7 @@ export default class Searchbar extends Element {
             }
 
             if (!result.isFinal) {
-                this.#elements.input.entry.attr('placeholder', result[0].transcript.trim());
+                this.#elements.input.attr('placeholder', result[0].transcript.trim());
             }
         }
     };
@@ -333,17 +329,17 @@ export default class Searchbar extends Element {
                 .style('pointer-events', 'none');
 
             listItems
-                .classed('rn3-searchbar__dropdown-group-item--preselected', (d, i) => i === this.#keyCounter);
+                .classed('rn3-searchbar__dropdown-item--preselected', (d, i) => i === this.#keyCounter);
 
             const p = this.#getPreselectedDropdownItem().node();
-            const h = Number.parseInt(this.#elements.dropdown.group.style('height'), 10);
+            const h = Number.parseInt(this.#elements.dropdown.style('height'), 10);
 
             if (p.offsetTop + h / 2 > h) {
-                this.#elements.dropdown.group.node().scrollTop = p.offsetTop - h / 2;
+                this.#elements.dropdown.node().scrollTop = p.offsetTop - h / 2;
                 return;
             }
 
-            this.#elements.dropdown.group.node().scrollTop = 0;
+            this.#elements.dropdown.node().scrollTop = 0;
 
             return;
         }
@@ -403,32 +399,32 @@ export default class Searchbar extends Element {
     };
 
     #setLoadingSequenceInDropdown = () => {
-        this.#elements.dropdown.group
+        this.#elements.dropdown
             .html(this.settings.request.loading)
-            .classed('rn3-searchbar__dropdown-group--error', false)
-            .classed('rn3-searchbar__dropdown-group--loading', true);
+            .classed('rn3-searchbar__dropdown--error', false)
+            .classed('rn3-searchbar__dropdown--loading', true);
     };
 
     #setInputvalue = (val = '') => {
-        this.#elements.input.entry.node().value = val;
+        this.#elements.input.node().value = val;
     };
 
     #focusInput = () => {
-        this.#elements.input.entry.node().focus();
+        this.#elements.input.node().focus();
     };
 
     #getInputItems = () => getChildrenFromSelection(
-        this.#elements.input.area,
-        'div.rn3-searchbar__input-group-item',
+        this.#elements.field,
+        'div.rn3-searchbar__form-item',
     );
 
     #getDropdownItems = () => getChildrenFromSelection(
-        this.#elements.dropdown.group,
-        'div.rn3-searchbar__dropdown-group-item',
+        this.#elements.dropdown,
+        'div.rn3-searchbar__dropdown-item',
     );
 
-    #getPreselectedDropdownItem = () => this.#elements.dropdown.group
-        .select('.rn3-searchbar__dropdown-group-item--preselected');
+    #getPreselectedDropdownItem = () => this.#elements.dropdown
+        .select('.rn3-searchbar__dropdown-item--preselected');
 
     #getIndexOfDatum = datum => (this.data.values || [])
         .findIndex(d => this.getIdentity(d) === this.getIdentity(datum));
@@ -442,7 +438,7 @@ export default class Searchbar extends Element {
     };
 
     #toggleBackspace = (show) => {
-        this.#elements.input.backspace
+        this.#elements.backspace
             .attr('disabled', show === true ? null : 'disabled');
     };
 
@@ -455,7 +451,7 @@ export default class Searchbar extends Element {
     };
 
     #toggleDeleteBtn = (show) => {
-        this.#elements.input.deleteBtn
+        this.#elements.deleteBtn
             .attr('disabled', show === true ? null : 'disabled');
     };
 
@@ -468,7 +464,7 @@ export default class Searchbar extends Element {
     };
 
     #toggleDropdown = (open) => {
-        this.#elements.dropdown.group
-            .classed('rn3-searchbar__dropdown-group--open', open);
+        this.#elements.dropdown
+            .classed('rn3-searchbar__dropdown--open', open);
     };
 }
