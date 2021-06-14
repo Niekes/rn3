@@ -37,6 +37,7 @@
     &__form-item-remove,
     &__form-mic {
         align-items: center;
+        box-sizing: border-box;
         display: flex;
         justify-content: center;
     }
@@ -48,8 +49,6 @@
         border: 0;
         cursor: pointer;
         margin: 0;
-        position: relative;
-        transition: color 250ms linear, opacity 250ms linear;
 
         &:hover:not([disabled]) {
             cursor: pointer;
@@ -70,28 +69,10 @@
 
     &__form-clear-btn {
         grid-area: clear-btn;
-
-        &::after {
-            background-color: $rn3-border-color;
-            content: '';
-            height: 80%;
-            left: 0;
-            position: absolute;
-            width: 1px;
-        }
     }
 
     &__form-mic {
         grid-area: mic;
-
-        &::after {
-            background-color: $rn3-border-color;
-            content: '';
-            height: 80%;
-            left: 0;
-            position: absolute;
-            width: 1px;
-        }
     }
 
     &__form-field {
@@ -159,6 +140,65 @@
         white-space: nowrap;
     }
 
+    &__dropdown-item {
+        align-items: center;
+        cursor: pointer;
+        display: flex;
+        flex: 1 0 auto;
+        position: relative;
+        user-select: none;
+
+        &--preselected,
+        &:hover {
+            background-color: $rn3-black-10;
+
+            &::before {
+                background-color: lightskyblue;
+                content: '';
+                height: 100%;
+                left: 0;
+                position: absolute;
+                width: 2px;
+            }
+
+            &::after {
+                content: '';
+                flex: 1;
+                font-size: 0.75rem;
+                padding-left: math.div($rn3-padding-x, 2);
+                position: relative;
+                text-align: right;
+                text-decoration: underline;
+            }
+        }
+
+        &:hover {
+            &::after {
+                content: 'Click to select';
+            }
+        }
+
+        &--present {
+            &:hover {
+                &::after {
+                    content: 'Click to remove';
+                }
+            }
+        }
+
+        &--preselected:not(&--present) {
+            &::after {
+                content: 'Enter to select';
+            }
+        }
+
+        &--present.rn3-searchbar__dropdown-item--preselected {
+            &::after {
+                content: 'Enter to remove';
+            }
+        }
+    }
+
     @each $name, $searchbar in $rn3-searchbar-variants {
         &--#{$name} {
             .rn3-searchbar__form {
@@ -173,8 +213,20 @@
                 }
             }
 
+            .rn3-searchbar__form-icon {
+                @each $property, $value in map-deep-get($searchbar, 'form', 'icon') {
+                    #{$property}: reveal-value($searchbar, $value);
+                }
+            }
+
             .rn3-searchbar__form-backspace {
                 @each $property, $value in map-deep-get($searchbar, 'form', 'backspace') {
+                    #{$property}: reveal-value($searchbar, $value);
+                }
+            }
+
+            .rn3-searchbar__form-backspace:hover {
+                @each $property, $value in map-deep-get($searchbar, 'form', 'backspace', 'hover') {
                     #{$property}: reveal-value($searchbar, $value);
                 }
             }
@@ -185,14 +237,20 @@
                 }
             }
 
+            .rn3-searchbar__form-clear-btn:hover {
+                @each $property, $value in map-deep-get($searchbar, 'form', 'clear-btn', 'hover') {
+                    #{$property}: reveal-value($searchbar, $value);
+                }
+            }
+
             .rn3-searchbar__form-mic {
                 @each $property, $value in map-deep-get($searchbar, 'form', 'mic') {
                     #{$property}: reveal-value($searchbar, $value);
                 }
             }
 
-            .rn3-searchbar__form-icon {
-                @each $property, $value in map-deep-get($searchbar, 'form', 'icon') {
+            .rn3-searchbar__form-mic:hover {
+                @each $property, $value in map-deep-get($searchbar, 'form', 'mic', 'hover') {
                     #{$property}: reveal-value($searchbar, $value);
                 }
             }
@@ -250,65 +308,11 @@
                     }
                 }
             }
-        }
-    }
 
-    &__dropdown-item {
-        align-items: center;
-        cursor: pointer;
-        display: flex;
-        flex: 1 0 auto;
-        padding: math.div($rn3-padding-y, 2) $rn3-padding-x;
-        position: relative;
-        user-select: none;
-
-        &--preselected,
-        &:hover {
-            background-color: $rn3-black-10;
-
-            &::before {
-                background-color: lightskyblue;
-                content: '';
-                height: 100%;
-                left: 0;
-                position: absolute;
-                width: 2px;
-            }
-
-            &::after {
-                content: '';
-                flex: 1;
-                font-size: 0.75rem;
-                padding-left: math.div($rn3-padding-x, 2);
-                position: relative;
-                text-align: right;
-                text-decoration: underline;
-            }
-        }
-
-        &:hover {
-            &::after {
-                content: 'Click to select';
-            }
-        }
-
-        &--present {
-            &:hover {
-                &::after {
-                    content: 'Click to remove';
+            .rn3-searchbar__dropdown-item {
+                @each $property, $value in map-deep-get($searchbar, 'dropdown', 'item') {
+                    #{$property}: reveal-value($searchbar, $value);
                 }
-            }
-        }
-
-        &--preselected:not(&--present) {
-            &::after {
-                content: 'Enter to select';
-            }
-        }
-
-        &--present.rn3-searchbar__dropdown-item--preselected {
-            &::after {
-                content: 'Enter to remove';
             }
         }
     }

@@ -55,17 +55,31 @@ $rn3-searchbar-default: (
                 ),
             ),
         ),
-        clear-btn: (
-            color: $rn3-black-25,
-            padding: '@:padding',
-        ),
         backspace: (
             color: $rn3-black-25,
             padding: '@:padding',
+            transition: color 250ms ease-in-out,
+            hover: (
+                color: $rn3-black-50,
+            ),
         ),
-        mic: (
+        clear-btn: (
+            border-left: '@:border',
             color: $rn3-black-25,
             padding: '@:padding',
+            transition: color 250ms ease-in-out,
+            hover: (
+                color: $rn3-black-50,
+            ),
+        ),
+        mic: (
+            border-left: '@:border',
+            color: $rn3-black-25,
+            padding: '@:padding',
+            transition: color 250ms ease-in-out,
+            hover: (
+                color: $rn3-black-50,
+            ),
         ),
     ),
     dropdown: (
@@ -78,6 +92,9 @@ $rn3-searchbar-default: (
         font-weight: '@:font-weight',
         font-size: '@:font-size',
         max-height: 30rem,
+        item: (
+            padding: math.div($rn3-padding-y, 2) $rn3-padding-x,
+        )
     )
 );
 
