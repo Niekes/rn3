@@ -6,6 +6,7 @@ $rn3-searchbar-default: (
     font-family: $rn3-font-family,
     font-size: $rn3-font-size,
     font-weight: $rn3-font-weight-light,
+    padding: $rn3-padding-y $rn3-padding-x,
     form: (
         background-color: '@:background-color',
         border-radius: '@:border-radius',
@@ -15,6 +16,7 @@ $rn3-searchbar-default: (
         font-weight: '@:font-weight',
         icon: (
             color: $rn3-black-25,
+            padding: '@:padding',
         ),
         input: (
             color: '@:color',
@@ -29,14 +31,41 @@ $rn3-searchbar-default: (
                 color: $rn3-black-25,
             ),
         ),
+        field: (
+            padding-bottom: $rn3-padding-y,
+        ),
+        item: (
+            border: '@:border',
+            border-radius: '@:border-radius',
+            background-color: lightskyblue,
+            color: $rn3-white,
+            height: 1.5rem,
+            margin-right: math.div($rn3-margin-x, 2),
+            margin-top: $rn3-margin-y,
+            max-height: 1.5rem,
+            content: (
+                padding: 0 math.div($rn3-padding-x, 2),
+                text-shadow: $rn3-text-shadow,
+            ),
+            remove: (
+                background-color: $rn3-black-25,
+                transition: background-color 250ms ease-in-out,
+                hover: (
+                    background-color: $rn3-black-30,
+                ),
+            ),
+        ),
         clear-btn: (
             color: $rn3-black-25,
+            padding: '@:padding',
         ),
         backspace: (
             color: $rn3-black-25,
+            padding: '@:padding',
         ),
         mic: (
             color: $rn3-black-25,
+            padding: '@:padding',
         ),
     ),
     dropdown: (

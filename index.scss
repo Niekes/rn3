@@ -4,6 +4,11 @@ $rn3-searchbar-variants: (
         font-family: monospace,
         background-color: lightpink,
         border-radius: 20px,
+        form: (
+            item: (
+                background-color: #ccc,
+            ),
+        ),
     ),
 );
 

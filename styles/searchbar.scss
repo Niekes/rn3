@@ -44,14 +44,89 @@
     &__form-backspace,
     &__form-mic,
     &__form-clear-btn {
+        background-color: transparent;
+        border: 0;
+        cursor: pointer;
+        margin: 0;
+        position: relative;
+        transition: color 250ms linear, opacity 250ms linear;
+
         &:hover:not([disabled]) {
             cursor: pointer;
-            opacity: 1;
         }
 
         &[disabled] {
             cursor: not-allowed;
-            opacity: 0.5;
+        }
+    }
+
+    &__form-icon {
+        grid-area: icon;
+    }
+
+    &__form-backspace {
+        grid-area: backspace;
+    }
+
+    &__form-clear-btn {
+        grid-area: clear-btn;
+
+        &::after {
+            background-color: $rn3-border-color;
+            content: '';
+            height: 80%;
+            left: 0;
+            position: absolute;
+            width: 1px;
+        }
+    }
+
+    &__form-mic {
+        grid-area: mic;
+
+        &::after {
+            background-color: $rn3-border-color;
+            content: '';
+            height: 80%;
+            left: 0;
+            position: absolute;
+            width: 1px;
+        }
+    }
+
+    &__form-field {
+        display: flex;
+        flex-wrap: wrap;
+        grid-area: field;
+
+        &:hover {
+            cursor: text;
+        }
+    }
+
+    &__form-item,
+    &__form-item-content {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    &__form-item {
+        box-sizing: border-box;
+        cursor: default;
+        user-select: none;
+    }
+
+    &__form-item-content {
+        user-select: none;
+    }
+
+    &__form-item-remove {
+        cursor: pointer;
+        height: 100%;
+
+        * {
+            pointer-events: none;
         }
     }
 
@@ -77,6 +152,13 @@
         }
     }
 
+    &__dropdown-item,
+    &__dropdown-item-content {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
     @each $name, $searchbar in $rn3-searchbar-variants {
         &--#{$name} {
             .rn3-searchbar__form {
@@ -87,12 +169,6 @@
 
             .rn3-searchbar__form-input {
                 @each $property, $value in map-deep-get($searchbar, 'form', 'input') {
-                    #{$property}: reveal-value($searchbar, $value);
-                }
-            }
-
-            .rn3-searchbar__form-icon {
-                @each $property, $value in map-deep-get($searchbar, 'form', 'icon') {
                     #{$property}: reveal-value($searchbar, $value);
                 }
             }
@@ -115,8 +191,44 @@
                 }
             }
 
+            .rn3-searchbar__form-icon {
+                @each $property, $value in map-deep-get($searchbar, 'form', 'icon') {
+                    #{$property}: reveal-value($searchbar, $value);
+                }
+            }
+
             .rn3-searchbar__form-input::placeholder {
                 @each $property, $value in map-deep-get($searchbar, 'form', 'input', 'placeholder') {
+                    #{$property}: reveal-value($searchbar, $value);
+                }
+            }
+
+            .rn3-searchbar__form-field {
+                @each $property, $value in map-deep-get($searchbar, 'form', 'field') {
+                    #{$property}: reveal-value($searchbar, $value);
+                }
+            }
+
+            .rn3-searchbar__form-item {
+                @each $property, $value in map-deep-get($searchbar, 'form', 'item') {
+                    #{$property}: reveal-value($searchbar, $value);
+                }
+            }
+
+            .rn3-searchbar__form-item-content {
+                @each $property, $value in map-deep-get($searchbar, 'form', 'item', 'content') {
+                    #{$property}: reveal-value($searchbar, $value);
+                }
+            }
+
+            .rn3-searchbar__form-item-remove {
+                @each $property, $value in map-deep-get($searchbar, 'form', 'item', 'remove') {
+                    #{$property}: reveal-value($searchbar, $value);
+                }
+            }
+
+            .rn3-searchbar__form-item-remove:hover {
+                @each $property, $value in map-deep-get($searchbar, 'form', 'item', 'remove', 'hover') {
                     #{$property}: reveal-value($searchbar, $value);
                 }
             }
@@ -139,115 +251,6 @@
                 }
             }
         }
-    }
-
-    &__form-icon {
-        grid-area: icon;
-        padding: $rn3-padding-y math.div($rn3-padding-y, 2) $rn3-padding-x $rn3-padding-x;
-    }
-
-    &__form-field {
-        display: flex;
-        flex-wrap: wrap;
-        grid-area: field;
-        min-width: 0;
-        padding-bottom: $rn3-padding-y;
-        padding-left: math.div($rn3-padding-x, 2);
-
-        &:hover {
-            cursor: text;
-        }
-    }
-
-    &__form-item,
-    &__form-item-content {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    &__form-item {
-        background-color: lightskyblue;
-        border-radius: $rn3-border-radius;
-        border: 1px solid $rn3-black-25;
-        box-sizing: border-box;
-        color: $rn3-white;
-        cursor: default;
-        height: 1.5rem;
-        margin-right: math.div($rn3-margin-x, 2);
-        margin-top: $rn3-margin-y;
-        max-height: 1.5rem;
-        user-select: none;
-    }
-
-    &__form-item-content {
-        font-family: sans-serif;
-        padding: 0 math.div($rn3-padding-x, 2);
-        text-shadow: $rn3-text-shadow;
-        user-select: none;
-    }
-
-    &__form-item-remove {
-        background-color: $rn3-black-25;
-        cursor: pointer;
-        height: 100%;
-
-        * {
-            pointer-events: none;
-        }
-    }
-
-    &__form-backspace,
-    &__form-clear-btn,
-    &__form-mic {
-        background-color: transparent;
-        border: 0;
-        cursor: pointer;
-        margin: 0;
-        padding: $rn3-padding-y $rn3-padding-x;
-        position: relative;
-        transition: color 250ms linear, opacity 250ms linear;
-    }
-
-    &__form-backspace {
-        grid-area: backspace;
-    }
-
-    &__form-clear-btn {
-        grid-area: clear-btn;
-
-        &::after {
-            background-color: $rn3-black-25;
-            content: '';
-            height: 80%;
-            left: 0;
-            position: absolute;
-            width: 1px;
-        }
-    }
-
-    &__form-mic {
-        grid-area: mic;
-
-        &::after {
-            background-color: $rn3-black-25;
-            content: '';
-            height: 80%;
-            left: 0;
-            position: absolute;
-            width: 1px;
-        }
-
-        &:hover {
-            color: $rn3-black-50;
-        }
-    }
-
-    &__dropdown-item,
-    &__dropdown-item-content {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
     }
 
     &__dropdown-item {
@@ -292,7 +295,7 @@
         &--present {
             &:hover {
                 &::after {
-                    content: 'Click to clear';
+                    content: 'Click to remove';
                 }
             }
         }
@@ -305,7 +308,7 @@
 
         &--present.rn3-searchbar__dropdown-item--preselected {
             &::after {
-                content: 'Enter to clear';
+                content: 'Enter to remove';
             }
         }
     }
