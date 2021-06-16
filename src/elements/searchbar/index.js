@@ -115,6 +115,13 @@ export default class Searchbar extends Element {
             this.#getDropdownItems()
                 .style('pointer-events', null);
         });
+
+        this.on('outside-click', () => {
+            this.#closeDropdown();
+            this.#hideBackspace();
+            this.#resetKeyCounter();
+            this.#setInputvalue();
+        });
     }
 
     #convertUrl = (url, params, value) => {
@@ -248,9 +255,13 @@ export default class Searchbar extends Element {
 
         inputItems
             .exit()
+            .style('max-width', (d, i, nodes) => `${nodes[i].offsetWidth}px`)
             .transition()
             .duration(this.settings.transition.duration)
             .style('opacity', 0)
+            .style('max-width', '0px')
+            .style('padding', '0px')
+            .style('border-width', '0px')
             .remove();
 
         if (this.data.values.length > 0) {
@@ -394,8 +405,13 @@ export default class Searchbar extends Element {
     #preventDefault = (e) => {
         const keyCode = e.keyCode || e.which;
 
-        if (isKey(keyCode, 'up')) e.preventDefault();
-        if (isKey(keyCode, 'down')) e.preventDefault();
+        if (isNavigatingVertically(keyCode)) {
+            if (e.repeat) {
+                this.#handleKeyUp(e);
+            }
+
+            e.preventDefault();
+        }
     };
 
     #setLoadingSequenceInDropdown = () => {

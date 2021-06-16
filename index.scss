@@ -4,10 +4,19 @@ $rn3-searchbar-variants: (
         background-color: lightgreen,
         border-radius: 10px,
         form: (
+            background-color: '@:background-color',
+            border-radius: '@:border-radius',
             item: (
                 background-color: #ccc,
             ),
         ),
+        dropdown: (
+            item: (
+                indicator: (
+                    background-color: violet,
+                ),
+            )
+        )
     ),
 );
 

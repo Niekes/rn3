@@ -153,12 +153,10 @@
             background-color: $rn3-black-10;
 
             &::before {
-                background-color: lightskyblue;
                 content: '';
                 height: 100%;
                 left: 0;
                 position: absolute;
-                width: 2px;
             }
 
             &::after {
@@ -311,6 +309,13 @@
 
             .rn3-searchbar__dropdown-item {
                 @each $property, $value in map-deep-get($searchbar, 'dropdown', 'item') {
+                    #{$property}: reveal-value($searchbar, $value);
+                }
+            }
+
+            .rn3-searchbar__dropdown-item--preselected::before,
+            .rn3-searchbar__dropdown-item:hover::before {
+                @each $property, $value in map-deep-get($searchbar, 'dropdown', 'item', 'indicator') {
                     #{$property}: reveal-value($searchbar, $value);
                 }
             }

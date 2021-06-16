@@ -1,3 +1,7 @@
+import {
+    selectAll,
+} from 'd3';
+
 import uuid from './uuid';
 
 import {
@@ -27,6 +31,11 @@ export default class Super {
             Merge settings
         */
         this.settings = Super.mergeSettings(settings, this.data.settings);
+
+        /*
+            Add event listener to document for outside click
+        */
+        document.addEventListener('click', Super.checkOutsideClick.bind(null, this.id, this.dispatch), true);
     }
 
     off = (eventName) => {
@@ -40,10 +49,12 @@ export default class Super {
         }
 
         /*
-            If no event was passed we remove all events
+            If no event was passed we remove all events and event listener
         */
         if (!event) {
             this.#events = {};
+
+            document.removeEventListener('click', Super.checkOutsideClick.bind(null, this.id, this.dispatch), true);
         }
 
         return this.#events;
@@ -64,6 +75,18 @@ export default class Super {
     }
 
     static mergeSettings = (oldSettings, newSetting) => mergeDeep(oldSettings, newSetting);
+
+    static checkOutsideClick = (id, dispatch, event) => {
+        const outside = selectAll(`#${id}, #${id} *`)
+            .filter((d, i, nodes) => nodes[i] === event.target)
+            .empty();
+
+        if (outside) {
+            dispatch('outside-click');
+        }
+
+        return outside;
+    };
 
     getIdentity = d => d[this.settings.identity];
 }
