@@ -1,2 +1,2 @@
-$rn3-body-bg: $rn3-white !default;
-$rn3-body-color: color-yiq($rn3-body-bg) !default;
+$rn3-body-bg: var(--rn3-body-bg, #{$rn3-white}) !default;
+$rn3-body-color: var(--rn3-body-color, #{$rn3-black}) !default;

@@ -129,7 +129,7 @@
         &--error,
         &--no-results,
         &--loading {
-            padding: math.div($rn3-padding-y, 2) $rn3-padding-x;
+            padding: $rn3-padding-y-50 $rn3-padding-x;
         }
     }
 
@@ -165,7 +165,7 @@
                 content: '';
                 flex: 1;
                 font-size: 0.75rem;
-                padding-left: math.div($rn3-padding-x, 2);
+                padding-left: $rn3-padding-x-50;
                 position: relative;
                 text-align: right;
                 text-decoration: underline;

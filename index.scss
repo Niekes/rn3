@@ -1,9 +1,8 @@
 $rn3-searchbar-variants: (
     default: (),
     test: (
-        font-family: monospace,
-        background-color: lightpink,
-        border-radius: 20px,
+        background-color: lightgreen,
+        border-radius: 10px,
         form: (
             item: (
                 background-color: #ccc,
@@ -11,8 +10,6 @@ $rn3-searchbar-variants: (
         ),
     ),
 );
-
-@use "sass:math";
 
 @import './node_modules/sass-recursive-map-merge/_recursive-map-merge.scss';
 /*

@@ -1,12 +1,12 @@
 $rn3-searchbar-default: (
-    background-color: $rn3-body-bg,
-    border-radius: $rn3-border-radius,
-    border: $rn3-border,
-    color: $rn3-black,
-    font-family: $rn3-font-family,
-    font-size: $rn3-font-size,
-    font-weight: $rn3-font-weight-light,
-    padding: $rn3-padding-y $rn3-padding-x,
+    background-color: var(--rn3-searchbar-background-color, #{$rn3-body-bg}),
+    border-radius: var(--rn3-searchbar-border-radius, $rn3-border-radius),
+    border: var(--rn3-searchbar-border, $rn3-border),
+    color: var(--rn3-searchbar-black, $rn3-black),
+    font-family: var(--rn3-searchbar-font-family, $rn3-font-family),
+    font-size: var(--rn3-searchbar-font-size, $rn3-font-size),
+    font-weight: var(--rn3-searchbar-font-weight-light, $rn3-font-weight-light),
+    padding: var(--rn3-searchbar-padding, $rn3-padding),
     form: (
         background-color: '@:background-color',
         border-radius: '@:border-radius',
@@ -15,7 +15,7 @@ $rn3-searchbar-default: (
         font-family: '@:font-family',
         font-weight: '@:font-weight',
         icon: (
-            color: $rn3-black-25,
+            color: var(--rn3-searchbar-form-icon-color, #{$rn3-black-25}),
             padding: '@:padding',
         ),
         input: (
@@ -23,16 +23,16 @@ $rn3-searchbar-default: (
             font-family: '@:font-family',
             font-size: '@:font-size',
             font-weight: '@:font-weight',
-            line-height: $rn3-line-height,
-            margin-top: $rn3-margin-y,
-            min-width: 6rem,
-            padding: math.div($rn3-padding-x, 4) math.div($rn3-padding-x, 4),
+            line-height: var(--rn3-searchbar-form-input-color, #{$rn3-line-height}),
+            margin-top: var(--rn3-searchbar-form-input-margin-top, #{$rn3-margin-y}),
+            min-width: var(--rn3-searchbar-form-input-min-width, 6rem),
+            padding: var(--rn3-searchbar-form-input-padding, #{$rn3-padding-25}),
             placeholder: (
-                color: $rn3-black-25,
+                color: var(--rn3-searchbar-form-input-placeholder-color, #{$rn3-black-25}),
             ),
         ),
         field: (
-            padding-bottom: $rn3-padding-y,
+            padding-bottom: var(--rn3-searchbar-form-field-padding-bottom, #{$rn3-padding-y}),
         ),
         item: (
             border: '@:border',
@@ -40,11 +40,11 @@ $rn3-searchbar-default: (
             background-color: lightskyblue,
             color: $rn3-white,
             height: 1.5rem,
-            margin-right: math.div($rn3-margin-x, 2),
+            margin-right: $rn3-margin-x-50,
             margin-top: $rn3-margin-y,
             max-height: 1.5rem,
             content: (
-                padding: 0 math.div($rn3-padding-x, 2),
+                padding: 0 $rn3-padding-x-50,
                 text-shadow: $rn3-text-shadow,
             ),
             remove: (
@@ -93,7 +93,7 @@ $rn3-searchbar-default: (
         font-size: '@:font-size',
         max-height: 30rem,
         item: (
-            padding: math.div($rn3-padding-y, 2) $rn3-padding-x,
+            padding: $rn3-padding-y-50 $rn3-padding-x,
         )
     )
 );

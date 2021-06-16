@@ -1,7 +1,33 @@
-$rn3-margin-x: 0.5rem !default;
-$rn3-margin-y: 0.5rem !default;
-$rn3-margin: $rn3-margin-y $rn3-margin-x !default;
+$rn3-margin-x: var(--rn3-margin-x, 0.5rem) !default;
+$rn3-margin-y: var(--rn3-margin-y, 0.5rem) !default;
 
-$rn3-padding-x: 0.5rem !default;
-$rn3-padding-y: 0.5rem !default;
-$rn3-padding: $rn3-padding-y $rn3-padding-x !default;
+$rn3-margin-x-75: var(--rn3-margin-x-75, 0.375rem) !default;
+$rn3-margin-y-75: var(--rn3-margin-y-75, 0.375rem) !default;
+
+$rn3-margin-x-50: var(--rn3-margin-x-50, 0.25rem) !default;
+$rn3-margin-y-50: var(--rn3-margin-y-50, 0.25rem) !default;
+
+$rn3-margin-x-25: var(--rn3-margin-x-25, 0.125rem) !default;
+$rn3-margin-y-25: var(--rn3-margin-y-25, 0.125rem) !default;
+
+$rn3-margin: var(--rn3-margin, #{$rn3-margin-y} #{$rn3-margin-x}) !default;
+$rn3-margin-75: var(--rn3-margin-75, #{$rn3-margin-y-75} #{$rn3-margin-x-75}) !default;
+$rn3-margin-50: var(--rn3-margin-50, #{$rn3-margin-y-50} #{$rn3-margin-x-50}) !default;
+$rn3-margin-25: var(--rn3-margin-25, #{$rn3-margin-y-25} #{$rn3-margin-x-25}) !default;
+
+$rn3-padding-x: var(--rn3-padding-x, 0.5rem) !default;
+$rn3-padding-y: var(--rn3-padding-y, 0.5rem) !default;
+
+$rn3-padding-x-75: var(--rn3-padding-x-75, 0.375rem) !default;
+$rn3-padding-y-75: var(--rn3-padding-y-75, 0.375rem) !default;
+
+$rn3-padding-x-50: var(--rn3-padding-x-50, 0.25rem) !default;
+$rn3-padding-y-50: var(--rn3-padding-y-50, 0.25rem) !default;
+
+$rn3-padding-x-25: var(--rn3-padding-x-25, 0.125rem) !default;
+$rn3-padding-y-25: var(--rn3-padding-y-25, 0.125rem) !default;
+
+$rn3-padding: var(--rn3-padding, #{$rn3-padding-y} #{$rn3-padding-x}) !default;
+$rn3-padding-75: var(--rn3-padding-75, #{$rn3-padding-y-75} #{$rn3-padding-x-75}) !default;
+$rn3-padding-50: var(--rn3-padding-50, #{$rn3-padding-y-50} #{$rn3-padding-x-50}) !default;
+$rn3-padding-25: var(--rn3-padding-25, #{$rn3-padding-y-25} #{$rn3-padding-x-25}) !default;
