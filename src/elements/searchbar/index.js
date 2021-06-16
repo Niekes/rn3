@@ -13,6 +13,11 @@ import {
     debounce,
 } from '../../utils/function';
 
+
+import {
+    has,
+} from '../../utils/object';
+
 import {
     isArrayOfObjects,
 } from '../../utils/array';
@@ -55,8 +60,8 @@ export default class Searchbar extends Element {
         /*
             Add necessary elements
         */
-        const dropdown = appendSelection(this.container, 'div', { class: 'rn3-searchbar__dropdown' });
-        const form = appendSelection(this.container, 'div', { class: 'rn3-searchbar__form' });
+        const dropdown = appendSelection(Element.container, 'div', { class: 'rn3-searchbar__dropdown' });
+        const form = appendSelection(Element.container, 'div', { class: 'rn3-searchbar__form' });
         const icon = appendSelection(form, 'div', { class: 'rn3-searchbar__form-icon' });
         const field = appendSelection(form, 'div', { class: 'rn3-searchbar__form-field' });
         const backspace = appendSelection(form, 'button', { class: 'rn3-searchbar__form-backspace', disabled: 'disabled' });
@@ -86,6 +91,8 @@ export default class Searchbar extends Element {
         this.#elements.icon.on('click', this.#focusInput);
         this.#elements.field.on('click', this.#focusInput);
         this.#elements.input.on('keyup', this.#handleKeyUp);
+        this.#elements.input.on('focus', () => this.dispatch('focus'));
+        this.#elements.input.on('blur', () => this.dispatch('blur'));
         this.#elements.input.on('keydown', this.#preventDefault);
 
         this.#elements.backspace.on('click', () => {
@@ -233,6 +240,13 @@ export default class Searchbar extends Element {
             .insert('div', 'input.rn3-searchbar__form-input')
             .attr('class', 'rn3-searchbar__form-item')
             .style('opacity', 0)
+            .style('background-color', (d) => {
+                if (has(d, 'bgColor')) {
+                    return d.bgColor;
+                }
+
+                return null;
+            })
             .merge(inputItems)
             .on('click', (e, datum) => {
                 const isRemoveBtn = select(e.target).classed('rn3-searchbar__form-item-remove');
@@ -251,6 +265,8 @@ export default class Searchbar extends Element {
             .html(d => `<span class="rn3-searchbar__form-item-content">${this.settings.input.item.render(d)}</span><span class="rn3-searchbar__form-item-remove"><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path stroke="currentColor" fill="currentColor" d="M13.41 12l4.3-4.29a1 1 0 10-1.42-1.42L12 10.59l-4.29-4.3a1 1 0 00-1.42 1.42l4.3 4.29-4.3 4.29a1 1 0 000 1.42 1 1 0 001.42 0l4.29-4.3 4.29 4.3a1 1 0 001.42 0 1 1 0 000-1.42z"/></svg></span>`)
             .transition()
             .duration(this.settings.transition.duration)
+            .ease(this.settings.transition.ease)
+            .delay(this.settings.transition.delay)
             .style('opacity', 1);
 
         inputItems
@@ -258,6 +274,8 @@ export default class Searchbar extends Element {
             .style('max-width', (d, i, nodes) => `${nodes[i].offsetWidth}px`)
             .transition()
             .duration(this.settings.transition.duration)
+            .ease(this.settings.transition.ease)
+            .delay(this.settings.transition.delay)
             .style('opacity', 0)
             .style('max-width', '0px')
             .style('padding', '0px')

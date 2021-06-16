@@ -35,12 +35,27 @@ const searchbar2 = new rn3.Searchbar({
     }
 });
 
+searchbar.update({
+    values: [
+        { osm_id: '1', display_name: 'Moin', bgColor: 'red' },
+        { osm_id: '2', display_name: 'Hallo', bgColor: 'violet' },
+    ]
+});
+
+searchbar.on('focus', (d) => {
+    console.log('focus');
+});
+
+searchbar.on('blur', (d) => {
+    console.log('blur');
+});
+
 searchbar.on('added', (d) => {
-    console.log(d, searchbar.data.values);
+    console.log(d, searchbar.data.values, searchbar.value);
 });
 
 searchbar.on('removed', (d) => {
-    console.log(d, searchbar.data.values);
+    console.log(d, searchbar.data.values, searchbar.value);
 });
 
 console.log(searchbar);

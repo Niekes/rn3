@@ -11,6 +11,7 @@ $rn3-searchbar-variants: (
             ),
         ),
         dropdown: (
+            background-color: '@:background-color',
             item: (
                 indicator: (
                     background-color: violet,
@@ -38,6 +39,7 @@ $rn3-searchbar-variants: (
 @import './styles/variables/base-border';
 @import './styles/variables/base-shadows';
 @import './styles/variables/base-spacing';
+@import './styles/variables/base-transition';
 @import './styles/variables/base-typography';
 @import './styles/variables/base-z-index';
 @import './styles/variables/searchbar';
