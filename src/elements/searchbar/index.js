@@ -15,6 +15,10 @@ import {
 } from '../../utils/function';
 
 import {
+    constructUrl,
+} from '../../utils/url';
+
+import {
     checkSpeechRecognition,
 } from '../../utils/speech-recognition';
 
@@ -143,30 +147,6 @@ export default class Searchbar extends Element {
         });
     }
 
-    #constructUrl = (url, params, value) => {
-        try {
-            const u = new URL(url);
-
-            Object
-                .keys(params)
-                .forEach((key) => {
-                    const v = String(params[key]);
-
-                    if (v.includes('{query}')) {
-                        u.searchParams.set(key, v.replace(/{query}/gi, () => value));
-                    }
-
-                    if (!v.includes('{query}')) {
-                        u.searchParams.set(key, v);
-                    }
-                });
-
-            return u;
-        } catch (e) {
-            return null;
-        }
-    };
-
     #fetchResults = async (value) => {
         const {
             request,
@@ -177,7 +157,7 @@ export default class Searchbar extends Element {
 
         this.#showBackspace();
 
-        const url = this.#constructUrl(request.url, request.params, value);
+        const url = constructUrl(request.url, request.params, value);
 
         try {
             this.response = await fetch(url, request.interceptor(request.options));
@@ -524,7 +504,8 @@ export default class Searchbar extends Element {
         this.#elements.dropdown
             .html(this.settings.request.loading)
             .classed('rn3-searchbar__dropdown--error', false)
-            .classed('rn3-searchbar__dropdown--loading', true);
+            .classed('rn3-searchbar__dropdown--loading', true)
+            .classed('rn3-searchbar__dropdown--no-results', false);
     };
 
     #setInputValue = (val = '') => {
