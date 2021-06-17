@@ -6,9 +6,51 @@
     &__form {
         box-sizing: border-box;
         display: grid;
-        grid-template-areas: "icon field backspace clear-btn mic";
-        grid-template-columns: minmax(0, min-content) minmax(0, 1fr) minmax(0, min-content) minmax(0, min-content) minmax(0, min-content);
         grid-template-rows: 1fr;
+    }
+
+    &--mode-1 {
+        .rn3-searchbar__form {
+            grid-template-areas: "icon field backspace clear-btn";
+            grid-template-columns: minmax(0, min-content) minmax(0, 1fr) minmax(0, min-content) minmax(0, min-content);
+
+            &-mic {
+                display: none;
+                visibility: hidden;
+            }
+        }
+    }
+
+    &--mode-2 {
+        .rn3-searchbar__form {
+            grid-template-areas: "icon field backspace";
+            grid-template-columns: minmax(0, min-content) minmax(0, 1fr) minmax(0, min-content);
+
+            &-mic,
+            &-clear-btn {
+                display: none;
+                visibility: hidden;
+            }
+        }
+    }
+
+    &--mode-3 {
+        .rn3-searchbar__form {
+            grid-template-areas: "icon field backspace mic";
+            grid-template-columns: minmax(0, min-content) minmax(0, 1fr) minmax(0, min-content) minmax(0, min-content) minmax(0, min-content);
+
+            &-clear-btn {
+                display: none;
+                visibility: hidden;
+            }
+        }
+    }
+
+    &--mode-4 {
+        .rn3-searchbar__form {
+            grid-template-areas: "icon field backspace clear-btn mic";
+            grid-template-columns: minmax(0, min-content) minmax(0, 1fr) minmax(0, min-content) minmax(0, min-content) minmax(0, min-content);
+        }
     }
 
     &__form-input {

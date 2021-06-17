@@ -15,17 +15,19 @@ export default {
             addressdetails: 1,
             email: 'info@niekes.com',
         },
+        interceptor: options => options,
         callback: response => response.json(),
         error: 'An error occured. Please try again later',
         noResults: 'No results found',
         loading: 'loading...',
     },
     identity: 'osm_id',
-    input: {
+    form: {
         icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path fill="currentColor" d="M23.7 22.281l-6.887-6.89a9.318 9.318 0 002.171-5.98c0-5.184-4.254-9.4-9.488-9.4C4.266.012 0 4.232 0 9.415c0 5.184 4.254 9.399 9.488 9.399 2.223 0 4.27-.762 5.89-2.036l6.911 6.91a.975.975 0 001.41 0 .97.97 0 000-1.406zM2.015 9.414c0-4.074 3.355-7.383 7.472-7.383 4.117 0 7.473 3.309 7.473 7.383s-3.356 7.383-7.473 7.383-7.472-3.317-7.472-7.383zm0 0"/></svg>',
         item: {
             render: d => d.display_name,
         },
+        freeText: false,
         placeholder: 'Type to search',
         backspace: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path fill="currentColor" d="M20.14 4h-9.77a3 3 0 00-2 .78l-.1.11-6 7.48a1 1 0 00.11 1.37l6 5.48a3 3 0 002 .78h9.77A1.84 1.84 0 0022 18.18V5.82A1.84 1.84 0 0020.14 4zm-3.43 9.29a1 1 0 010 1.42 1 1 0 01-1.42 0L14 13.41l-1.29 1.3a1 1 0 01-1.42 0 1 1 0 010-1.42l1.3-1.29-1.3-1.29a1 1 0 011.42-1.42l1.29 1.3 1.29-1.3a1 1 0 011.42 1.42L15.41 12z"/></svg>',
         clearBtn: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path fill="currentColor" d="M9.191 21.64c-.812 0-1.539-.421-1.964-1.058-.22-.324-.36-.7-.395-1.11L5.887 8.09h12.11l-.946 11.383c-.04.41-.18.785-.395 1.109a2.382 2.382 0 01-1.965 1.059zM18.27 6.399c0-.554-.45-1.007-1.008-1.007H6.613A1.01 1.01 0 005.61 6.398V7.2h12.66zm-8.145-2.453c0-.445.367-.812.816-.816h1.996c.45 0 .813.367.813.816V4.5h.89v-.555c0-.937-.769-1.707-1.703-1.707h-1.996c-.937 0-1.707.77-1.707 1.707V4.5h.891zm0 0"/></svg>',
@@ -35,5 +37,9 @@ export default {
         item: {
             render: d => d.display_name,
         },
+    },
+    speechRecognition: {
+        enabled: true,
+        language: navigator.language,
     },
 };

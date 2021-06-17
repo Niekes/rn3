@@ -39,7 +39,10 @@ export default class Barchart extends Chart {
     }
 
     update(updatedData) {
-        // this.data = updatedData; // use this.data
+        // this.data = { // use this.data
+        //     ...this.data,
+        //     ...updatedData,
+        // };
         /*
             Merge settings
         */
