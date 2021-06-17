@@ -92,6 +92,7 @@ $rn3-searchbar-default: (
         font-size: var(--rn3-searchbar-dropdown-font-size, var(--rn3-searchbar-font-size, #{$rn3-font-size})),
         font-weight: var(--rn3-searchbar-dropdown-font-weight, var(--rn3-searchbar-font-weight, #{$rn3-font-weight-light})),
         max-height: var(--rn3-searchbar-dropdown-max-height, 30rem),
+        z-index: var(--rn3-searhcbar-dropdown-z-index, #{$rn3-z-index-dropdown}),
         item: (
             padding: var(--rn3-searchbar-dropdown-item-padding, #{$rn3-padding-y-50} #{$rn3-padding-x}),
             indicator: (
