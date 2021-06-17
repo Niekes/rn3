@@ -179,7 +179,7 @@ export default class Searchbar extends Element {
             .classed('rn3-searchbar__dropdown--loading', false)
             .classed('rn3-searchbar__dropdown--no-results', false);
 
-        if (isArrayOfObjects(this.responseData)) {
+        if (isArrayOfObjects(this.responseData) && errorOccured === false) {
             const dropdownItems = this.#getDropdownItems()
                 .data(this.responseData, this.getIdentity);
 
