@@ -99,7 +99,16 @@ $rn3-searchbar-default: (
                 background-color: var(--rn3-searchbar-dropdown-item-indicator-background-color, #{$rn3-blue}),
                 width: var(--rn3-searchbar-dropdown-item-indicator-width, 2px),
             ),
-        )
+        ),
+        error: (
+            padding: var(--rnr-searchbar-dropdown-error-padding, #{$rn3-padding-y-50} #{$rn3-padding-x})
+        ),
+        no-results: (
+            padding: var(--rnr-searchbar-dropdown-no-results-padding, #{$rn3-padding-y-50} #{$rn3-padding-x})
+        ),
+        loading: (
+            padding: var(--rnr-searchbar-dropdown-loading-padding, #{$rn3-padding-y-50} #{$rn3-padding-x})
+        ),
     )
 );
 

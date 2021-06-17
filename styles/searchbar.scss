@@ -166,12 +166,6 @@
             display: flex;
             flex-direction: column;
         }
-
-        &--error,
-        &--no-results,
-        &--loading {
-            padding: $rn3-padding-y-50 $rn3-padding-x;
-        }
     }
 
     &__dropdown-item,
@@ -345,6 +339,24 @@
 
                         border-radius: $br $br 0 0;
                     }
+                }
+            }
+
+            .rn3-searchbar__dropdown--error {
+                @each $property, $value in map-deep-get($searchbar, 'dropdown', 'error') {
+                    #{$property}: reveal-value($searchbar, $value);
+                }
+            }
+
+            .rn3-searchbar__dropdown--no-results {
+                @each $property, $value in map-deep-get($searchbar, 'dropdown', 'no-results') {
+                    #{$property}: reveal-value($searchbar, $value);
+                }
+            }
+
+            .rn3-searchbar__dropdown--loading {
+                @each $property, $value in map-deep-get($searchbar, 'dropdown', 'loading') {
+                    #{$property}: reveal-value($searchbar, $value);
                 }
             }
 
