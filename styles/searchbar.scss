@@ -207,27 +207,27 @@
 
         &:hover {
             &::after {
-                content: 'Click to select';
+                content: attr(data-click-to-select);
             }
         }
 
         &--present {
             &:hover {
                 &::after {
-                    content: 'Click to remove';
+                    content: attr(data-click-to-remove);
                 }
             }
         }
 
         &--preselected:not(&--present) {
             &::after {
-                content: 'Enter to select';
+                content: attr(data-enter-to-select);
             }
         }
 
         &--present.rn3-searchbar__dropdown-item--preselected {
             &::after {
-                content: 'Enter to remove';
+                content: attr(data-enter-to-remove);
             }
         }
     }

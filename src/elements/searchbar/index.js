@@ -143,36 +143,41 @@ export default class Searchbar extends Element {
         });
     }
 
-    #convertUrl = (url, params, value) => {
-        const u = new URL(url);
+    #constructUrl = (url, params, value) => {
+        try {
+            const u = new URL(url);
 
-        Object
-            .keys(params)
-            .forEach((key) => {
-                const v = String(params[key]);
+            Object
+                .keys(params)
+                .forEach((key) => {
+                    const v = String(params[key]);
 
-                if (v.includes('{query}')) {
-                    u.searchParams.set(key, v.replace(/{query}/gi, () => value));
-                }
+                    if (v.includes('{query}')) {
+                        u.searchParams.set(key, v.replace(/{query}/gi, () => value));
+                    }
 
-                if (!v.includes('{query}')) {
-                    u.searchParams.set(key, v);
-                }
-            });
+                    if (!v.includes('{query}')) {
+                        u.searchParams.set(key, v);
+                    }
+                });
 
-        return u;
+            return u;
+        } catch (e) {
+            return null;
+        }
     };
 
     #fetchResults = async (value) => {
         const {
             request,
+            dropdown,
         } = this.settings;
 
         let errorOccured = false;
 
         this.#showBackspace();
 
-        const url = this.#convertUrl(request.url, request.params, value);
+        const url = this.#constructUrl(request.url, request.params, value);
 
         try {
             this.response = await fetch(url, request.interceptor(request.options));
@@ -202,6 +207,10 @@ export default class Searchbar extends Element {
                 .enter()
                 .append('div')
                 .attr('class', 'rn3-searchbar__dropdown-item')
+                .attr('data-click-to-select', dropdown.item.clickToSelect)
+                .attr('data-click-to-remove', dropdown.item.clickToRemove)
+                .attr('data-enter-to-select', dropdown.item.enterToSelect)
+                .attr('data-enter-to-remove', dropdown.item.enterToRemove)
                 .merge(dropdownItems)
                 .on('click', (e, datum) => {
                     this.#manageItemInput(datum);

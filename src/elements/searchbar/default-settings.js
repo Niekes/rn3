@@ -36,10 +36,14 @@ export default {
     dropdown: {
         item: {
             render: d => d.display_name,
+            clickToSelect: 'Click to select',
+            clickToRemove: 'Click to remove',
+            enterToSelect: 'Enter to select',
+            enterToRemove: 'Enter to remove',
         },
     },
     speechRecognition: {
-        enabled: true,
+        enabled: false,
         language: navigator.language,
     },
 };
