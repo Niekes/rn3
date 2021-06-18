@@ -12,6 +12,7 @@ $rn3-searchbar-variants: (
         ),
         dropdown: (
             background-color: '@:background-color',
+            border-radius: '@:border-radius',
             item: (
                 indicator: (
                     background-color: violet,
@@ -25,25 +26,17 @@ $rn3-searchbar-variants: (
 /*
     Functions
 */
-@import './styles/functions/color';
-@import './styles/functions/map';
-@import './styles/functions/string';
-@import './styles/functions/utils';
+@import './styles/functions/_index';
+
+/*
+    Mixins
+*/
+@import './styles/mixins/_index';
 
 /*
     Variables
 */
-@import './styles/variables/base-colors'; // leave here on top
-
-@import './styles/variables/base-body';
-@import './styles/variables/base-border';
-@import './styles/variables/base-shadows';
-@import './styles/variables/base-spacing';
-@import './styles/variables/base-transition';
-@import './styles/variables/base-typography';
-@import './styles/variables/base-z-index';
-@import './styles/variables/searchbar';
-@import './styles/variables/tooltip';
+@import './styles/variables/_index'; // leave here on top
 
 /*
     Styles
