@@ -4,24 +4,17 @@ export default {
     ...defaults,
     css: 'rn3-searchbar--default',
     request: {
-        url: 'https://nominatim.openstreetmap.org',
+        url: '',
         options: {
             method: 'GET',
         },
-        params: {
-            city: '{query}',
-            format: 'json',
-            limit: 20,
-            addressdetails: 1,
-            email: 'info@niekes.com',
-        },
+        params: {},
         interceptor: options => options,
         callback: response => response.json(),
         error: 'An error occured. Please try again later',
         noResults: 'No results found',
         loading: 'loading...',
     },
-    identity: 'osm_id',
     form: {
         icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path fill="currentColor" d="M23.7 22.281l-6.887-6.89a9.318 9.318 0 002.171-5.98c0-5.184-4.254-9.4-9.488-9.4C4.266.012 0 4.232 0 9.415c0 5.184 4.254 9.399 9.488 9.399 2.223 0 4.27-.762 5.89-2.036l6.911 6.91a.975.975 0 001.41 0 .97.97 0 000-1.406zM2.015 9.414c0-4.074 3.355-7.383 7.472-7.383 4.117 0 7.473 3.309 7.473 7.383s-3.356 7.383-7.473 7.383-7.472-3.317-7.472-7.383zm0 0"/></svg>',
         item: {

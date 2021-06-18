@@ -7,7 +7,6 @@
 </head>
 <body style="height: 100%;width: 80%;margin:0 auto;padding:0">
     <div id="searchbar" style="padding: 2rem 0"></div>
-    <div id="searchbar-2" style="padding: 0 0 2rem 0"></div>
     <div id="chart" style="box-sizing: border-box; margin: 0 auto; height: 400px; width: 100%; border: 1px solid rgba(0, 0, 0, 0.25); border-radius: 0.15rem; position: relative;"></div>
 
 <script type="text/javascript">
@@ -26,13 +25,29 @@ const barchart = new rn3.Barchart({
 
 const searchbar = new rn3.Searchbar({
     el: '#searchbar',
-});
-
-const searchbar2 = new rn3.Searchbar({
-    el: '#searchbar-2',
     settings: {
-        css: 'rn3-searchbar--test',
-    }
+        identity: 'osm_id',
+        request: {
+            url: 'https://nominatim.openstreetmap.org',
+            params: {
+                city: '{query}',
+                format: 'json',
+                limit: 20,
+                addressdetails: 1,
+                email: 'info@niekes.com',
+            },
+        },
+        form: {
+            item: {
+                render: d => d.display_name,
+            },
+        },
+        dropdown: {
+            item: {
+                render: d => d.display_name,
+            },
+        },
+    },
 });
 
 searchbar.update({

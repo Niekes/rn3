@@ -7,6 +7,12 @@ import defaults from '../../utils/default-settings';
 export default {
     ...defaults,
     css: 'rn3-barchart--default',
+    margin: {
+        bottom: 0,
+        left: 0,
+        right: 0,
+        top: 0,
+    },
     xAxis: {
         fill: '#000',
         font: '10px sans-serif',

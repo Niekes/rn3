@@ -1,28 +1,5 @@
-$rn3-searchbar-variants: (
-    default: (),
-    test: (
-        background-color: lightgreen,
-        border-radius: 10px,
-        form: (
-            background-color: '@:background-color',
-            border-radius: '@:border-radius',
-            item: (
-                background-color: #ccc,
-            ),
-        ),
-        dropdown: (
-            background-color: '@:background-color',
-            border-radius: '@:border-radius',
-            item: (
-                indicator: (
-                    background-color: violet,
-                ),
-            )
-        )
-    ),
-);
-
 @import './node_modules/sass-recursive-map-merge/_recursive-map-merge.scss';
+
 /*
     Functions
 */
