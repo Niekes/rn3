@@ -159,12 +159,28 @@
         left: 0;
         overflow: auto;
         position: absolute;
+        scrollbar-color: $rn3-black-25 $rn3-black-10;
+        scrollbar-width: thin;
         top: 100%;
         width: 100%;
 
         &--open {
             display: flex;
             flex-direction: column;
+        }
+
+        &::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: $rn3-black-10;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: $rn3-black-25;
+            border-radius: $rn3-border-radius;
+            border: 1px solid $rn3-black-10;
         }
     }
 
