@@ -167,7 +167,7 @@
             flex-direction: column;
         }
 
-        @include scrollbar($rn3-black-25, $rn3-black-10)
+        @include scrollbar($rn3-black-25, transparent);
     }
 
     &__dropdown-item,

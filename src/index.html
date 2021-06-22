@@ -4,13 +4,36 @@
     <title>rn3.js - Data Visualization Toolkit</title>
     <script type="text/javascript" src="./rn3.min.js"></script>
     <link rel="stylesheet" type="text/css" href="./rn3.min.css">
+    <style>
+        body {
+            height: 100%;
+            width: 80%;
+            margin:0 auto;
+            padding:0;
+        }
+
+        #searchbar {
+            padding: 2rem 0;
+        }
+
+        #chart {
+            border-radius: 0.15rem;
+            border: 1px solid rgba(0, 0, 0, 0.25);
+            box-sizing: border-box;
+            height: 400px;
+            margin: 0 auto;
+            position: relative;
+            width: 100%;
+        }
+</style>
 </head>
-<body style="height: 100%;width: 80%;margin:0 auto;padding:0">
-    <div id="searchbar" style="padding: 2rem 0"></div>
-    <div id="chart" style="box-sizing: border-box; margin: 0 auto; height: 400px; width: 100%; border: 1px solid rgba(0, 0, 0, 0.25); border-radius: 0.15rem; position: relative;"></div>
+<body>
+
+<div id="datepicker"></div>
+<div id="searchbar"></div>
+<div id="chart"></div>
 
 <script type="text/javascript">
-// eslint-disable-next-line no-undef
 const barchart = new rn3.Barchart({
     el: '#chart',
     settings: {
@@ -54,7 +77,7 @@ searchbar.update({
     values: [
         { osm_id: '1', display_name: 'Moin', styles: { 'background-color': 'violet' } },
         { osm_id: '2', display_name: 'Hallo' },
-    ]
+    ],
 });
 
 searchbar.on('added', (d) => {
@@ -92,18 +115,6 @@ barchart.update({
         },
     ],
 });
-
-window.setTimeout(() => {
-    barchart.update({
-        values: [
-            { id: 'b', value: 2, fill: 'deeppink' },
-            { id: 'a', value: 1, fill: 'skyblue' },
-            { id: 'c', value: 3, fill: 'crimson' },
-            { id: 'e', value: -5, fill: 'violet' },
-            { id: 'f', value: -6, fill: 'darkblue' },
-        ],
-    });
-}, 4000);
 </script>
 </body>
 </html>

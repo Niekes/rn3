@@ -1,0 +1,28 @@
+@mixin scrollbar($thumb-color, $track-color) {
+    @supports (scrollbar-width: thin) {
+        scrollbar-width: thin;
+    }
+
+    @supports (scrollbar-color: $thumb-color $track-color) {
+        scrollbar-color: $thumb-color $track-color;
+    }
+
+    & {
+        scrollbar-face-color: $thumb-color;
+        scrollbar-track-color: $track-color;
+    }
+
+    &::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: $track-color;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: $thumb-color;
+        border: 1px solid $track-color;
+        border-radius: 1rem;
+    }
+}
