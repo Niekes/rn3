@@ -12,6 +12,7 @@ import {
 
 export function drawXAxis(ctx, parent, settings) {
     const {
+        type,
         tickSize,
         tickFormat,
         font,
@@ -53,9 +54,9 @@ export function drawXAxis(ctx, parent, settings) {
         ctx.strokeStyle = fill;
         ctx.stroke();
         ctx.fillText(
-            tickFormat(d.id),
+            tickFormat(d),
             x,
-            d.value > 0
+            type === 'bottom'
                 ? y + height + tickSize
                 : y + height - (tickSize * 2),
         );
@@ -114,14 +115,14 @@ export function drawYAxis(ctx, parent, settings) {
     return ctx;
 }
 
-export function bindXAxisData(join, xScale, yScale, settings) {
+export function bindXAxisData(join, xScale, settings, height, y0) {
     const {
         xAxis,
         transition,
     } = settings;
 
-    const y = yScale(0);
     const width = xScale.range()[1];
+    const x = d => xScale(join.identity(d)) + xScale.bandwidth() / 2;
 
     /*
         Create, update and remove x-axis
@@ -135,17 +136,18 @@ export function bindXAxisData(join, xScale, yScale, settings) {
         enter: {
             fill: transparentize(xAxis.fill),
             x: 0,
-            y,
+            y: y0,
             width,
         },
         update: {
             fill: xAxis.fill,
             x: 0,
-            y,
+            y: y0,
             width,
         },
         exit: {
             fill: transparentize(xAxis.fill),
+            y: y0,
         },
     }, transition);
 
@@ -157,48 +159,39 @@ export function bindXAxisData(join, xScale, yScale, settings) {
         enter: {
             fill: transparentize(xAxis.fill),
             height: 0,
-            x(d) {
-                return xScale(d.id) + xScale.bandwidth() / 2;
-            },
-            y(d) {
-                return d.value > 0
-                    ? yScale(0)
-                    : yScale(0) - xAxis.tickSize;
-            },
+            x,
+            y: xAxis.type === 'bottom'
+                ? xAxis.transform(height)
+                : xAxis.transform(height) - xAxis.tickSize,
         },
         update: {
             fill: xAxis.fill,
-            height(d) {
-                return d.value > 0
-                    ? xAxis.tickSize
-                    : xAxis.tickSize;
-            },
-            x(d) {
-                return xScale(d.id) + xScale.bandwidth() / 2;
-            },
-            y(d) {
-                return d.value > 0
-                    ? yScale(0)
-                    : yScale(0) - xAxis.tickSize;
-            },
+            height: xAxis.tickSize,
+            x,
+            y: xAxis.type === 'bottom'
+                ? xAxis.transform(height)
+                : xAxis.transform(height) - xAxis.tickSize,
         },
         exit: {
             fill: transparentize(xAxis.fill),
             height: 0,
-            y() {
-                return yScale(0);
-            },
+            y: xAxis.type === 'bottom'
+                ? xAxis.transform(height)
+                : xAxis.transform(height) - xAxis.tickSize,
         },
     }, transition);
 }
 
-export function bindYAxisData(join, yScale, settings) {
+export function bindYAxisData(join, yScale, settings, width) {
     const {
         yAxis,
         transition,
     } = settings;
 
     const height = yScale.range()[0];
+    const y = typeof yScale.bandwidth === 'function'
+        ? d => yScale(join.identity(d)) + yScale.bandwidth() / 2
+        : d => yScale(d);
 
     /*
         Create, update and remove x-axis
@@ -211,13 +204,13 @@ export function bindYAxisData(join, yScale, settings) {
         },
         enter: {
             fill: transparentize(yAxis.fill),
-            x: 0,
+            x: yAxis.transform(width),
             y: 0,
             height,
         },
         update: {
             fill: yAxis.fill,
-            x: 0,
+            x: yAxis.transform(width),
             y: 0,
             height,
         },
@@ -235,17 +228,13 @@ export function bindYAxisData(join, yScale, settings) {
             fill: transparentize(yAxis.fill),
             width: 0,
             x: 0,
-            y(d) {
-                return yScale(d);
-            },
+            y,
         },
         update: {
             fill: yAxis.fill,
             width: yAxis.tickSize,
             x: 0,
-            y(d) {
-                return yScale(d);
-            },
+            y,
         },
         exit: {
             fill: transparentize(yAxis.fill),

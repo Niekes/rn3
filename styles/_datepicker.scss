@@ -1,0 +1,56 @@
+.rn3-datepicker {
+    box-sizing: border-box;
+    padding: 0;
+    position: relative;
+
+    &__form {
+        box-sizing: border-box;
+        display: grid;
+        grid-template-rows: 1fr;
+    }
+
+    &__dropdown {
+        box-sizing: border-box;
+        display: none;
+        left: 0;
+        overflow: auto;
+        position: absolute;
+        top: 100%;
+        width: 100%;
+
+        &--open {
+            display: flex;
+            flex-direction: column;
+        }
+
+        @include scrollbar($rn3-black-25, transparent);
+    }
+
+    @each $name, $datepicker in $rn3-datepicker-variants {
+        &--#{$name} {
+            .rn3-datepicker__form {
+                @each $property, $value in map-get($datepicker, 'form') {
+                    #{$property}: reveal-value($datepicker, $value);
+                }
+            }
+
+            .rn3-datepicker__dropdown {
+                @each $property, $value in map-get($datepicker, 'dropdown') {
+                    #{$property}: reveal-value($datepicker, $value);
+                }
+
+                &--open {
+                    $br: get-value($datepicker, 'dropdown', 'border-radius');
+
+                    border-radius: 0 0 $br $br;
+
+                    + .rn3-datepicker__form {
+                        $br: get-value($datepicker, 'form', 'border-radius');
+
+                        border-radius: $br $br 0 0;
+                    }
+                }
+            }
+        }
+    }
+}

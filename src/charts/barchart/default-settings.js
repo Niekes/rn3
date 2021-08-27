@@ -16,8 +16,10 @@ export default {
     xAxis: {
         fill: '#000',
         font: '10px sans-serif',
-        tickFormat: d => d,
+        tickFormat: d => d.id,
         tickSize: 6,
+        transform: h => h,
+        type: 'bottom',
     },
     yAxis: {
         fill: '#000',
@@ -25,6 +27,8 @@ export default {
         tickFormat: d => d,
         ticks: 3,
         tickSize: 6,
+        transform: () => 0,
+        type: 'left',
     },
     xScale: {
         domain: values => values.map(d => d.id),

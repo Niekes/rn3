@@ -1,7 +1,6 @@
 import {
     select,
     scaleBand,
-    scaleLinear,
 } from 'd3';
 
 import Chart from '../Chart';
@@ -33,7 +32,9 @@ import {
     getUniqueColorByIndex,
 } from '../../utils/color';
 
-export default class Barchart extends Chart {
+export default class Heatmap extends Chart {
+    #tileSize;
+
     constructor(data) {
         super(data, defaultSettings);
     }
@@ -43,10 +44,16 @@ export default class Barchart extends Chart {
             ...this.data,
             ...updatedData,
         };
+
         /*
             Merge settings
         */
         this.settings = Chart.mergeSettings(this.settings, this.data.settings);
+
+        /*
+            Grid
+        */
+        this.#tileSize = this.width / this.settings.grid.columns;
 
         /*
             Update canvas
@@ -60,8 +67,9 @@ export default class Barchart extends Chart {
             .range([0, this.width])
             .padding(this.settings.xScale.padding);
 
-        this.yScale = scaleLinear()
-            .range([this.height, 0]);
+        this.yScale = scaleBand()
+            .range([this.height, 0])
+            .padding(this.settings.yScale.padding);
 
         /*
             Compute domains
@@ -76,43 +84,43 @@ export default class Barchart extends Chart {
         this.yScale.domain(domainY).range([this.height, 0]);
 
         /*
-            Create, update and remove bars
+            Create, update and remove tiles
         */
         updateSelection({
             join: {
-                cssClass: 'bars',
+                cssClass: 'tiles',
                 data: this.data.values,
                 identity: this.getIdentity,
                 parent: this.detachedContainer,
             },
             enter: {
-                fill: Chart.getFill,
+                fill: Chart.getFillTransparentized,
                 height: 0,
-                width: this.#getWidthOfBars,
-                x: this.#getXPositionOfBars,
-                y: this.#getYScale0,
+                width: 0,
+                x: this.#getXPositionOfTiles,
+                y: this.#getYPositionOfTiles,
             },
             update: {
                 fill: Chart.getFill,
-                height: this.#getHeightOfBars,
-                width: this.#getWidthOfBars,
-                x: this.#getXPositionOfBars,
-                y: this.#getYPositionOfBars,
+                height: this.#getHeightOfTiles,
+                width: this.#getWidthOfTiles,
+                x: this.#getXPositionOfTiles,
+                y: this.#getYPositionOfTiles,
             },
             exit: {
                 height: 0,
-                y: this.#getYScale0,
+                y: 0,
                 fill: Chart.getFillTransparentized,
             },
         }, this.settings.transition);
 
         /*
-            Render bars on canvas
+            Render tiles on canvas
         */
         render(this.#draw, this.settings.transition.duration);
 
         /*
-            Render bars on virtual canvas
+            Render tiles on virtual canvas
         */
         renderOnVirtualCanvas(this.#drawOnVirtualCanvas, this.settings.transition.duration);
 
@@ -122,14 +130,14 @@ export default class Barchart extends Chart {
         bindXAxisData(
             {
                 cssClass: 'x-ticks',
-                data: this.data.values,
-                identity: this.getIdentity,
+                data: domainX,
+                identity: d => d,
                 parent: this.detachedContainer,
             },
             this.xScale,
             this.settings,
             this.height,
-            this.yScale(0),
+            0,
         );
 
         /*
@@ -138,8 +146,8 @@ export default class Barchart extends Chart {
         bindYAxisData(
             {
                 cssClass: 'y-ticks',
-                data: this.yScale.ticks(this.settings.yAxis.ticks),
-                identity: null,
+                data: domainY,
+                identity: d => d,
                 parent: this.detachedContainer,
             },
             this.yScale,
@@ -151,17 +159,17 @@ export default class Barchart extends Chart {
     #draw = () => {
         clearCanvas(this.context, this.settings.margin, this.height, this.width);
 
-        const bars = this.detachedContainer.selectAll('custom.bars');
+        const tiles = this.detachedContainer.selectAll('custom.tiles');
 
-        bars.each((d, i, nodes) => {
-            const bar = select(nodes[i]);
-            const x = +bar.attr('x');
-            const y = +bar.attr('y');
-            const height = +bar.attr('height');
-            const width = +bar.attr('width');
+        tiles.each((d, i, nodes) => {
+            const tile = select(nodes[i]);
+            const x = +tile.attr('x');
+            const y = +tile.attr('y');
+            const height = +tile.attr('height');
+            const width = +tile.attr('width');
 
             this.context.beginPath();
-            this.context.fillStyle = bar.attr('fill');
+            this.context.fillStyle = tile.attr('fill');
             this.context.rect(x, y, width, height);
             this.context.fill();
         });
@@ -173,15 +181,16 @@ export default class Barchart extends Chart {
     #drawOnVirtualCanvas = () => {
         clearCanvas(this.virtualContext, this.settings.margin, this.height, this.width);
 
-        const bars = this.detachedContainer.selectAll('custom.bars');
+        const tiles = this.detachedContainer.selectAll('custom.tiles');
 
-        bars.each((d, i, nodes) => {
-            const bar = select(nodes[i]);
-            const x = +bar.attr('x');
-            const y = +bar.attr('y');
-            const height = +bar.attr('height');
-            const width = +bar.attr('width');
-            const datum = bar.datum();
+        tiles.each((d, i, nodes) => {
+            const tile = select(nodes[i]);
+            const x = +tile.attr('x');
+            const y = +tile.attr('y');
+            const height = +tile.attr('height');
+            const width = +tile.attr('width');
+            const datum = tile.datum();
+
             /*
                 Draw to virtual context
             */
@@ -198,13 +207,11 @@ export default class Barchart extends Chart {
         });
     }
 
-    #getYScale0 = () => this.yScale(0);
+    #getXPositionOfTiles = d => this.xScale(d.x);
 
-    #getXPositionOfBars = d => this.xScale(this.getIdentity(d));
+    #getYPositionOfTiles = d => this.yScale(d.y);
 
-    #getYPositionOfBars = d => Math.min(this.#getYScale0(), this.yScale(d.value));
+    #getWidthOfTiles = () => this.xScale.bandwidth();
 
-    #getWidthOfBars = () => this.xScale.bandwidth();
-
-    #getHeightOfBars = d => Math.abs(this.yScale(d.value) - this.#getYScale0());
+    #getHeightOfTiles = () => this.yScale.bandwidth();
 }

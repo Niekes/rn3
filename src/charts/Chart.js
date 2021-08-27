@@ -21,6 +21,10 @@ import {
 } from '../utils/dimension';
 
 import {
+    has,
+} from '../utils/object';
+
+import {
     transparentize,
 } from '../utils/color';
 
@@ -78,7 +82,16 @@ export default class Chart extends Super {
         this.canvas.on('mousemove', (e) => {
             const [x, y] = pointer(e);
 
-            const d = this.getTooltipDataByMousePosition(x, y);
+            const d = this.#getTooltipDataByMousePosition(x, y);
+
+
+            if (d && has(d, 'data')) {
+                // console.log(this.data.values);
+            }
+
+            if (!d) {
+                // console.log('UNSET');
+            }
 
             setTooltip(d, ...pointer(e, document.documentElement));
         });
@@ -86,16 +99,12 @@ export default class Chart extends Super {
         this.canvas.on('mouseleave', unsetTooltip);
     }
 
-    getTooltipDataByMousePosition = (x, y) => {
+    #getTooltipDataByMousePosition = (x, y) => {
         const imageData = this.virtualContext
             .getImageData(x * 2, y * 2, 1, 1);
 
         return this.tooltipData.get(rgb(...imageData.data).toString());
     };
-
-    static getFill = d => d.fill;
-
-    static getFillTransparentized = d => transparentize(this.getFill(d));
 
     updateCanvas = () => {
         const height = getHeight(this.data.el);
@@ -115,16 +124,24 @@ export default class Chart extends Super {
         this.virtualContext.translate(this.settings.margin.left * 2, this.settings.margin.top * 2);
         this.virtualContext.scale(2, 2);
 
-        this.clearTooltipData();
+        this.#clearTooltipData();
 
         unsetTooltip();
     }
 
-    clearTooltipData = () => {
+    #clearTooltipData = () => {
         if (this.tooltipData.size > 0) {
             this.tooltipData.clear();
         }
 
         return this.tooltipData;
     }
+
+    setTooltipData(key, value) {
+        this.tooltipData.set(key, value);
+    }
+
+    static getFill = d => d.fill;
+
+    static getFillTransparentized = d => transparentize(Chart.getFill(d));
 }
