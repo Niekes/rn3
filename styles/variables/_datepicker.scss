@@ -8,6 +8,7 @@ $rn3-datepicker-default: (
     font-weight: var(--rn3-datepicker-font-weight, #{$rn3-font-weight-light}),
     padding: var(--rn3-datepicker-padding, #{$rn3-padding}),
     form: (
+        cursor: var(--rn3-datepicker-form-cursor, pointer),
         height: var(--rn3-datepicker-form-height, 100%),
         background-color: var(--rn3-datepicker-form-background-color, var(--rn3-datepicker-background-color, #{$rn3-body-bg})),
         border: var(--rn3-datepicker-form-border, var(--rn3-datepicker-border, #{$rn3-border})),
@@ -47,6 +48,9 @@ $rn3-datepicker-default: (
         font-weight: var(--rn3-datepicker-dropdown-font-weight, var(--rn3-datepicker-font-weight, #{$rn3-font-weight-light})),
         max-height: var(--rn3-datepicker-dropdown-max-height, 30rem),
         z-index: var(--rn3-searhcbar-dropdown-z-index, #{$rn3-z-index-dropdown}),
+        period-control: (
+            padding: var(--rn3-datepicker-dropdown-period-control-padding, var(--rn3-datepicker-padding, #{$rn3-padding})),
+        ),
     )
 );
 

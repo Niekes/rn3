@@ -30,10 +30,54 @@
         box-sizing: border-box;
         display: none;
         left: 0;
+        min-width: 12.5rem;
         overflow: auto;
         position: absolute;
         top: 100%;
         width: 100%;
+
+        &-period-control {
+            display: flex;
+            justify-content: space-around;
+
+            .period-control-items {
+                flex: 1;
+                text-align: center;
+            }
+        }
+
+        &-periods-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            width: 100%;
+
+            .period-items {
+                align-items: center;
+                box-sizing: border-box;
+                justify-content: center;
+                padding: 0.5rem;
+                font-size: $rn3-font-size;
+                display: flex;
+
+                &--not-valid-date {
+                    color: $rn3-black-25;
+                    font-size: $rn3-font-size;
+                    overflow: hidden;
+                    pointer-events: none;
+                    text-align: center;
+                    text-overflow: ellipsis;
+                    white-space: normal;
+                }
+
+                &--valid-date {
+                    cursor: pointer;
+
+                    &:hover {
+                        background-color: pink;
+                    }
+                }
+            }
+        }
 
         &--open {
             display: flex;
@@ -47,6 +91,15 @@
         }
 
         @include scrollbar($rn3-black-25, transparent);
+    }
+
+    &--day-mode {
+        .rn3-datepicker__dropdown-periods-wrapper {
+            .period-items {
+                max-width: calc(100% / 7);
+                min-width: calc(100% / 7);
+            }
+        }
     }
 
     @each $name, $datepicker in $rn3-datepicker-variants {
@@ -90,6 +143,12 @@
 
                         border-radius: $br $br 0 0;
                     }
+                }
+            }
+
+            .rn3-datepicker__dropdown-period-control {
+                @each $property, $value in map-deep-get($datepicker, 'dropdown', 'period-control') {
+                    #{$property}: reveal-value($datepicker, $value);
                 }
             }
         }
