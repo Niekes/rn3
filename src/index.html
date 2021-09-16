@@ -61,8 +61,8 @@ const datepicker = new rn3.Datepicker({
 
 datepicker.update({
     values: {
-        to: new Date(new Date().getFullYear() + 1, 0, 1),
-        from: new Date(new Date().getFullYear(), 0, 1),
+        from: new Date(),
+        to: new Date(),
     },
 });
 
@@ -148,8 +148,6 @@ const barchart = new rn3.Barchart({
         },
     },
 });
-
-console.log(barchart);
 
 barchart.update({
     values: [

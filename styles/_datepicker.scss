@@ -4,9 +4,26 @@
     position: relative;
 
     &__form {
+        align-items: center;
         box-sizing: border-box;
         display: grid;
+        gap: 0.5rem 0.5rem;
+        grid-template-areas: "form-icon form-display form-arrow";
+        grid-template-columns: min-content 1fr min-content;
         grid-template-rows: 1fr;
+
+        &-icon {
+            grid-area: form-icon;
+        }
+
+        &-display {
+            grid-area: form-display;
+        }
+
+        &-arrow {
+            grid-area: form-arrow;
+            transform: rotate(0deg);
+        }
     }
 
     &__dropdown {
@@ -21,6 +38,12 @@
         &--open {
             display: flex;
             flex-direction: column;
+
+            ~ div.rn3-datepicker__form {
+                div.rn3-datepicker__form-arrow {
+                    transform: rotate(180deg);
+                }
+            }
         }
 
         @include scrollbar($rn3-black-25, transparent);
@@ -30,6 +53,24 @@
         &--#{$name} {
             .rn3-datepicker__form {
                 @each $property, $value in map-get($datepicker, 'form') {
+                    #{$property}: reveal-value($datepicker, $value);
+                }
+            }
+
+            .rn3-datepicker__form-icon {
+                @each $property, $value in map-deep-get($datepicker, 'form', 'icon') {
+                    #{$property}: reveal-value($datepicker, $value);
+                }
+            }
+
+            .rn3-datepicker__form-display {
+                @each $property, $value in map-deep-get($datepicker, 'form', 'display') {
+                    #{$property}: reveal-value($datepicker, $value);
+                }
+            }
+
+            .rn3-datepicker__form-arrow {
+                @each $property, $value in map-deep-get($datepicker, 'form', 'arrow') {
                     #{$property}: reveal-value($datepicker, $value);
                 }
             }

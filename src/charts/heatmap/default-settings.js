@@ -33,7 +33,4 @@ export default {
         domain: values => Array.from(new Set(values.map(d => d.y))),
         padding: 0,
     },
-    grid: {
-        columns: 14,
-    },
 };

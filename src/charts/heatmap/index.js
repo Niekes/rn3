@@ -33,8 +33,6 @@ import {
 } from '../../utils/color';
 
 export default class Heatmap extends Chart {
-    #tileSize;
-
     constructor(data) {
         super(data, defaultSettings);
     }
@@ -49,11 +47,6 @@ export default class Heatmap extends Chart {
             Merge settings
         */
         this.settings = Chart.mergeSettings(this.settings, this.data.settings);
-
-        /*
-            Grid
-        */
-        this.#tileSize = this.width / this.settings.grid.columns;
 
         /*
             Update canvas
