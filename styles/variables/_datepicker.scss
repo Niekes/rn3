@@ -49,7 +49,9 @@ $rn3-datepicker-default: (
         max-height: var(--rn3-datepicker-dropdown-max-height, 30rem),
         z-index: var(--rn3-searhcbar-dropdown-z-index, #{$rn3-z-index-dropdown}),
         period-control: (
-            padding: var(--rn3-datepicker-dropdown-period-control-padding, var(--rn3-datepicker-padding, #{$rn3-padding})),
+            buttons: (
+                padding: var(--rn3-datepicker-dropdown-period-control-padding, var(--rn3-datepicker-padding, #{$rn3-padding})),
+            ),
         ),
     )
 );

@@ -41,11 +41,19 @@
             display: flex;
             justify-content: space-around;
 
-            .period-control-items {
+            &-buttons {
                 cursor: pointer;
                 flex: 1;
                 text-align: center;
                 user-select: none;
+
+                &--disabled {
+                    pointer-events: none;
+                }
+
+                &:hover {
+                    background-color: $rn3-blue;
+                }
             }
         }
 
@@ -195,6 +203,14 @@
         }
     }
 
+    &--month-mode {
+        .rn3-datepicker__dropdown-periods-wrapper {
+            .period-items {
+                width: calc(100% / 3);
+            }
+        }
+    }
+
     @each $name, $datepicker in $rn3-datepicker-variants {
         &--#{$name} {
             .rn3-datepicker__form {
@@ -241,6 +257,12 @@
 
             .rn3-datepicker__dropdown-period-control {
                 @each $property, $value in map-deep-get($datepicker, 'dropdown', 'period-control') {
+                    #{$property}: reveal-value($datepicker, $value);
+                }
+            }
+
+            .rn3-datepicker__dropdown-period-control-buttons {
+                @each $property, $value in map-deep-get($datepicker, 'dropdown', 'period-control', 'buttons') {
                     #{$property}: reveal-value($datepicker, $value);
                 }
             }
