@@ -297,7 +297,7 @@ export default class Datepicker extends Element {
                 value: -1,
             },
             {
-                text: 'Month',
+                text: this.settings.modes.month.label,
                 value: 'month',
             },
             {
@@ -366,7 +366,7 @@ export default class Datepicker extends Element {
                 value: -12,
             },
             {
-                text: 'Day',
+                text: this.settings.modes.day.label,
                 value: 'day',
             },
             {
