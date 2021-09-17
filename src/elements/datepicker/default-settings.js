@@ -26,6 +26,19 @@ export default {
             render: d => timeFormat('%e. %b \'%y')(d),
         },
     },
-    customPeriods: [],
+    customPeriods: [
+        {
+            label: 'Today',
+            from: new Date(),
+            to: new Date(),
+            mode: 'day',
+        },
+        {
+            label: 'YTD',
+            from: new Date(2021, 0, 1),
+            to: new Date(),
+            mode: 'day',
+        },
+    ],
     singleSelect: false,
 };
