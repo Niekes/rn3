@@ -7,8 +7,6 @@ import defaults from '../../utils/default-settings';
 export default {
     ...defaults,
     css: 'rn3-datepicker--default',
-    minDate: new Date(new Date().getFullYear(), 0, 1),
-    maxDate: new Date(new Date().getFullYear(), 11, 31),
     activeMode: 'month',
     form: {
         icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M16.91 3.191V.758h-1.82V3.19H8.91V.758H7.09V3.19H0v3.95h24V3.19ZM0 23.242h24V8.961H0Zm15.95-11.394h3.038v3.039H15.95Zm0 5.468h3.038v3.04H15.95Zm-5.47-5.468h3.04v3.039h-3.04Zm0 5.468h3.04v3.04h-3.04Zm-5.468-5.468H8.05v3.039H5.01Zm0 5.468H8.05v3.04H5.01Zm0 0"/></svg>',
@@ -16,6 +14,9 @@ export default {
     },
     modes: {
         day: {
+            label: 'Day',
+            minDate: new Date(new Date().getFullYear(), 0, 1),
+            maxDate: new Date(),
             render: d => timeFormat('%-e.%-m.%y')(d),
             pages: 3,
             customPeriods: [
@@ -32,6 +33,9 @@ export default {
             ],
         },
         month: {
+            label: 'Month',
+            minDate: new Date(new Date().getFullYear(), 0, 1),
+            maxDate: new Date(),
             render: d => timeFormat('%b \'%y')(d),
             pages: 3,
             customPeriods: [
@@ -48,6 +52,9 @@ export default {
             ],
         },
         week: {
+            label: 'CW',
+            minDate: new Date(new Date().getFullYear(), 0, 1),
+            maxDate: new Date(),
             render: d => timeFormat('%e. %b \'%y')(d),
             pages: 1,
             customPeriods: [],

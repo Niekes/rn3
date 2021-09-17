@@ -66,8 +66,8 @@ datepicker.update({
     },
 });
 
-datepicker.on('date-selected', (d) => {
-    console.log(d);
+datepicker.on('date-selected', (dates) => {
+    console.log(dates);
 });
 
 const searchbar = new rn3.Searchbar({
