@@ -21,7 +21,7 @@ import {
     isValidDate,
     getDaysInMonth,
     getISOWeeks,
-    getDateByWeek,
+    getDateOfISOWeek,
 } from '../../utils/date';
 
 import defaultSettings from './default-settings';
@@ -80,6 +80,28 @@ export default class Datepicker extends Element {
                 },
                 view: null,
                 format: timeFormat('%e'),
+                controlData: [
+                    {
+                        text: '&lsaquo;',
+                        value: -1,
+                    },
+                    {
+                        text: this.settings.modes.day.label,
+                        value: 'day',
+                    },
+                    {
+                        text: this.settings.modes.week.label,
+                        value: 'week',
+                    },
+                    {
+                        text: this.settings.modes.month.label,
+                        value: 'month',
+                    },
+                    {
+                        text: '&rsaquo;',
+                        value: 1,
+                    },
+                ],
             },
             month: {
                 marked: {
@@ -88,6 +110,28 @@ export default class Datepicker extends Element {
                 },
                 view: null,
                 format: timeFormat('%b'),
+                controlData: [
+                    {
+                        text: '&lsaquo;',
+                        value: -12,
+                    },
+                    {
+                        text: this.settings.modes.day.label,
+                        value: 'day',
+                    },
+                    {
+                        text: this.settings.modes.week.label,
+                        value: 'week',
+                    },
+                    {
+                        text: this.settings.modes.month.label,
+                        value: 'month',
+                    },
+                    {
+                        text: '&rsaquo;',
+                        value: 12,
+                    },
+                ],
             },
             week: {
                 marked: {
@@ -96,6 +140,28 @@ export default class Datepicker extends Element {
                 },
                 view: null,
                 format: timeFormat('%V'),
+                controlData: [
+                    {
+                        text: '&lsaquo;',
+                        value: -12,
+                    },
+                    {
+                        text: this.settings.modes.day.label,
+                        value: 'day',
+                    },
+                    {
+                        text: this.settings.modes.week.label,
+                        value: 'week',
+                    },
+                    {
+                        text: this.settings.modes.month.label,
+                        value: 'month',
+                    },
+                    {
+                        text: '&rsaquo;',
+                        value: 12,
+                    },
+                ],
             },
         };
 
@@ -293,20 +359,6 @@ export default class Datepicker extends Element {
     #getDayData = (activePeriod) => {
         const values = [];
         const { pages } = this.settings.modes.day;
-        const dayControlData = [
-            {
-                text: '&lsaquo;',
-                value: -1,
-            },
-            {
-                text: this.settings.modes.month.label,
-                value: 'month',
-            },
-            {
-                text: '&rsaquo;',
-                value: 1,
-            },
-        ];
 
         for (let i = 0; i < pages; i += 1) {
             let dayData = null;
@@ -354,7 +406,7 @@ export default class Datepicker extends Element {
 
 
         return {
-            control: dayControlData,
+            control: this.#periods.day.controlData,
             values,
         };
     };
@@ -362,20 +414,6 @@ export default class Datepicker extends Element {
     #getMonthData = (activePeriod) => {
         const values = [];
         const { pages } = this.settings.modes.month;
-        const monthControlData = [
-            {
-                text: '&lsaquo;',
-                value: -12,
-            },
-            {
-                text: this.settings.modes.day.label,
-                value: 'day',
-            },
-            {
-                text: '&rsaquo;',
-                value: 12,
-            },
-        ];
 
         for (let i = 0; i < pages; i += 1) {
             let monthData = null;
@@ -393,37 +431,33 @@ export default class Datepicker extends Element {
         }
 
         return {
-            control: monthControlData,
+            control: this.#periods.month.controlData,
             values,
         };
     };
 
     #getWeekData = (activePeriod) => {
-        let weekData = null;
+        const values = [];
+        const { pages } = this.settings.modes.week;
 
-        const weekControlData = [
-            {
-                text: '&lsaquo;',
-                value: -12,
-            },
-            {
-                text: timeFormat('%Y')(activePeriod.view),
-                value: null,
-            },
-            {
-                text: '&rsaquo;',
-                value: 12,
-            },
-        ];
+        for (let i = 0; i < pages; i += 1) {
+            let weekData = null;
 
-        weekData = range(0, getISOWeeks(activePeriod.view))
-            .map(m => ({
-                value: timeMonday(getDateByWeek(activePeriod.view.getFullYear(), m + 1)),
-            }));
+            const pageYearFloored = timeYear.floor(activePeriod.view);
+            const pageYear = timeYear.offset(pageYearFloored, i - pages + Math.round(pages / 2));
+
+            weekData = range(1, getISOWeeks(pageYear) + 1)
+                .map(w => ({
+                    value: timeMonday(getDateOfISOWeek(w, pageYear.getFullYear())),
+                }));
+
+            values[i] = weekData;
+            values[i].label = timeFormat('%Y')(pageYear);
+        }
 
         return {
-            control: weekControlData,
-            values: weekData,
+            control: this.#periods.month.controlData,
+            values,
         };
     };
 
@@ -442,7 +476,7 @@ export default class Datepicker extends Element {
         }
     };
 
-    #checkPeriod = (d, marked) => {
+    #markPeriod = (d, marked) => {
         const { from, to } = marked;
         switch (this.settings.activeMode) {
         case 'day': {
@@ -470,22 +504,24 @@ export default class Datepicker extends Element {
             };
         }
         case 'week': {
-            const sameYear = d.getFullYear() === from.getFullYear();
-            const sameWeek = timeFormat('%V')(d) === timeFormat('%V')(from) && timeFormat('%V')(d) === timeFormat('%V')(to);
-
-            if (timeFormat('%V')(d) === timeFormat('%V')(to)) {
-                // TODO
-                // eslint-disable-next-line
-                console.log(timeFormat('%V')(d), timeFormat('%V')(from), d);
-            }
+            const sameYearFrom = d.getFullYear() === from.getFullYear();
+            const sameYearTo = d.getFullYear() === to.getFullYear();
+            const sameWeekFrom = timeFormat('%V')(d) === timeFormat('%V')(from);
+            const sameWeekTo = timeFormat('%V')(d) === timeFormat('%V')(to);
 
             return {
-                isStart: timeFormat('%V')(d) === timeFormat('%V')(from) && sameYear && sameWeek,
-                isMiddle: timeFormat('%V')(d) > timeFormat('%V')(from)
-                    && timeFormat('%V')(d) < timeFormat('%V')(to)
-                    && sameYear && sameWeek,
-                isEnd: timeFormat('%V')(d) === timeFormat('%V')(to) && sameYear && sameWeek,
-                isNow: timeFormat('%V')(d) === timeFormat('%V')(this.#today),
+                isStart: timeFormat('%V')(d) === timeFormat('%V')(from)
+                    && sameYearFrom
+                    && sameWeekFrom,
+                isMiddle: d.getTime() >= from.getTime()
+                    && d.getTime() <= to.getTime(),
+                isEnd: timeFormat('%V')(d) === timeFormat('%V')(to)
+                    && sameYearTo
+                    && sameWeekTo,
+                isNow: timeFormat('%V')(d) === timeFormat('%V')(this.#today)
+                    && d.getFullYear() === this.#today.getFullYear(),
+                isOutOfRange: d.getTime() < this.settings.modes.week.minDate.getTime()
+                    || d.getTime() > this.settings.modes.week.maxDate.getTime(),
             };
         }
         default:
@@ -650,7 +686,7 @@ export default class Datepicker extends Element {
                 node.classed('period-items--not-valid-date', !isValid);
 
                 if (isValid) {
-                    const period = this.#checkPeriod(d.value, marked);
+                    const period = this.#markPeriod(d.value, marked);
 
                     node.classed('period-items--start', period.isStart);
                     node.classed('period-items--end', period.isEnd);

@@ -195,7 +195,8 @@
         @include scrollbar($rn3-black-25, transparent);
     }
 
-    &--day-mode {
+    &--day-mode,
+    &--week-mode {
         .rn3-datepicker__dropdown-periods-wrapper {
             .period-items {
                 width: calc(100% / 7);

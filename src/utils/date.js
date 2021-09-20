@@ -61,6 +61,19 @@ export function getISOWeeks(date) {
 *   @param {number} week
 *   @returns {date} Monday of that week
 */
-export function getDateByWeek(year, week) {
-    return new Date(year, 0, (1 + (week - 1) * 7));
+export function getDateByWeek(week, year) {
+    return new Date(week, 0, (1 + (year - 1) * 7));
+}
+
+export function getDateOfISOWeek(week, year) {
+    const simple = new Date(year, 0, 1 + (week - 1) * 7);
+    const dow = simple.getDay();
+    const isoWeekStart = simple;
+
+    if (dow <= 4) {
+        isoWeekStart.setDate(simple.getDate() - simple.getDay() + 1);
+    } else {
+        isoWeekStart.setDate(simple.getDate() + 8 - simple.getDay());
+    }
+    return isoWeekStart;
 }
