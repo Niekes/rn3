@@ -141,6 +141,8 @@ export default class Datepicker extends Element {
                 return;
             }
 
+            this.settings.activeMode = this.#periods.selected || this.settings.activeMode;
+
             this.#counter = 0;
 
             this.#closeDropdown();
@@ -267,7 +269,7 @@ export default class Datepicker extends Element {
 
     #getActivePeriod = () => this.#periods[this.settings.activeMode];
 
-    #setActivePeriod = (m) => {
+    #setActiveMode = (m) => {
         this.settings.activeMode = m;
     };
 
@@ -533,13 +535,15 @@ export default class Datepicker extends Element {
                 e.stopPropagation();
 
                 if (!d.value) return;
+
                 if (Object.keys(this.settings.modes).includes(d.value)) {
                     const ap = this.#getActivePeriod();
 
+                    this.#periods.selected = this.settings.activeMode;
                     this.#periods[d.value].marked.from = ap.marked.from;
                     this.#periods[d.value].marked.to = ap.marked.to;
 
-                    this.#setActivePeriod(d.value);
+                    this.#setActiveMode(d.value);
                     this.#setView(this.#periods[d.value].marked.from);
                     this.#updateDateSelection();
 
