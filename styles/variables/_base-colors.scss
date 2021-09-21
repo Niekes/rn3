@@ -24,5 +24,12 @@ $rn3-white-75: var(--rn3-white-75,rgba(255, 255, 255, 0.75)) !default;
 $rn3-white-80: var(--rn3-white-80,rgba(255, 255, 255, 0.8)) !default;
 $rn3-white-90: var(--rn3-white-90,rgba(255, 255, 255, 0.9)) !default;
 
-$rn3-blue: var(--rn3-blue, dodgerblue) !default;
-$rn3-red: var(--rn3-red, crimson) !default;
+$rn3-blue: var(--rn3-blue, rgb(30, 144, 255)) !default;
+$rn3-blue-25: var(--rn3-blue-25, rgba(30, 144, 255, 0.25)) !default;
+$rn3-blue-50: var(--rn3-blue-50, rgba(30, 144, 255, 0.5)) !default;
+$rn3-blue-75: var(--rn3-blue-75, rgba(30, 144, 255, 0.75)) !default;
+
+$rn3-red: var(--rn3-red, rgb(237, 20, 61)) !default;
+$rn3-red-25: var(--rn3-red, rgba(237, 20, 61, 0.25)) !default;
+$rn3-red-50: var(--rn3-red, rgba(237, 20, 61, 0.5)) !default;
+$rn3-red-75: var(--rn3-red, rgba(237, 20, 61, 0.75)) !default;

@@ -505,9 +505,9 @@ export default class Datepicker extends Element {
         }
         case 'week': {
             const sameYearFrom = d.getFullYear() === from.getFullYear();
-            const sameYearTo = d.getFullYear() === to.getFullYear();
+            const sameYearTo = d.getFullYear() === timeMonday(to).getFullYear();
             const sameWeekFrom = timeFormat('%V')(d) === timeFormat('%V')(from);
-            const sameWeekTo = timeFormat('%V')(d) === timeFormat('%V')(to);
+            const sameWeekTo = timeFormat('%V')(d) === timeFormat('%V')(timeMonday(to));
 
             return {
                 isStart: timeFormat('%V')(d) === timeFormat('%V')(from)
@@ -561,7 +561,13 @@ export default class Datepicker extends Element {
         */
         const controlItems = this.#elements.periodControl
             .selectAll('div.rn3-datepicker__dropdown-period-control-buttons')
-            .data(periodData.control);
+            .data(periodData.control.filter((c) => {
+                if (this.settings.modes[c.value]) {
+                    return this.settings.modes[c.value].show;
+                }
+
+                return true;
+            }));
 
         controlItems
             .enter()

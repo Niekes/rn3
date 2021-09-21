@@ -131,25 +131,23 @@
                 &--start,
                 &--end,
                 &--middle {
-                    background-color: $rn3-blue;
                     color: $rn3-white;
-
-                    &:hover {
-                        background-color: $rn3-blue;
-                    }
                 }
 
                 &--end {
+                    background-color: $rn3-blue;
                     border-bottom-right-radius: $rn3-border-radius;
                     border-top-right-radius: $rn3-border-radius;
                 }
 
                 &--start {
+                    background-color: $rn3-blue;
                     border-bottom-left-radius: $rn3-border-radius;
                     border-top-left-radius: $rn3-border-radius;
                 }
 
                 &--middle {
+                    background-color: $rn3-blue-75;
                     border-radius: 0;
                 }
             }
