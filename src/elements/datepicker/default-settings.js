@@ -12,6 +12,10 @@ export default {
         icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M16.91 3.191V.758h-1.82V3.19H8.91V.758H7.09V3.19H0v3.95h24V3.19ZM0 23.242h24V8.961H0Zm15.95-11.394h3.038v3.039H15.95Zm0 5.468h3.038v3.04H15.95Zm-5.47-5.468h3.04v3.039h-3.04Zm0 5.468h3.04v3.04h-3.04Zm-5.468-5.468H8.05v3.039H5.01Zm0 5.468H8.05v3.04H5.01Zm0 0"/></svg>',
         arrow: '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="currentColor" d="M.14 5.242 11.63 19.645c.187.238.59.238.781 0L23.898 5.242a.725.725 0 0 0 .106-.652c-.016-.047-.035-.082-.047-.11a.504.504 0 0 0-.441-.265H.523a.5.5 0 0 0-.441.265.695.695 0 0 0 .059.762Zm0 0"/></svg>',
     },
+    dropdown: {
+        previousBtn: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M16.5 5.969V18.03c0 .836-1.012 1.254-1.602.664l-6.03-6.03a.945.945 0 0 1 0-1.33l6.03-6.03c.59-.59 1.602-.172 1.602.664Zm0 0"/></svg>',
+        nextBtn: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M9 17.898c0 1.075 1.266 1.649 2.074.942l6.309-5.524a1.749 1.749 0 0 0 0-2.632L11.074 5.16C10.266 4.453 9 5.027 9 6.102Zm0 0"/></svg>',
+    },
     modes: {
         day: {
             label: 'Day',

@@ -37,13 +37,16 @@
         width: auto;
 
         &-period-control {
+            align-items: center;
             display: flex;
             justify-content: space-around;
 
             &-buttons {
+                align-items: center;
                 cursor: pointer;
+                display: flex;
                 flex: 1;
-                text-align: center;
+                justify-content: center;
                 user-select: none;
 
                 &--disabled {

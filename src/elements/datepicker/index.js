@@ -82,7 +82,7 @@ export default class Datepicker extends Element {
                 format: timeFormat('%e'),
                 controlData: [
                     {
-                        text: '&lsaquo;',
+                        text: this.settings.dropdown.previousBtn,
                         value: -1,
                     },
                     {
@@ -98,7 +98,7 @@ export default class Datepicker extends Element {
                         value: 'month',
                     },
                     {
-                        text: '&rsaquo;',
+                        text: this.settings.dropdown.nextBtn,
                         value: 1,
                     },
                 ],
@@ -112,7 +112,7 @@ export default class Datepicker extends Element {
                 format: timeFormat('%b'),
                 controlData: [
                     {
-                        text: '&lsaquo;',
+                        text: this.settings.dropdown.previousBtn,
                         value: -12,
                     },
                     {
@@ -128,7 +128,7 @@ export default class Datepicker extends Element {
                         value: 'month',
                     },
                     {
-                        text: '&rsaquo;',
+                        text: this.settings.dropdown.nextBtn,
                         value: 12,
                     },
                 ],
@@ -142,7 +142,7 @@ export default class Datepicker extends Element {
                 format: timeFormat('%V'),
                 controlData: [
                     {
-                        text: '&lsaquo;',
+                        text: this.settings.dropdown.previousBtn,
                         value: -12,
                     },
                     {
@@ -158,7 +158,7 @@ export default class Datepicker extends Element {
                         value: 'month',
                     },
                     {
-                        text: '&rsaquo;',
+                        text: this.settings.dropdown.nextBtn,
                         value: 12,
                     },
                 ],
