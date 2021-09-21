@@ -165,7 +165,7 @@ export default class Datepicker extends Element {
             },
         };
 
-        this.#today = new Date();
+        this.#today = timeDay();
 
         this.#counter = 0;
 
@@ -365,7 +365,6 @@ export default class Datepicker extends Element {
 
             const pageMonthFloored = timeMonth.floor(activePeriod.view);
             const pageMonth = timeMonth.offset(pageMonthFloored, i - pages + Math.round(pages / 2));
-
             const daysInPageMonth = getDaysInMonth(pageMonth);
             const firstOfPageMonth = getFirstOfMonth(pageMonth).getDay();
             const daysOffset = firstOfPageMonth === 0 ? 6 : firstOfPageMonth - 1;
@@ -393,6 +392,10 @@ export default class Datepicker extends Element {
                 timeFormat('%a')(sat),
                 timeFormat('%a')(sun),
             );
+
+            if (dayData.length <= 42) {
+                dayData.push(...range(0, 43 - dayData.length).map(() => '&nbsp;'));
+            }
 
             values[i] = dayData
                 .map(d => ({
@@ -478,6 +481,7 @@ export default class Datepicker extends Element {
 
     #markPeriod = (d, marked) => {
         const { from, to } = marked;
+
         switch (this.settings.activeMode) {
         case 'day': {
             return {
@@ -488,19 +492,7 @@ export default class Datepicker extends Element {
                 isNow: d.getTime() === this.#today.getTime(),
                 isOutOfRange: d.getTime() < this.settings.modes.day.minDate.getTime()
                     || d.getTime() > this.settings.modes.day.maxDate.getTime(),
-            };
-        }
-        case 'month': {
-            const sameYear = d.getFullYear() === from.getFullYear();
-            return {
-                isStart: d.getMonth() === from.getMonth() && sameYear,
-                isMiddle: d.getMonth() > from.getMonth()
-                    && d.getMonth() < to.getMonth() && sameYear,
-                isEnd: d.getMonth() === to.getMonth() && sameYear,
-                isNow: d.getMonth() === this.#today.getMonth()
-                    && d.getFullYear() === this.#today.getFullYear(),
-                isOutOfRange: d.getTime() < this.settings.modes.month.minDate.getTime()
-                    || d.getTime() > this.settings.modes.month.maxDate.getTime(),
+                isWeekend: d.getDay() === 0 || d.getDay() === 6,
             };
         }
         case 'week': {
@@ -522,6 +514,21 @@ export default class Datepicker extends Element {
                     && d.getFullYear() === this.#today.getFullYear(),
                 isOutOfRange: d.getTime() < this.settings.modes.week.minDate.getTime()
                     || d.getTime() > this.settings.modes.week.maxDate.getTime(),
+                isWeekend: false,
+            };
+        }
+        case 'month': {
+            const sameYear = d.getFullYear() === from.getFullYear();
+            return {
+                isStart: d.getMonth() === from.getMonth() && sameYear,
+                isMiddle: d.getMonth() > from.getMonth()
+                    && d.getMonth() < to.getMonth() && sameYear,
+                isEnd: d.getMonth() === to.getMonth() && sameYear,
+                isNow: d.getMonth() === this.#today.getMonth()
+                    && d.getFullYear() === this.#today.getFullYear(),
+                isOutOfRange: d.getTime() < this.settings.modes.month.minDate.getTime()
+                    || d.getTime() > this.settings.modes.month.maxDate.getTime(),
+                isWeekend: false,
             };
         }
         default:
@@ -644,14 +651,14 @@ export default class Datepicker extends Element {
         /*
             Create/update period pages
         */
-        const periodItems = pagesEnter.selectAll('div.period-items').data(d => d);
+        const periodItems = pagesEnter.selectAll('div.rn3-datepicker__dropdown-period-items').data(d => d);
 
         periodItems
             .enter()
             .append('div')
-            .attr('class', 'period-items')
+            .attr('class', 'rn3-datepicker__dropdown-period-items')
             .on('click', (e, d) => {
-                if (select(e.target).classed('period-items--out-of-range')) return;
+                if (select(e.target).classed('rn3-datepicker__dropdown-period-items--out-of-range')) return;
 
                 const isFrom = this.settings.singleSelect ? true : this.#counter % 2 === 0;
 
@@ -681,31 +688,32 @@ export default class Datepicker extends Element {
                 /*
                     Reset all css classes
                 */
-                node.classed('period-items--valid-date', false);
-                node.classed('period-items--not-valid-date', false);
-                node.classed('period-items--start', false);
-                node.classed('period-items--end', false);
-                node.classed('period-items--middle', false);
-                node.classed('period-items--now', false);
+                node.classed('rn3-datepicker__dropdown-period-items--valid-date', false);
+                node.classed('rn3-datepicker__dropdown-period-items--not-valid-date', false);
+                node.classed('rn3-datepicker__dropdown-period-items--start', false);
+                node.classed('rn3-datepicker__dropdown-period-items--end', false);
+                node.classed('rn3-datepicker__dropdown-period-items--middle', false);
+                node.classed('rn3-datepicker__dropdown-period-items--now', false);
 
-                node.classed('period-items--valid-date', isValid);
-                node.classed('period-items--not-valid-date', !isValid);
+                node.classed('rn3-datepicker__dropdown-period-items--valid-date', isValid);
+                node.classed('rn3-datepicker__dropdown-period-items--not-valid-date', !isValid);
 
                 if (isValid) {
                     const period = this.#markPeriod(d.value, marked);
 
-                    node.classed('period-items--start', period.isStart);
-                    node.classed('period-items--end', period.isEnd);
-                    node.classed('period-items--middle', period.isMiddle);
-                    node.classed('period-items--now', period.isNow);
-                    node.classed('period-items--out-of-range', period.isOutOfRange);
+                    node.classed('rn3-datepicker__dropdown-period-items--start', period.isStart);
+                    node.classed('rn3-datepicker__dropdown-period-items--end', period.isEnd);
+                    node.classed('rn3-datepicker__dropdown-period-items--middle', period.isMiddle);
+                    node.classed('rn3-datepicker__dropdown-period-items--now', period.isNow);
+                    node.classed('rn3-datepicker__dropdown-period-items--out-of-range', period.isOutOfRange);
+                    node.classed('rn3-datepicker__dropdown-period-items--is-weekend', period.isWeekend);
 
                     if (period.isMiddle && period.isStart) {
-                        node.classed('period-items--middle', false);
+                        node.classed('rn3-datepicker__dropdown-period-items--middle', false);
                     }
 
                     if (period.isMiddle && period.isEnd) {
-                        node.classed('period-items--middle', false);
+                        node.classed('rn3-datepicker__dropdown-period-items--middle', false);
                     }
 
                     return activePeriod.format(d.value).trim();

@@ -37,7 +37,6 @@
         width: auto;
 
         &-period-control {
-            border-bottom: 1px solid $rn3-black-25;
             display: flex;
             justify-content: space-around;
 
@@ -49,10 +48,6 @@
 
                 &--disabled {
                     pointer-events: none;
-                }
-
-                &:hover {
-                    background-color: $rn3-blue;
                 }
             }
         }
@@ -86,70 +81,72 @@
 
         &-periods-wrapper {
             display: flex;
+        }
 
-            .period-items {
-                align-items: center;
-                box-sizing: border-box;
-                justify-content: center;
-                padding: 0.5rem;
+        &-period-items {
+            align-items: center;
+            box-sizing: border-box;
+            justify-content: center;
+            display: flex;
+            transition: border-radius $rn3-transition-duration $rn3-transition-timing-function;
+
+            &--not-valid-date {
+                color: $rn3-black-25;
                 font-size: $rn3-font-size-small;
-                display: flex;
-                transition: border-radius $rn3-transition-duration $rn3-transition-timing-function;
+                overflow: hidden;
+                pointer-events: none;
+                text-align: center;
+                text-overflow: ellipsis;
+                white-space: normal;
+            }
 
-                &--not-valid-date {
-                    color: $rn3-black-25;
-                    font-size: $rn3-font-size-small;
-                    overflow: hidden;
-                    pointer-events: none;
-                    text-align: center;
-                    text-overflow: ellipsis;
-                    white-space: normal;
-                }
+            &--valid-date {
+                cursor: pointer;
 
-                &--valid-date {
-                    cursor: pointer;
-
-                    &:hover {
-                        background-color: $rn3-blue;
-                        color: $rn3-white;
-                        border-bottom-left-radius: inherit;
-                        border-bottom-right-radius: inherit;
-                        border-top-left-radius: inherit;
-                        border-top-right-radius: inherit;
-                    }
-                }
-
-                &--out-of-range {
-                    color: $rn3-black-25;
-                    pointer-events: none;
-                }
-
-                &--now {
-                    text-decoration: underline;
-                }
-
-                &--start,
-                &--end,
-                &--middle {
+                &:hover {
+                    background-color: $rn3-blue;
                     color: $rn3-white;
+                    border-bottom-left-radius: inherit;
+                    border-bottom-right-radius: inherit;
+                    border-top-left-radius: inherit;
+                    border-top-right-radius: inherit;
                 }
+            }
 
-                &--end {
-                    background-color: $rn3-blue;
-                    border-bottom-right-radius: $rn3-border-radius;
-                    border-top-right-radius: $rn3-border-radius;
-                }
+            &--out-of-range {
+                color: $rn3-black-25;
+                pointer-events: none;
+            }
 
-                &--start {
-                    background-color: $rn3-blue;
-                    border-bottom-left-radius: $rn3-border-radius;
-                    border-top-left-radius: $rn3-border-radius;
-                }
+            &--is-weekend {
+                font-weight: $rn3-font-weight-bold;
+            }
 
-                &--middle {
-                    background-color: $rn3-blue-75;
-                    border-radius: 0;
-                }
+            &--now {
+                text-decoration: underline;
+            }
+
+            &--start,
+            &--end,
+            &--middle {
+                color: $rn3-white;
+            }
+
+            &--end {
+                background-color: $rn3-blue;
+                border-bottom-right-radius: $rn3-border-radius;
+                border-top-right-radius: $rn3-border-radius;
+            }
+
+            &--start {
+                background-color: $rn3-blue;
+                border-bottom-left-radius: $rn3-border-radius;
+                border-top-left-radius: $rn3-border-radius;
+            }
+
+            &--middle {
+                background-color: $rn3-blue-75;
+                border-radius: 0;
             }
         }
 
@@ -195,18 +192,14 @@
 
     &--day-mode,
     &--week-mode {
-        .rn3-datepicker__dropdown-periods-wrapper {
-            .period-items {
+        .rn3-datepicker__dropdown-period-items {
                 width: calc(100% / 7);
-            }
         }
     }
 
     &--month-mode {
-        .rn3-datepicker__dropdown-periods-wrapper {
-            .period-items {
-                width: calc(100% / 3);
-            }
+        .rn3-datepicker__dropdown-period-items {
+            width: calc(100% / 3);
         }
     }
 
@@ -262,6 +255,18 @@
 
             .rn3-datepicker__dropdown-period-control-buttons {
                 @each $property, $value in map-deep-get($datepicker, 'dropdown', 'period-control', 'buttons') {
+                    #{$property}: reveal-value($datepicker, $value);
+                }
+            }
+
+            .rn3-datepicker__dropdown-period-control-buttons:hover {
+                @each $property, $value in map-deep-get($datepicker, 'dropdown', 'period-control', 'buttons', 'hover') {
+                    #{$property}: reveal-value($datepicker, $value);
+                }
+            }
+
+            .rn3-datepicker__dropdown-period-items {
+                @each $property, $value in map-deep-get($datepicker, 'dropdown', 'period-items') {
                     #{$property}: reveal-value($datepicker, $value);
                 }
             }
