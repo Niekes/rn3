@@ -48,6 +48,10 @@ $rn3-datepicker-default: (
         font-weight: var(--rn3-datepicker-dropdown-font-weight, var(--rn3-datepicker-font-weight, #{$rn3-font-weight-light})),
         max-height: var(--rn3-datepicker-dropdown-max-height, 30rem),
         z-index: var(--rn3-datepicker-dropdown-z-index, #{$rn3-z-index-dropdown}),
+        period-selection: (
+            border-bottom: var(--rn3-datepicker-dropdown-period-selection, var(--rn3-datepicker-border, #{$rn3-border})),
+            padding: var(--rn3-datepicker-dropdown-period-selection-padding, var(--rn3-datepicker-padding, #{$rn3-padding})),
+        ),
         period-control: (
             border-bottom: var(--rn3-datepicker-dropdown-period-control, var(--rn3-datepicker-border, #{$rn3-border})),
             buttons: (

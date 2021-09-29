@@ -28,62 +28,134 @@
 
     &__dropdown {
         box-sizing: border-box;
-        display: none;
+        display: flex;
+        flex-direction: column;
         left: 0;
         min-width: 100%;
-        overflow: auto;
+        opacity: 0;
+        overflow: hidden;
+        pointer-events: none;
         position: absolute;
         top: 100%;
+        transform-origin: top left;
+        transform: scaleY(0.75);
+        transition:
+            opacity $rn3-transition-duration $rn3-transition-timing-function,
+            transform $rn3-transition-duration $rn3-transition-timing-function;
         width: auto;
 
-        &-period-control {
-            align-items: center;
+        &-period-selection {
             display: flex;
-            justify-content: space-around;
+            justify-content: center;
+            align-items: center;
+
+            &-to {
+                margin-left: $rn3-margin-x;
+            }
+
+            &-from,
+            &-to {
+                align-items: center;
+                border-radius: $rn3-border-radius;
+                border: $rn3-border;
+                box-sizing: border-box;
+                display: flex;
+                flex-direction: row-reverse;
+                justify-content: center;
+                padding: $rn3-padding-y-50 $rn3-padding-x-50;
+                transition:
+                    border $rn3-transition-duration $rn3-transition-timing-function,
+                    box-shadow $rn3-transition-duration $rn3-transition-timing-function,
+                    color $rn3-transition-duration $rn3-transition-timing-function;
+
+                &-icon {
+                    color: $rn3-black-25;
+                    transition: color $rn3-transition-duration $rn3-transition-timing-function;
+                }
+
+                &-input {
+                    background: transparent;
+                    border: 0;
+                    box-sizing: border-box;
+                    display: flex;
+                    margin-left: $rn3-margin-x-25;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    width: 100%;
+
+                    &::placeholder {
+                        transition: color $rn3-transition-duration $rn3-transition-timing-function;
+                    }
+
+                    &:focus {
+                        outline: none;
+                    }
+                }
+
+                &--focus {
+                    border: 1px solid $rn3-blue;
+                    box-shadow: 0 0 3px $rn3-blue;
+
+                    input.rn3-datepicker__dropdown-period-selection-from-input,
+                    input.rn3-datepicker__dropdown-period-selection-to-input {
+                        outline-offset: 0;
+
+                        &::placeholder {
+                            color: $rn3-blue;
+                        }
+                    }
+
+                    div.rn3-datepicker__dropdown-period-selection-from-icon,
+                    div.rn3-datepicker__dropdown-period-selection-to-icon {
+                        color: $rn3-blue;
+                    }
+                }
+            }
+        }
+
+        &-period-control {
+            display: grid;
+            gap: 0;
+            grid-template-columns: repeat(3, minmax(min-content, 1fr));
+            grid-template-rows: 1fr;
+            opacity: 0;
+            height: 0;
+            transition:
+                opacity $rn3-transition-duration $rn3-transition-timing-function,
+                height $rn3-transition-duration $rn3-transition-timing-function;
 
             &-buttons {
                 align-items: center;
                 cursor: pointer;
                 display: flex;
-                flex: 1;
                 justify-content: center;
+                overflow: hidden;
+                text-overflow: ellipsis;
                 user-select: none;
-
-                &--disabled {
-                    pointer-events: none;
-                }
+                white-space: nowrap;
             }
-        }
 
-        &-period-display {
-            display: flex;
-        }
-
-        &-period-displays {
-            align-items: center;
-            display: flex;
-            flex: 1;
-            justify-content: center;
-            padding: $rn3-padding;
-
-            &:not(:first-child) {
-                border-left: 1px solid $rn3-black-25;
-            }
-        }
-
-        &-period-pages {
-            display: flex;
-            flex-wrap: wrap;
-            min-width: 15rem;
-            width: 100%;
-
-            &:not(:first-child) {
-                border-left: 1px solid $rn3-black-25;
+            &--visible {
+                height: 2.5rem;
+                opacity: 1;
             }
         }
 
         &-periods-wrapper {
+            border-bottom: 1px solid $rn3-black-25;
             display: flex;
+            flex-wrap: wrap;
+            width: 100%;
+            opacity: 0;
+            height: 0;
+            transition:
+                opacity $rn3-transition-duration $rn3-transition-timing-function,
+                height $rn3-transition-duration $rn3-transition-timing-function;
+
+            &--visible {
+                height: 218px;
+                opacity: 1;
+            }
         }
 
         &-period-items {
@@ -93,6 +165,7 @@
             display: flex;
             transition: border-radius $rn3-transition-duration $rn3-transition-timing-function;
 
+            &--disabled,
             &--not-valid-date {
                 color: $rn3-black-25;
                 font-size: $rn3-font-size-small;
@@ -121,7 +194,7 @@
                 pointer-events: none;
             }
 
-            &--is-weekend {
+            &--highlighted {
                 font-weight: $rn3-font-weight-bold;
             }
 
@@ -155,9 +228,7 @@
 
         &-custom-periods-wrapper {
             display: flex;
-            justify-content: space-between;
-            border-top: 1px solid $rn3-black-25;
-            padding: $rn3-padding;
+            flex-direction: column;
 
             &--empty {
                 display: none;
@@ -165,23 +236,19 @@
         }
 
         &-custom-periods {
-            @include button;
-        }
-
-        &-action-wrapper {
-            border-top: 1px solid $rn3-black-25;
-            display: flex;
-            justify-content: center;
-            padding: $rn3-padding;
-        }
-
-        &-apply-button {
-            @include button;
+            @include button(
+                $rn3-white,
+                $rn3-blue,
+                0,
+                $rn3-black,
+                $rn3-white,
+            );
         }
 
         &--open {
-            display: flex;
-            flex-direction: column;
+            opacity: 1;
+            pointer-events: all;
+            transform: scaleY(1);
 
             ~ div.rn3-datepicker__form {
                 div.rn3-datepicker__form-arrow {
@@ -189,8 +256,6 @@
                 }
             }
         }
-
-        @include scrollbar($rn3-black-25, transparent);
     }
 
     &--day-mode,
@@ -247,6 +312,12 @@
 
                         border-radius: $br $br 0 0;
                     }
+                }
+            }
+
+            .rn3-datepicker__dropdown-period-selection {
+                @each $property, $value in map-deep-get($datepicker, 'dropdown', 'period-selection') {
+                    #{$property}: reveal-value($datepicker, $value);
                 }
             }
 

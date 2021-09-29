@@ -1,8 +1,13 @@
-@mixin button() {
-    background-color: $rn3-blue;
-    border-radius: 3px;
+@mixin button($bg: $rn3-blue, $bg-hover: $rn3-blue-75, $br: 0, $c: $rn3-white, $c-hover: $rn3-black, $p: $rn3-padding) {
+    background-color: $bg;
+    border-radius: $br;
     border: 0;
-    color: $rn3-white;
+    color: $c;
     cursor: pointer;
-    padding: 0.5rem;
+    padding: $p;
+
+    &:hover {
+        background-color: $bg-hover;
+        color: $c-hover;
+    }
 }

@@ -6,6 +6,7 @@ import {
     timeDay,
     range,
     timeMonth,
+    timeParse,
 } from 'd3';
 
 import Element from '../Element';
@@ -46,11 +47,16 @@ export default class Datepicker extends Element {
         const icon = appendSelection(form, 'div', { class: 'rn3-datepicker__form-icon' });
         const display = appendSelection(form, 'div', { class: 'rn3-datepicker__form-display' });
         const arrow = appendSelection(form, 'div', { class: 'rn3-datepicker__form-arrow' });
+        const periodSelection = appendSelection(dropdown, 'div', { class: 'rn3-datepicker__dropdown-period-selection' });
+        const periodSelectionFrom = appendSelection(periodSelection, 'div', { class: 'rn3-datepicker__dropdown-period-selection-from' });
+        const periodSelectionFromInput = appendSelection(periodSelectionFrom, 'input', { class: 'rn3-datepicker__dropdown-period-selection-from-input' });
+        const periodSelectionFromIcon = appendSelection(periodSelectionFrom, 'div', { class: 'rn3-datepicker__dropdown-period-selection-from-icon' });
+        const periodSelectionTo = appendSelection(periodSelection, 'div', { class: 'rn3-datepicker__dropdown-period-selection-to' });
+        const periodSelectionToInput = appendSelection(periodSelectionTo, 'input', { class: 'rn3-datepicker__dropdown-period-selection-to-input' });
+        const periodSelectionToIcon = appendSelection(periodSelectionTo, 'div', { class: 'rn3-datepicker__dropdown-period-selection-to-icon' });
         const periodControl = appendSelection(dropdown, 'div', { class: 'rn3-datepicker__dropdown-period-control' });
-        const periodDisplay = appendSelection(dropdown, 'div', { class: 'rn3-datepicker__dropdown-period-display' });
-        const periodPagesWrapper = appendSelection(dropdown, 'div', { class: 'rn3-datepicker__dropdown-periods-wrapper' });
+        const periodsWrapper = appendSelection(dropdown, 'div', { class: 'rn3-datepicker__dropdown-periods-wrapper' });
         const customPeriodsWrapper = appendSelection(dropdown, 'div', { class: 'rn3-datepicker__dropdown-custom-periods-wrapper' });
-        const actionWrapper = appendSelection(dropdown, 'div', { class: 'rn3-datepicker__dropdown-action-wrapper' });
 
         this.#elements = {
             dropdown,
@@ -58,15 +64,28 @@ export default class Datepicker extends Element {
             icon,
             display,
             arrow,
+            periodSelection,
+            periodSelectionFrom,
+            periodSelectionFromInput,
+            periodSelectionFromIcon,
+            periodSelectionTo,
+            periodSelectionToInput,
+            periodSelectionToIcon,
             periodControl,
-            periodDisplay,
-            periodPagesWrapper,
+            periodsWrapper,
             customPeriodsWrapper,
-            actionWrapper,
         };
 
         this.#elements.icon.html(this.settings.form.icon);
         this.#elements.arrow.html(this.settings.form.arrow);
+
+        this.#elements.periodSelectionFromIcon.html(this.settings.dropdown.input.from.icon);
+        this.#elements.periodSelectionFromInput.attr('placeholder', this.settings.dropdown.input.from.placeholder);
+
+        this.#elements.periodSelectionToIcon.html(this.settings.dropdown.input.to.icon);
+        this.#elements.periodSelectionToInput.attr('placeholder', this.settings.dropdown.input.to.placeholder);
+
+        this.#today = timeDay();
 
         /*
             Init periods
@@ -86,15 +105,7 @@ export default class Datepicker extends Element {
                         value: -1,
                     },
                     {
-                        text: this.settings.modes.day.label,
-                        value: 'day',
-                    },
-                    {
-                        text: this.settings.modes.week.label,
-                        value: 'week',
-                    },
-                    {
-                        text: this.settings.modes.month.label,
+                        text: null,
                         value: 'month',
                     },
                     {
@@ -165,8 +176,6 @@ export default class Datepicker extends Element {
             },
         };
 
-        this.#today = timeDay();
-
         this.#counter = 0;
 
         /*
@@ -185,19 +194,37 @@ export default class Datepicker extends Element {
             }
         });
 
-        /*
-            Add apply button
-        */
-        this.#elements.actionWrapper
-            .append('button')
-            .attr('class', 'rn3-datepicker__dropdown-apply-button')
-            .text('Apply')
-            .on('click', () => {
-                this.#applyDates({
-                    ...this.#getActivePeriod().marked,
-                    customPeriod: false,
-                });
-            });
+        this.#elements.periodSelectionFrom.on('click', this.#handleFromPeriodInput);
+        this.#elements.periodSelectionFromInput.on('focus', this.#handleFromPeriodInput);
+        this.#elements.periodSelectionFromInput.on('keyup', (e) => {
+            const d = e.target.value.trim();
+
+            if (d.length <= 0) {
+                return;
+            }
+
+            const from = this.settings.dropdown.input.from.timeParse(d);
+
+            if (isValidDate(from)) {
+                console.log(from);
+            }
+        });
+
+        this.#elements.periodSelectionTo.on('click', this.#handleToPeriodInput);
+        this.#elements.periodSelectionToInput.on('focus', this.#handleToPeriodInput);
+        this.#elements.periodSelectionToInput.on('keyup', (e) => {
+            const d = e.target.value.trim();
+
+            if (d.length <= 0) {
+                return;
+            }
+
+            const to = this.settings.dropdown.input.to.timeParse(d);
+
+            if (isValidDate(to)) {
+                console.log(to);
+            }
+        });
 
         this.on('outside-click', () => {
             const isOpen = this.#elements.dropdown
@@ -295,6 +322,11 @@ export default class Datepicker extends Element {
 
     #closeDropdown = () => {
         this.#toggleDropdown(false);
+
+        this.#elements.periodSelectionFrom.classed('rn3-datepicker__dropdown-period-selection-from--focus', false);
+        this.#elements.periodSelectionTo.classed('rn3-datepicker__dropdown-period-selection-to--focus', false);
+        this.#elements.periodControl.classed('rn3-datepicker__dropdown-period-control--visible', false);
+        this.#elements.periodsWrapper.classed('rn3-datepicker__dropdown-periods-wrapper--visible', false);
     }
 
     #toggleDropdown = (open) => {
@@ -342,7 +374,7 @@ export default class Datepicker extends Element {
     #getActiveMode = () => this.settings.modes[this.settings.activeMode];
 
     #applyDates = (values) => {
-        this.#toggleDropdown(false);
+        this.#closeDropdown();
 
         this.#counter = 0;
 
@@ -357,60 +389,55 @@ export default class Datepicker extends Element {
     };
 
     #getDayData = (activePeriod) => {
-        const values = [];
-        const { pages } = this.settings.modes.day;
+        let dayData = null;
 
-        for (let i = 0; i < pages; i += 1) {
-            let dayData = null;
+        const pageMonthFloored = timeMonth.floor(activePeriod.view);
+        const daysInPageMonth = getDaysInMonth(pageMonthFloored);
+        const firstOfPageMonth = getFirstOfMonth(pageMonthFloored).getDay();
+        const daysOffset = firstOfPageMonth === 0 ? 6 : firstOfPageMonth - 1;
 
-            const pageMonthFloored = timeMonth.floor(activePeriod.view);
-            const pageMonth = timeMonth.offset(pageMonthFloored, i - pages + Math.round(pages / 2));
-            const daysInPageMonth = getDaysInMonth(pageMonth);
-            const firstOfPageMonth = getFirstOfMonth(pageMonth).getDay();
-            const daysOffset = firstOfPageMonth === 0 ? 6 : firstOfPageMonth - 1;
+        dayData = range(1, daysInPageMonth + 1);
 
-            dayData = range(1, daysInPageMonth + 1);
-
-            for (let j = 0; j < daysOffset; j += 1) {
-                dayData.unshift('&nbsp;');
-            }
-
-            const mon = timeMonday(this.#today);
-            const tue = timeDay.offset(mon, 1);
-            const wed = timeDay.offset(mon, 2);
-            const thu = timeDay.offset(mon, 3);
-            const fri = timeDay.offset(mon, 4);
-            const sat = timeDay.offset(mon, 5);
-            const sun = timeDay.offset(mon, 6);
-
-            dayData.unshift(
-                timeFormat('%a')(mon),
-                timeFormat('%a')(tue),
-                timeFormat('%a')(wed),
-                timeFormat('%a')(thu),
-                timeFormat('%a')(fri),
-                timeFormat('%a')(sat),
-                timeFormat('%a')(sun),
-            );
-
-            if (dayData.length <= 42) {
-                dayData.push(...range(0, 43 - dayData.length).map(() => '&nbsp;'));
-            }
-
-            values[i] = dayData
-                .map(d => ({
-                    value: typeof d === 'number'
-                        ? new Date(pageMonth.getFullYear(), pageMonth.getMonth(), d)
-                        : d,
-                }));
-
-            values[i].label = timeFormat('%b \'%y')(pageMonth);
+        for (let j = 0; j < daysOffset; j += 1) {
+            dayData.unshift('&nbsp;');
         }
 
+        const mon = timeMonday(this.#today);
+        const tue = timeDay.offset(mon, 1);
+        const wed = timeDay.offset(mon, 2);
+        const thu = timeDay.offset(mon, 3);
+        const fri = timeDay.offset(mon, 4);
+        const sat = timeDay.offset(mon, 5);
+        const sun = timeDay.offset(mon, 6);
+
+        dayData.unshift(
+            timeFormat('%a')(mon),
+            timeFormat('%a')(tue),
+            timeFormat('%a')(wed),
+            timeFormat('%a')(thu),
+            timeFormat('%a')(fri),
+            timeFormat('%a')(sat),
+            timeFormat('%a')(sun),
+        );
+
+        if (dayData.length <= 42) {
+            dayData.push(...range(0, 43 - dayData.length).map(() => '&nbsp;'));
+        }
+
+        dayData = dayData
+            .map(d => ({
+                value: typeof d === 'number'
+                    ? new Date(pageMonthFloored.getFullYear(), pageMonthFloored.getMonth(), d)
+                    : d,
+            }));
+
+        dayData.label = timeFormat('%b \'%y')(pageMonthFloored);
+
+        this.#periods.day.controlData[1].text = timeFormat('%B \'%y')(timeMonth.floor(activePeriod.view));
 
         return {
             control: this.#periods.day.controlData,
-            values,
+            values: dayData,
         };
     };
 
@@ -479,20 +506,27 @@ export default class Datepicker extends Element {
         }
     };
 
-    #markPeriod = (d, marked) => {
+    #markPeriod = (d, marked = { from: null, to: null }) => {
         const { from, to } = marked;
 
         switch (this.settings.activeMode) {
         case 'day': {
             return {
-                isStart: from ? d.getTime() === from.getTime() : false,
-                isMiddle: d.getTime() >= from.getTime()
-                    && d.getTime() <= to.getTime(),
-                isEnd: d.getTime() === to.getTime(),
+                isStart: from
+                    ? d.getTime() === from.getTime()
+                    : false,
+                isMiddle: from && to
+                    ? d.getTime() >= from.getTime()
+                    && d.getTime() <= to.getTime()
+                    : false,
+                isEnd: to
+                    ? d.getTime() === to.getTime()
+                    : false,
                 isNow: d.getTime() === this.#today.getTime(),
                 isOutOfRange: d.getTime() < this.settings.modes.day.minDate.getTime()
                     || d.getTime() > this.settings.modes.day.maxDate.getTime(),
-                isWeekend: d.getDay() === 0 || d.getDay() === 6,
+                highlighted: this.settings.modes.day.daysHighlighted.includes(d.getDay()),
+                disabled: this.settings.modes.day.daysDisabled.includes(d.getDay()),
             };
         }
         case 'week': {
@@ -514,7 +548,8 @@ export default class Datepicker extends Element {
                     && d.getFullYear() === this.#today.getFullYear(),
                 isOutOfRange: d.getTime() < this.settings.modes.week.minDate.getTime()
                     || d.getTime() > this.settings.modes.week.maxDate.getTime(),
-                isWeekend: false,
+                highlighted: this.settings.modes.week.weeksHighlighted.includes(+timeFormat('%V')(d)),
+                disabled: this.settings.modes.week.weeksDisabled.includes(+timeFormat('%V')(d)),
             };
         }
         case 'month': {
@@ -528,12 +563,28 @@ export default class Datepicker extends Element {
                     && d.getFullYear() === this.#today.getFullYear(),
                 isOutOfRange: d.getTime() < this.settings.modes.month.minDate.getTime()
                     || d.getTime() > this.settings.modes.month.maxDate.getTime(),
-                isWeekend: false,
+                highlighted: this.settings.modes.month.monthsHighlighted.includes(d.getMonth()),
+                disabled: this.settings.modes.month.monthsDisabled.includes(d.getMonth()),
             };
         }
         default:
             throw new Error(`Selected mode does not exist: ${this.settings.activeMode}`);
         }
+    };
+
+    #handleFromPeriodInput = () => {
+        this.#elements.periodSelectionFrom.classed('rn3-datepicker__dropdown-period-selection-from--focus', true);
+        this.#elements.periodSelectionTo.classed('rn3-datepicker__dropdown-period-selection-to--focus', false);
+
+        this.#elements.periodControl.classed('rn3-datepicker__dropdown-period-control--visible', true);
+        this.#elements.periodsWrapper.classed('rn3-datepicker__dropdown-periods-wrapper--visible', true);
+
+        this.#elements.periodSelectionFromInput.node().focus();
+    };
+
+    #handleToPeriodInput = () => {
+        this.#elements.periodSelectionFrom.classed('rn3-datepicker__dropdown-period-selection-from--focus', false);
+        this.#elements.periodSelectionTo.classed('rn3-datepicker__dropdown-period-selection-to--focus', true);
     };
 
     #updateDateSelection = () => {
@@ -568,13 +619,7 @@ export default class Datepicker extends Element {
         */
         const controlItems = this.#elements.periodControl
             .selectAll('div.rn3-datepicker__dropdown-period-control-buttons')
-            .data(periodData.control.filter((c) => {
-                if (this.settings.modes[c.value]) {
-                    return this.settings.modes[c.value].show;
-                }
-
-                return true;
-            }));
+            .data(periodData.control);
 
         controlItems
             .enter()
@@ -606,7 +651,6 @@ export default class Datepicker extends Element {
                 this.#updateDateSelection();
             })
             .merge(controlItems)
-            .classed('rn3-datepicker__dropdown-period-control-buttons--disabled', d => !d.value)
             .html(d => d.text);
 
         controlItems
@@ -614,44 +658,9 @@ export default class Datepicker extends Element {
             .remove();
 
         /*
-            Period display
-        */
-        const displays = this.#elements.periodDisplay
-            .selectAll('div.rn3-datepicker__dropdown-period-displays')
-            .data(periodData.values);
-
-        displays
-            .enter()
-            .append('div')
-            .attr('class', 'rn3-datepicker__dropdown-period-displays')
-            .merge(displays)
-            .html(d => d.label);
-
-        displays
-            .exit()
-            .remove();
-
-        /*
-            Period pages
-        */
-        const pages = this.#elements.periodPagesWrapper
-            .selectAll('div.rn3-datepicker__dropdown-period-pages')
-            .data(periodData.values);
-
-        const pagesEnter = pages
-            .enter()
-            .append('div')
-            .attr('class', 'rn3-datepicker__dropdown-period-pages')
-            .merge(pages);
-
-        pages
-            .exit()
-            .remove();
-
-        /*
             Create/update period pages
         */
-        const periodItems = pagesEnter.selectAll('div.rn3-datepicker__dropdown-period-items').data(d => d);
+        const periodItems = this.#elements.periodsWrapper.selectAll('div.rn3-datepicker__dropdown-period-items').data(periodData.values);
 
         periodItems
             .enter()
@@ -699,14 +708,15 @@ export default class Datepicker extends Element {
                 node.classed('rn3-datepicker__dropdown-period-items--not-valid-date', !isValid);
 
                 if (isValid) {
-                    const period = this.#markPeriod(d.value, marked);
+                    const period = this.#markPeriod(d.value);
 
                     node.classed('rn3-datepicker__dropdown-period-items--start', period.isStart);
                     node.classed('rn3-datepicker__dropdown-period-items--end', period.isEnd);
                     node.classed('rn3-datepicker__dropdown-period-items--middle', period.isMiddle);
                     node.classed('rn3-datepicker__dropdown-period-items--now', period.isNow);
                     node.classed('rn3-datepicker__dropdown-period-items--out-of-range', period.isOutOfRange);
-                    node.classed('rn3-datepicker__dropdown-period-items--is-weekend', period.isWeekend);
+                    node.classed('rn3-datepicker__dropdown-period-items--highlighted', period.highlighted);
+                    node.classed('rn3-datepicker__dropdown-period-items--disabled', period.disabled);
 
                     if (period.isMiddle && period.isStart) {
                         node.classed('rn3-datepicker__dropdown-period-items--middle', false);

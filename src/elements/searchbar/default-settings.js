@@ -20,7 +20,7 @@ export default {
         item: {
             render: d => d.display_name,
         },
-        freeText: false,
+        freeText: true,
         placeholder: 'Type to search',
         backspace: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20.14 4h-9.77a3 3 0 00-2 .78l-.1.11-6 7.48a1 1 0 00.11 1.37l6 5.48a3 3 0 002 .78h9.77A1.84 1.84 0 0022 18.18V5.82A1.84 1.84 0 0020.14 4zm-3.43 9.29a1 1 0 010 1.42 1 1 0 01-1.42 0L14 13.41l-1.29 1.3a1 1 0 01-1.42 0 1 1 0 010-1.42l1.3-1.29-1.3-1.29a1 1 0 011.42-1.42l1.29 1.3 1.29-1.3a1 1 0 011.42 1.42L15.41 12z"/></svg>',
         clearBtn: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M11.996 0C5.371 0 0 5.375 0 12s5.371 12 11.996 12C18.63 24 24 18.625 24 12S18.629 0 11.996 0Zm5.16 15.25-1.91 1.91s-3.023-3.246-3.25-3.246c-.223 0-3.246 3.246-3.246 3.246l-1.91-1.91s3.246-2.98 3.246-3.246c0-.27-3.246-3.25-3.246-3.25L8.75 6.84s3.05 3.246 3.246 3.246c.2 0 3.25-3.246 3.25-3.246l1.91 1.914s-3.246 3.023-3.246 3.25c0 .215 3.246 3.246 3.246 3.246Zm0 0"/></svg>',
@@ -36,7 +36,7 @@ export default {
         },
     },
     speechRecognition: {
-        enabled: true,
+        enabled: false,
         language: navigator.language,
     },
 };
