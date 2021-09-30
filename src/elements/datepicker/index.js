@@ -6,7 +6,6 @@ import {
     timeDay,
     range,
     timeMonth,
-    timeParse,
 } from 'd3';
 
 import Element from '../Element';
@@ -176,8 +175,6 @@ export default class Datepicker extends Element {
             },
         };
 
-        this.#counter = 0;
-
         /*
             Add event listener
         */
@@ -194,8 +191,14 @@ export default class Datepicker extends Element {
             }
         });
 
-        this.#elements.periodSelectionFrom.on('click', this.#handleFromPeriodInput);
-        this.#elements.periodSelectionFromInput.on('focus', this.#handleFromPeriodInput);
+        this.#elements.periodsWrapper
+            .on('mouseleave', () => {
+                this.#setDateMarkTo(null);
+                this.#updateDateSelection();
+            });
+
+        this.#elements.periodSelectionFrom.on('click', this.#focusFromPeriodInput);
+        this.#elements.periodSelectionFromInput.on('focus', this.#focusFromPeriodInput);
         this.#elements.periodSelectionFromInput.on('keyup', (e) => {
             const d = e.target.value.trim();
 
@@ -206,12 +209,12 @@ export default class Datepicker extends Element {
             const from = this.settings.dropdown.input.from.timeParse(d);
 
             if (isValidDate(from)) {
-                console.log(from);
+                console.log(from); // TODO
             }
         });
 
-        this.#elements.periodSelectionTo.on('click', this.#handleToPeriodInput);
-        this.#elements.periodSelectionToInput.on('focus', this.#handleToPeriodInput);
+        this.#elements.periodSelectionTo.on('click', this.#focusToPeriodInput);
+        this.#elements.periodSelectionToInput.on('focus', this.#focusToPeriodInput);
         this.#elements.periodSelectionToInput.on('keyup', (e) => {
             const d = e.target.value.trim();
 
@@ -222,7 +225,7 @@ export default class Datepicker extends Element {
             const to = this.settings.dropdown.input.to.timeParse(d);
 
             if (isValidDate(to)) {
-                console.log(to);
+                console.log(to); // TODO
             }
         });
 
@@ -234,17 +237,11 @@ export default class Datepicker extends Element {
                 return;
             }
 
-            this.settings.activeMode = this.#periods.selected || this.settings.activeMode;
-
-            this.#counter = 0;
-
             this.#closeDropdown();
 
             const dates = this.data.values;
 
             this.#setView(dates.from);
-            this.#setDateMarkFrom(dates.from);
-            this.#setDateMarkTo(dates.to);
 
             this.#updateDateSelection();
         });
@@ -303,10 +300,10 @@ export default class Datepicker extends Element {
         this.#setView(convertedDates.from);
 
         /*
-            Set the dates that should be marked and highlighted in the dropdown
+            Reset highlighted dates in the dropdown
         */
-        this.#setDateMarkFrom(convertedDates.from);
-        this.#setDateMarkTo(convertedDates.to);
+        this.#setDateMarkFrom(null);
+        this.#setDateMarkTo(null);
 
         /*
             Update date selection in dropdown
@@ -322,7 +319,15 @@ export default class Datepicker extends Element {
 
     #closeDropdown = () => {
         this.#toggleDropdown(false);
+        this.#setDateMarkFrom(null);
+        this.#setDateMarkTo(null);
 
+        this.#periods.selected = null;
+        this.#periods.day.marked.from = null;
+        this.#periods.day.marked.to = null;
+
+        this.#elements.periodSelectionFromInput.node().value = '';
+        this.#elements.periodSelectionToInput.node().value = '';
         this.#elements.periodSelectionFrom.classed('rn3-datepicker__dropdown-period-selection-from--focus', false);
         this.#elements.periodSelectionTo.classed('rn3-datepicker__dropdown-period-selection-to--focus', false);
         this.#elements.periodControl.classed('rn3-datepicker__dropdown-period-control--visible', false);
@@ -375,8 +380,6 @@ export default class Datepicker extends Element {
 
     #applyDates = (values) => {
         this.#closeDropdown();
-
-        this.#counter = 0;
 
         this.update({ values });
 
@@ -516,8 +519,10 @@ export default class Datepicker extends Element {
                     ? d.getTime() === from.getTime()
                     : false,
                 isMiddle: from && to
-                    ? d.getTime() >= from.getTime()
-                    && d.getTime() <= to.getTime()
+                    ? (d.getTime() >= from.getTime()
+                    && d.getTime() <= to.getTime())
+                    || (d.getTime() <= from.getTime()
+                    && d.getTime() >= to.getTime())
                     : false,
                 isEnd: to
                     ? d.getTime() === to.getTime()
@@ -572,7 +577,7 @@ export default class Datepicker extends Element {
         }
     };
 
-    #handleFromPeriodInput = () => {
+    #focusFromPeriodInput = () => {
         this.#elements.periodSelectionFrom.classed('rn3-datepicker__dropdown-period-selection-from--focus', true);
         this.#elements.periodSelectionTo.classed('rn3-datepicker__dropdown-period-selection-to--focus', false);
 
@@ -580,11 +585,25 @@ export default class Datepicker extends Element {
         this.#elements.periodsWrapper.classed('rn3-datepicker__dropdown-periods-wrapper--visible', true);
 
         this.#elements.periodSelectionFromInput.node().focus();
+
+        this.#periods.selected = 'from';
+
+        this.#setDateMarkTo(null);
     };
 
-    #handleToPeriodInput = () => {
+    #focusToPeriodInput = () => {
+        if (!isValidDate(this.#periods.day.marked.from)) {
+            this.#focusFromPeriodInput();
+
+            return;
+        }
+
         this.#elements.periodSelectionFrom.classed('rn3-datepicker__dropdown-period-selection-from--focus', false);
         this.#elements.periodSelectionTo.classed('rn3-datepicker__dropdown-period-selection-to--focus', true);
+
+        this.#elements.periodSelectionToInput.node().focus();
+
+        this.#periods.selected = 'to';
     };
 
     #updateDateSelection = () => {
@@ -666,26 +685,60 @@ export default class Datepicker extends Element {
             .enter()
             .append('div')
             .attr('class', 'rn3-datepicker__dropdown-period-items')
-            .on('click', (e, d) => {
-                if (select(e.target).classed('rn3-datepicker__dropdown-period-items--out-of-range')) return;
+            .on('mouseenter', (e, d) => {
+                if (this.settings.activeMode !== 'day' || this.#periods.selected === 'from') {
+                    this.#setDateMarkTo(null);
+                    this.#updateDateSelection();
 
-                const isFrom = this.settings.singleSelect ? true : this.#counter % 2 === 0;
-
-                if (isFrom) {
-                    this.#setDateMarkFrom(d.value);
+                    return;
                 }
 
                 this.#setDateMarkTo(d.value);
+                this.#updateDateSelection();
+            })
+            .on('click', (e, d) => {
+                const { from } = this.#periods.day.marked;
 
-                const { from } = marked;
-                const { to } = marked;
+                if (select(e.target).classed('rn3-datepicker__dropdown-period-items--out-of-range')) return;
 
-                if (from.getTime() > to.getTime()) {
-                    this.#setDateMarkFrom(to);
-                    this.#setDateMarkTo(from);
+                if (
+                    this.#periods.selected === 'to'
+                    && isValidDate(this.#periods.day.marked.from)
+                ) {
+                    this.#setDateMarkTo(d.value);
+
+                    this.#updateDateSelection();
+
+                    this.#elements.periodSelectionToInput
+                        .node().value = this.settings.modes.day.render(d.value);
+
+                    if (d.value.getTime() < from.getTime()) {
+                        this.#applyDates({
+                            from: d.value,
+                            to: from,
+                            customPeriod: false,
+                        });
+                    }
+
+                    if (d.value.getTime() > from.getTime()) {
+                        this.#applyDates({
+                            from,
+                            to: d.value,
+                            customPeriod: false,
+                        });
+                    }
                 }
 
-                this.#counter += 1;
+                if (this.#periods.selected === 'from') {
+                    this.#setDateMarkFrom(d.value);
+
+                    this.#focusToPeriodInput();
+
+                    this.#updateDateSelection();
+
+                    this.#elements.periodSelectionFromInput
+                        .node().value = this.settings.modes.day.render(d.value);
+                }
 
                 this.#updateDateSelection();
             })
@@ -708,7 +761,7 @@ export default class Datepicker extends Element {
                 node.classed('rn3-datepicker__dropdown-period-items--not-valid-date', !isValid);
 
                 if (isValid) {
-                    const period = this.#markPeriod(d.value);
+                    const period = this.#markPeriod(d.value, marked);
 
                     node.classed('rn3-datepicker__dropdown-period-items--start', period.isStart);
                     node.classed('rn3-datepicker__dropdown-period-items--end', period.isEnd);

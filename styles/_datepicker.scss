@@ -148,6 +148,7 @@
             width: 100%;
             opacity: 0;
             height: 0;
+            pointer-events: none;
             transition:
                 opacity $rn3-transition-duration $rn3-transition-timing-function,
                 height $rn3-transition-duration $rn3-transition-timing-function;
@@ -155,6 +156,7 @@
             &--visible {
                 height: 218px;
                 opacity: 1;
+                pointer-events: all;
             }
         }
 
@@ -208,21 +210,13 @@
                 color: $rn3-white;
             }
 
-            &--end {
-                background-color: $rn3-blue;
-                border-bottom-right-radius: $rn3-border-radius;
-                border-top-right-radius: $rn3-border-radius;
-            }
-
+            &--end,
             &--start {
                 background-color: $rn3-blue;
-                border-bottom-left-radius: $rn3-border-radius;
-                border-top-left-radius: $rn3-border-radius;
             }
 
             &--middle {
                 background-color: $rn3-blue-75;
-                border-radius: 0;
             }
         }
 
