@@ -120,6 +120,8 @@
             grid-template-rows: 1fr;
             opacity: 0;
             height: 0;
+            border: 0;
+            pointer-events: none;
             transition:
                 opacity $rn3-transition-duration $rn3-transition-timing-function,
                 height $rn3-transition-duration $rn3-transition-timing-function;
@@ -138,15 +140,16 @@
             &--visible {
                 height: 2.5rem;
                 opacity: 1;
+                pointer-events: all;
             }
         }
 
         &-periods-wrapper {
-            border-bottom: 1px solid $rn3-black-25;
             display: flex;
             flex-wrap: wrap;
             width: 100%;
             opacity: 0;
+            border: 0;
             height: 0;
             pointer-events: none;
             transition:
@@ -154,6 +157,7 @@
                 height $rn3-transition-duration $rn3-transition-timing-function;
 
             &--visible {
+                border-bottom: 1px solid $rn3-black-25;
                 height: 218px;
                 opacity: 1;
                 pointer-events: all;

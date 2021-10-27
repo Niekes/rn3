@@ -53,7 +53,6 @@ $rn3-datepicker-default: (
             padding: var(--rn3-datepicker-dropdown-period-selection-padding, var(--rn3-datepicker-padding, #{$rn3-padding})),
         ),
         period-control: (
-            border-bottom: var(--rn3-datepicker-dropdown-period-control, var(--rn3-datepicker-border, #{$rn3-border})),
             buttons: (
                 padding: var(--rn3-datepicker-dropdown-period-control-padding, var(--rn3-datepicker-padding, #{$rn3-padding})),
                 transition: var(--rn3-datepicker-dropdown-period-control-buttons-transition, background-color #{$rn3-transition-duration} #{$rn3-transition-timing-function}, color #{$rn3-transition-duration} #{$rn3-transition-timing-function}),

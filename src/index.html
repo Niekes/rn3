@@ -59,12 +59,12 @@ const datepicker = new rn3.Datepicker({
     el: '#datepicker',
 });
 
-datepicker.update({
-    values: {
-        from: new Date(),
-        to: new Date(),
-    },
-});
+// datepicker.update({
+//     values: {
+//         from: new Date(),
+//         to: new Date(),
+//     },
+// });
 
 datepicker.on('date-selected', (dates) => {
     console.log(dates);

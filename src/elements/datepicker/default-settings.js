@@ -29,53 +29,38 @@ export default {
             },
         },
     },
+    customPeriods: [
+        {
+            label: 'Today',
+            from: new Date(),
+            to: new Date(),
+        },
+        {
+            label: 'YTD',
+            from: new Date(new Date().getFullYear(), 0, 1),
+            to: new Date(),
+        },
+    ],
     modes: {
         day: {
             label: 'Day',
             minDate: new Date(new Date().getFullYear(), 0, 1),
             maxDate: new Date(new Date().getFullYear(), 11, 31),
-            show: false,
             render: d => timeFormat('%x')(d),
             weekStart: 0,
-            customPeriods: [
-                {
-                    label: 'Today',
-                    from: new Date(),
-                    to: new Date(),
-                },
-                {
-                    label: 'YTD',
-                    from: new Date(new Date().getFullYear(), 0, 1),
-                    to: new Date(),
-                },
-            ],
             daysHighlighted: [],
             daysDisabled: [],
         },
         month: {
             label: 'Month',
-            show: false,
             minDate: new Date(new Date().getFullYear(), 0, 1),
             maxDate: new Date(new Date().getFullYear(), 11, 31),
             render: d => timeFormat('%x')(d),
-            customPeriods: [
-                {
-                    label: 'Today',
-                    from: new Date(),
-                    to: new Date(),
-                },
-                {
-                    label: 'MTD',
-                    from: new Date(new Date().getFullYear(), 0, 1),
-                    to: new Date(),
-                },
-            ],
             monthsHighlighted: [],
             monthsDisabled: [],
         },
         week: {
             label: 'Week',
-            show: false,
             minDate: new Date(new Date().getFullYear(), 0, 1),
             maxDate: new Date(new Date().getFullYear(), 11, 31),
             render: d => timeFormat('%x')(d),

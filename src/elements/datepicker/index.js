@@ -90,7 +90,7 @@ export default class Datepicker extends Element {
             Init periods
         */
         this.#periods = {
-            selected: null,
+            activeMode: 'day',
             day: {
                 marked: {
                     from: null,
@@ -126,16 +126,8 @@ export default class Datepicker extends Element {
                         value: -12,
                     },
                     {
-                        text: this.settings.modes.day.label,
-                        value: 'day',
-                    },
-                    {
-                        text: this.settings.modes.week.label,
-                        value: 'week',
-                    },
-                    {
-                        text: this.settings.modes.month.label,
-                        value: 'month',
+                        text: null,
+                        value: 'year',
                     },
                     {
                         text: this.settings.dropdown.nextBtn,
@@ -156,15 +148,7 @@ export default class Datepicker extends Element {
                         value: -12,
                     },
                     {
-                        text: this.settings.modes.day.label,
-                        value: 'day',
-                    },
-                    {
-                        text: this.settings.modes.week.label,
-                        value: 'week',
-                    },
-                    {
-                        text: this.settings.modes.month.label,
+                        text: null,
                         value: 'month',
                     },
                     {
@@ -239,12 +223,23 @@ export default class Datepicker extends Element {
 
             this.#closeDropdown();
 
-            const dates = this.data.values;
-
-            this.#setView(dates.from);
+            this.#setView(this.#today);
 
             this.#updateDateSelection();
         });
+
+        /*
+            Set view of date selection
+        */
+        this.#setView(this.#today);
+
+        /*
+            Reset highlighted dates in the dropdown
+        */
+        this.#setDateMarkFrom(null);
+        this.#setDateMarkTo(null);
+
+        this.#updateDateSelection();
     }
 
     update(updatedData) {
@@ -268,11 +263,9 @@ export default class Datepicker extends Element {
         normalizeHours(this.settings.modes.week.maxDate);
         normalizeHours(this.#today);
 
-        Object.keys(this.settings.modes).forEach((mode) => {
-            this.settings.modes[mode].customPeriods.forEach((m) => {
-                normalizeHours(m.from);
-                normalizeHours(m.to);
-            });
+        this.settings.customPeriods.forEach((m) => {
+            normalizeHours(m.from);
+            normalizeHours(m.to);
         });
 
         /*
@@ -297,7 +290,7 @@ export default class Datepicker extends Element {
         /*
             Set view of date selection
         */
-        this.#setView(convertedDates.from);
+        this.#setView(this.#today);
 
         /*
             Reset highlighted dates in the dropdown
@@ -322,7 +315,6 @@ export default class Datepicker extends Element {
         this.#setDateMarkFrom(null);
         this.#setDateMarkTo(null);
 
-        this.#periods.selected = null;
         this.#periods.day.marked.from = null;
         this.#periods.day.marked.to = null;
 
@@ -387,7 +379,6 @@ export default class Datepicker extends Element {
 
         this.dispatch('date-selected', {
             ...v,
-            mode: this.settings.activeMode,
         });
     };
 
@@ -445,27 +436,22 @@ export default class Datepicker extends Element {
     };
 
     #getMonthData = (activePeriod) => {
-        const values = [];
-        const { pages } = this.settings.modes.month;
+        let monthData = null;
 
-        for (let i = 0; i < pages; i += 1) {
-            let monthData = null;
+        const pageYearFloored = timeYear.floor(activePeriod.view);
 
-            const pageYearFloored = timeYear.floor(activePeriod.view);
-            const pageYear = timeYear.offset(pageYearFloored, i - pages + Math.round(pages / 2));
+        monthData = range(0, 12)
+            .map(m => ({
+                value: new Date(pageYearFloored.getFullYear(), m, 1),
+            }));
 
-            monthData = range(0, 12)
-                .map(m => ({
-                    value: new Date(pageYear.getFullYear(), m, 1),
-                }));
+        monthData.label = timeFormat('%Y')(pageYearFloored);
 
-            values[i] = monthData;
-            values[i].label = timeFormat('%Y')(pageYear);
-        }
+        this.#periods.month.controlData[1].text = timeFormat('%Y')(timeMonth.floor(activePeriod.view));
 
         return {
             control: this.#periods.month.controlData,
-            values,
+            values: monthData,
         };
     };
 
@@ -558,18 +544,14 @@ export default class Datepicker extends Element {
             };
         }
         case 'month': {
-            const sameYear = d.getFullYear() === from.getFullYear();
             return {
-                isStart: d.getMonth() === from.getMonth() && sameYear,
-                isMiddle: d.getMonth() > from.getMonth()
-                    && d.getMonth() < to.getMonth() && sameYear,
-                isEnd: d.getMonth() === to.getMonth() && sameYear,
-                isNow: d.getMonth() === this.#today.getMonth()
-                    && d.getFullYear() === this.#today.getFullYear(),
-                isOutOfRange: d.getTime() < this.settings.modes.month.minDate.getTime()
-                    || d.getTime() > this.settings.modes.month.maxDate.getTime(),
-                highlighted: this.settings.modes.month.monthsHighlighted.includes(d.getMonth()),
-                disabled: this.settings.modes.month.monthsDisabled.includes(d.getMonth()),
+                isStart: false,
+                isMiddle: false,
+                isEnd: false,
+                isNow: false,
+                isOutOfRange: false,
+                highlighted: false,
+                disabled: false,
             };
         }
         default:
@@ -586,8 +568,6 @@ export default class Datepicker extends Element {
 
         this.#elements.periodSelectionFromInput.node().focus();
 
-        this.#periods.selected = 'from';
-
         this.#setDateMarkTo(null);
     };
 
@@ -602,19 +582,19 @@ export default class Datepicker extends Element {
         this.#elements.periodSelectionTo.classed('rn3-datepicker__dropdown-period-selection-to--focus', true);
 
         this.#elements.periodSelectionToInput.node().focus();
-
-        this.#periods.selected = 'to';
     };
+
+    #isChoosingFrom = () => this.#elements.periodSelectionFrom
+        .classed('rn3-datepicker__dropdown-period-selection-from--focus')
+
+    #isChoosingTo = () => this.#elements.periodSelectionTo
+        .classed('rn3-datepicker__dropdown-period-selection-to--focus')
 
     #updateDateSelection = () => {
         /*
             Get acive period
         */
         const activePeriod = this.#getActivePeriod();
-        /*
-            Get acive mode
-        */
-        const activeMode = this.#getActiveMode();
 
         /*
             Set css classes
@@ -649,15 +629,11 @@ export default class Datepicker extends Element {
 
                 if (!d.value) return;
 
-                if (Object.keys(this.settings.modes).includes(d.value)) {
-                    const ap = this.#getActivePeriod();
-
-                    this.#periods.selected = this.settings.activeMode;
-                    this.#periods[d.value].marked.from = ap.marked.from;
-                    this.#periods[d.value].marked.to = ap.marked.to;
-
+                if (Object.keys(this.#periods).includes(d.value)) {
                     this.#setActiveMode(d.value);
-                    this.#setView(this.#periods[d.value].marked.from);
+
+                    this.#setView(this.#today);
+
                     this.#updateDateSelection();
 
                     return;
@@ -686,7 +662,7 @@ export default class Datepicker extends Element {
             .append('div')
             .attr('class', 'rn3-datepicker__dropdown-period-items')
             .on('mouseenter', (e, d) => {
-                if (this.settings.activeMode !== 'day' || this.#periods.selected === 'from') {
+                if (this.settings.activeMode !== 'day' || this.#isChoosingFrom()) {
                     this.#setDateMarkTo(null);
                     this.#updateDateSelection();
 
@@ -701,10 +677,19 @@ export default class Datepicker extends Element {
 
                 if (select(e.target).classed('rn3-datepicker__dropdown-period-items--out-of-range')) return;
 
-                if (
-                    this.#periods.selected === 'to'
-                    && isValidDate(this.#periods.day.marked.from)
-                ) {
+                if (this.settings.activeMode === 'month') {
+                    if (this.#isChoosingFrom()) {
+                        this.#focusFromPeriodInput();
+                    }
+
+                    this.#setActiveMode('day');
+                    this.#setView(d.value);
+
+                    this.#updateDateSelection();
+                    return;
+                }
+
+                if (this.#isChoosingTo()) {
                     this.#setDateMarkTo(d.value);
 
                     this.#updateDateSelection();
@@ -720,7 +705,8 @@ export default class Datepicker extends Element {
                         });
                     }
 
-                    if (d.value.getTime() > from.getTime()) {
+                    if (d.value.getTime() > from.getTime()
+                        || d.value.getTime() === from.getTime()) {
                         this.#applyDates({
                             from,
                             to: d.value,
@@ -729,7 +715,7 @@ export default class Datepicker extends Element {
                     }
                 }
 
-                if (this.#periods.selected === 'from') {
+                if (this.#isChoosingFrom()) {
                     this.#setDateMarkFrom(d.value);
 
                     this.#focusToPeriodInput();
@@ -795,7 +781,7 @@ export default class Datepicker extends Element {
         const customPeriods = this.#elements.customPeriodsWrapper
             .selectAll('button.rn3-datepicker__dropdown-custom-periods')
             .data(
-                activeMode.customPeriods,
+                this.settings.customPeriods,
                 d => d.label,
             );
 
@@ -821,7 +807,7 @@ export default class Datepicker extends Element {
         this.#elements.customPeriodsWrapper
             .classed(
                 'rn3-datepicker__dropdown-custom-periods-wrapper--empty',
-                activeMode.customPeriods.length === 0,
+                this.settings.customPeriods.length === 0,
             );
     };
 }
