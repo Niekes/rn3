@@ -256,16 +256,21 @@
         }
     }
 
-    &--day-mode,
-    &--week-mode {
+    &--day-mode {
         .rn3-datepicker__dropdown-period-items {
-                width: calc(100% / 7);
+            width: calc(100% / 7);
         }
     }
 
     &--month-mode {
         .rn3-datepicker__dropdown-period-items {
             width: calc(100% / 3);
+        }
+    }
+
+    &--year-mode {
+        .rn3-datepicker__dropdown-period-items {
+            width: calc(100% / 2);
         }
     }
 
@@ -333,6 +338,12 @@
 
             .rn3-datepicker__dropdown-period-control-buttons:hover {
                 @each $property, $value in map-deep-get($datepicker, 'dropdown', 'period-control', 'buttons', 'hover') {
+                    #{$property}: reveal-value($datepicker, $value);
+                }
+            }
+
+            .rn3-datepicker__dropdown-period-control-buttons:disabled {
+                @each $property, $value in map-deep-get($datepicker, 'dropdown', 'period-control', 'buttons', 'disabled') {
                     #{$property}: reveal-value($datepicker, $value);
                 }
             }

@@ -54,11 +54,18 @@ $rn3-datepicker-default: (
         ),
         period-control: (
             buttons: (
+                border: 0,
+                background-color: var(--rn3-datepicker-dropdown-period-control-background-color, var(--rn3-datepicker-background-color, #{$rn3-body-bg})),
                 padding: var(--rn3-datepicker-dropdown-period-control-padding, var(--rn3-datepicker-padding, #{$rn3-padding})),
                 transition: var(--rn3-datepicker-dropdown-period-control-buttons-transition, background-color #{$rn3-transition-duration} #{$rn3-transition-timing-function}, color #{$rn3-transition-duration} #{$rn3-transition-timing-function}),
                 hover: (
                     background-color: var(--rn3-datepicker-dropdown-period-control-buttons-hover-background-color, $rn3-blue),
                     color: var(--rn3-datepicker-dropdown-period-control-buttons-hover-color, $rn3-white),
+                ),
+                disabled: (
+                    background-color: var(--rn3-datepicker-dropdown-period-control-background-color, var(--rn3-datepicker-background-color, #{$rn3-body-bg})),
+                    color: var(--rn3-datepicker-dropdown-period-control-color, var(--rn3-datepicker-color, #{$rn3-black-50})),
+                    cursor: var(--rn3-datepicker-dropdown-period-control-cursor, not-allowed),
                 ),
             ),
         ),

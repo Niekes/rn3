@@ -20,8 +20,6 @@ import {
     getLastOfMonth,
     isValidDate,
     getDaysInMonth,
-    getISOWeeks,
-    getDateOfISOWeek,
 } from '../../utils/date';
 
 import defaultSettings from './default-settings';
@@ -135,25 +133,25 @@ export default class Datepicker extends Element {
                     },
                 ],
             },
-            week: {
+            year: {
                 marked: {
                     from: null,
                     to: null,
                 },
                 view: null,
-                format: timeFormat('%V'),
+                format: timeFormat('%Y'),
                 controlData: [
                     {
                         text: this.settings.dropdown.previousBtn,
-                        value: -12,
+                        value: -120,
                     },
                     {
                         text: null,
-                        value: 'month',
+                        value: null,
                     },
                     {
                         text: this.settings.dropdown.nextBtn,
-                        value: 12,
+                        value: 120,
                     },
                 ],
             },
@@ -257,10 +255,6 @@ export default class Datepicker extends Element {
         normalizeHours(this.data.values.to);
         normalizeHours(this.settings.modes.day.minDate);
         normalizeHours(this.settings.modes.day.maxDate);
-        normalizeHours(this.settings.modes.month.minDate);
-        normalizeHours(this.settings.modes.month.maxDate);
-        normalizeHours(this.settings.modes.week.minDate);
-        normalizeHours(this.settings.modes.week.maxDate);
         normalizeHours(this.#today);
 
         this.settings.customPeriods.forEach((m) => {
@@ -351,7 +345,7 @@ export default class Datepicker extends Element {
                 to: getLastOfMonth(dates.to),
             };
         }
-        case 'week': {
+        case 'year': {
             return {
                 from: timeMonday(dates.from),
                 to: timeDay.offset(timeMonday(dates.to), 6),
@@ -455,28 +449,26 @@ export default class Datepicker extends Element {
         };
     };
 
-    #getWeekData = (activePeriod) => {
-        const values = [];
-        const { pages } = this.settings.modes.week;
+    #getYearData = (activePeriod) => {
+        let yearData = null;
 
-        for (let i = 0; i < pages; i += 1) {
-            let weekData = null;
+        const pageYearFloored = timeYear.floor(activePeriod.view);
+        const rest = pageYearFloored.getFullYear() % 10;
+        const decadeStart = pageYearFloored.getFullYear() - rest;
+        const decadeEnd = decadeStart + 10;
 
-            const pageYearFloored = timeYear.floor(activePeriod.view);
-            const pageYear = timeYear.offset(pageYearFloored, i - pages + Math.round(pages / 2));
+        yearData = range(decadeStart, decadeEnd)
+            .map(y => ({
+                value: new Date(y, 0, 1),
+            }));
 
-            weekData = range(1, getISOWeeks(pageYear) + 1)
-                .map(w => ({
-                    value: timeMonday(getDateOfISOWeek(w, pageYear.getFullYear())),
-                }));
+        yearData.label = timeFormat('%Y')(pageYearFloored);
 
-            values[i] = weekData;
-            values[i].label = timeFormat('%Y')(pageYear);
-        }
+        this.#periods.year.controlData[1].text = `${decadeStart} - ${decadeEnd}`;
 
         return {
-            control: this.#periods.month.controlData,
-            values,
+            control: this.#periods.year.controlData,
+            values: yearData,
         };
     };
 
@@ -487,10 +479,10 @@ export default class Datepicker extends Element {
         case 'month': {
             return this.#getMonthData(ap);
         }
-        case 'week': {
-            return this.#getWeekData(ap);
+        case 'year': {
+            return this.#getYearData(ap);
         }
-        default: // day
+        default:
             return this.#getDayData(ap);
         }
     };
@@ -520,30 +512,18 @@ export default class Datepicker extends Element {
                 disabled: this.settings.modes.day.daysDisabled.includes(d.getDay()),
             };
         }
-        case 'week': {
-            const sameYearFrom = d.getFullYear() === from.getFullYear();
-            const sameYearTo = d.getFullYear() === timeMonday(to).getFullYear();
-            const sameWeekFrom = timeFormat('%V')(d) === timeFormat('%V')(from);
-            const sameWeekTo = timeFormat('%V')(d) === timeFormat('%V')(timeMonday(to));
-
+        case 'month': {
             return {
-                isStart: timeFormat('%V')(d) === timeFormat('%V')(from)
-                    && sameYearFrom
-                    && sameWeekFrom,
-                isMiddle: d.getTime() >= from.getTime()
-                    && d.getTime() <= to.getTime(),
-                isEnd: timeFormat('%V')(d) === timeFormat('%V')(to)
-                    && sameYearTo
-                    && sameWeekTo,
-                isNow: timeFormat('%V')(d) === timeFormat('%V')(this.#today)
-                    && d.getFullYear() === this.#today.getFullYear(),
-                isOutOfRange: d.getTime() < this.settings.modes.week.minDate.getTime()
-                    || d.getTime() > this.settings.modes.week.maxDate.getTime(),
-                highlighted: this.settings.modes.week.weeksHighlighted.includes(+timeFormat('%V')(d)),
-                disabled: this.settings.modes.week.weeksDisabled.includes(+timeFormat('%V')(d)),
+                isStart: false,
+                isMiddle: false,
+                isEnd: false,
+                isNow: false,
+                isOutOfRange: false,
+                highlighted: false,
+                disabled: false,
             };
         }
-        case 'month': {
+        case 'year': {
             return {
                 isStart: false,
                 isMiddle: false,
@@ -600,8 +580,8 @@ export default class Datepicker extends Element {
             Set css classes
         */
         select(`#${this.id}`).classed('rn3-datepicker--day-mode', this.settings.activeMode === 'day');
-        select(`#${this.id}`).classed('rn3-datepicker--week-mode', this.settings.activeMode === 'week');
         select(`#${this.id}`).classed('rn3-datepicker--month-mode', this.settings.activeMode === 'month');
+        select(`#${this.id}`).classed('rn3-datepicker--year-mode', this.settings.activeMode === 'year');
 
         /*
             Get the dates that will be marked and highlighted in the dropdown
@@ -617,12 +597,12 @@ export default class Datepicker extends Element {
             Create/update period control
         */
         const controlItems = this.#elements.periodControl
-            .selectAll('div.rn3-datepicker__dropdown-period-control-buttons')
+            .selectAll('button.rn3-datepicker__dropdown-period-control-buttons')
             .data(periodData.control);
 
         controlItems
             .enter()
-            .append('div')
+            .append('button')
             .attr('class', 'rn3-datepicker__dropdown-period-control-buttons')
             .on('click', (e, d) => {
                 e.stopPropagation();
@@ -630,9 +610,12 @@ export default class Datepicker extends Element {
                 if (!d.value) return;
 
                 if (Object.keys(this.#periods).includes(d.value)) {
+                    const { view } = this.#getActivePeriod();
+
+
                     this.#setActiveMode(d.value);
 
-                    this.#setView(this.#today);
+                    this.#setView(view);
 
                     this.#updateDateSelection();
 
@@ -646,6 +629,7 @@ export default class Datepicker extends Element {
                 this.#updateDateSelection();
             })
             .merge(controlItems)
+            .property('disabled', d => !d.value)
             .html(d => d.text);
 
         controlItems
@@ -686,6 +670,20 @@ export default class Datepicker extends Element {
                     this.#setView(d.value);
 
                     this.#updateDateSelection();
+
+                    return;
+                }
+
+                if (this.settings.activeMode === 'year') {
+                    if (this.#isChoosingFrom()) {
+                        this.#focusFromPeriodInput();
+                    }
+
+                    this.#setActiveMode('month');
+                    this.#setView(d.value);
+
+                    this.#updateDateSelection();
+
                     return;
                 }
 
