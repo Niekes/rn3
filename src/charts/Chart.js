@@ -84,7 +84,6 @@ export default class Chart extends Super {
 
             const d = this.#getTooltipDataByMousePosition(x, y);
 
-
             if (d && has(d, 'data')) {
                 // console.log(this.data.values);
             }
