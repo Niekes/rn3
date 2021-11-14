@@ -56,7 +56,7 @@
     "sass-recursive-map-merge": "^1.0.1",
     "style-loader": "^2.0.0",
     "tap-spec": "^5.0.0",
-    "tape": "^5.2.2",
+    "tape": "^5.3.1",
     "terser-webpack-plugin": "^5.1.2",
     "webpack": "^5.37.1",
     "webpack-cli": "^4.7.0",

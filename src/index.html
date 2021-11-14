@@ -12,10 +12,11 @@
             padding: 1rem 0 0 0;
             display: grid;
             grid-template-columns: 1fr 1fr 1fr 1fr;
-            grid-template-rows: min-content 180px 400px;
+            grid-template-rows: min-content min-content 180px 400px;
             gap: 1rem 1rem;
             grid-template-areas:
                 "datepicker searchbar searchbar searchbar"
+                "dropdown dropdown dropdown dropdown"
                 "heatmap heatmap heatmap heatmap"
                 "chart chart chart chart";
         }
@@ -26,6 +27,10 @@
 
         #searchbar {
             grid-area: searchbar;
+        }
+
+        #dropdown {
+            grid-area: dropdown;
         }
 
         #heatmap {
@@ -51,6 +56,7 @@
 
 <div id="datepicker"></div>
 <div id="searchbar"></div>
+<div id="dropdown"></div>
 <div id="heatmap"></div>
 <div id="chart"></div>
 
@@ -59,12 +65,12 @@ const datepicker = new rn3.Datepicker({
     el: '#datepicker',
 });
 
-// datepicker.update({
-//     values: {
-//         from: new Date(),
-//         to: new Date(),
-//     },
-// });
+datepicker.update({
+    values: {
+        from: new Date(),
+        to: new Date(),
+    },
+});
 
 datepicker.on('date-selected', (dates) => {
     console.log(dates);
@@ -110,6 +116,10 @@ searchbar.on('added', (d) => {
 
 searchbar.on('removed', (d) => {
     console.log(d, searchbar.data.values);
+});
+
+const dropdown = new rn3.Dropdown({
+    el: '#dropdown',
 });
 
 const heatmap = new rn3.Heatmap({
