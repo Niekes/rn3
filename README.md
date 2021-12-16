@@ -1,7 +1,7 @@
 **RN3** is a data visualization toolkit based on d3.js
 
 [![Codecov](https://img.shields.io/codecov/c/github/niekes/rn3)](https://app.codecov.io/gh/niekes/rn3)
-[![Travis (.org) branch](https://travis-ci.com/Niekes/rn3.svg?branch=master)](https://travis-ci.com/github/Niekes/rn3)
+[![Build][build-badge]][build]
 [![npm](https://img.shields.io/npm/dt/rn3)](https://www.npmjs.com/package/rn3)
 [![npm](https://img.shields.io/npm/dw/rn3)](https://www.npmjs.com/package/rn3)
 [![npm](https://img.shields.io/npm/l/rn3)](https://github.com/Niekes/rn3/blob/master/LICENSE)
@@ -58,3 +58,7 @@ const barchart = new rn3.Barchart({
 
 # License
 [BSD-3-Clause](https://github.com/Niekes/rn3/blob/master/LICENSE) © [Stefan Nieke](https://www.niekes.com)
+
+<!-- Definitions -->
+[build-badge]: https://github.com/niekes/rn3/workflows/master/badge.svg
+[build]: https://github.com/niekes/rn3/actions
