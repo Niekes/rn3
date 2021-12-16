@@ -1,7 +1,7 @@
 **RN3** is a data visualization toolkit based on d3.js
 
-[![Codecov](https://img.shields.io/codecov/c/github/niekes/rn3)](https://app.codecov.io/gh/niekes/rn3)
 [![Build][build-badge]][build]
+[![Codecov](https://img.shields.io/codecov/c/github/niekes/rn3)](https://app.codecov.io/gh/niekes/rn3)
 [![npm](https://img.shields.io/npm/dt/rn3)](https://www.npmjs.com/package/rn3)
 [![npm](https://img.shields.io/npm/dw/rn3)](https://www.npmjs.com/package/rn3)
 [![npm](https://img.shields.io/npm/l/rn3)](https://github.com/Niekes/rn3/blob/master/LICENSE)
