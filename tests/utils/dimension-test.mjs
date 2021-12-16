@@ -5,7 +5,7 @@ import {
     getWidth,
     computeInnerHeight,
     computeInnerWidth,
-} from '../../src/utils/dimension';
+} from '../../src/utils/dimension.js';
 
 test('Dimensions are calculated correctly', (t) => {
     select('body').html(null);

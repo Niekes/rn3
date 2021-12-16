@@ -27,4 +27,25 @@ export default class Dropdown extends Element {
             input,
         };
     }
+
+    update = (updatedData) => {
+        this.data = {
+            ...this.data,
+            ...updatedData,
+        };
+
+        const dropdownItems = this.#elements.dropdown
+            .selectAll('span.dropdown-group__list-item').data(this.data.values);
+
+        dropdownItems
+            .enter()
+            .append('span')
+            .attr('class', 'dropdown-group__list-item')
+            .merge(dropdownItems)
+            .html(this.settings.dropdown.item.render);
+
+        dropdownItems
+            .exit()
+            .remove();
+    }
 }

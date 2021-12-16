@@ -1,7 +1,7 @@
 import { test } from 'tape';
 import {
     has, isEmpty, mergeDeep, isObject,
-} from '../../src/utils/object';
+} from '../../src/utils/object.js';
 
 test('Check whether an object contains a key or not', (t) => {
     const obj = {

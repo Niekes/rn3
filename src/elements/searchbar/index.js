@@ -49,11 +49,14 @@ export default class Searchbar extends Element {
 
     #speechRecognition;
 
+    #recentSearches;
+
     constructor(data) {
         super(data, defaultSettings);
 
         this.#initialKeyCount = this.settings.form.freeText ? -1 : 0;
         this.#keyCounter = this.#initialKeyCount;
+        this.#recentSearches = [];
 
         this.#speechRecognition = checkSpeechRecognition({
             settings: this.settings.speechRecognition,
@@ -472,6 +475,7 @@ export default class Searchbar extends Element {
             }
 
             this.dispatch('added', datum);
+            this.#recentSearches.unshift(datum);
         }
 
         if (datumAlreadyExists) {
@@ -513,7 +517,22 @@ export default class Searchbar extends Element {
     };
 
     #focusInput = () => {
+        this.#openDropdown();
         this.#elements.input.node().focus();
+
+        const dropdownItems = this.#getDropdownItems()
+            .data(this.#recentSearches, this.getIdentity);
+
+        dropdownItems
+            .enter()
+            .append('div')
+            .attr('class', 'rn3-searchbar__dropdown-item')
+            .merge(dropdownItems)
+            .html(d => `<span class="rn3-searchbar__dropdown-item-content">${this.settings.dropdown.item.render(d)}</span>`);
+
+        dropdownItems
+            .exit()
+            .remove();
     };
 
     #getInputItems = () => getChildrenFromSelection(

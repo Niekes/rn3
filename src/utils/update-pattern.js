@@ -1,6 +1,6 @@
 import {
     setMultiAttributes,
-} from './selection';
+} from './selection.js';
 
 // eslint-disable-next-line import/prefer-default-export
 export function updateSelection(d, transition) {

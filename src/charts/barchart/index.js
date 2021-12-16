@@ -4,34 +4,34 @@ import {
     scaleLinear,
 } from 'd3';
 
-import Chart from '../Chart';
+import Chart from '../Chart.js';
 
-import defaultSettings from './default-settings';
+import defaultSettings from './default-settings.js';
 
 import {
     render,
     clearCanvas,
     renderOnVirtualCanvas,
-} from '../../utils/canvas';
+} from '../../utils/canvas.js';
 
 import {
     has,
-} from '../../utils/object';
+} from '../../utils/object.js';
 
 import {
     updateSelection,
-} from '../../utils/update-pattern';
+} from '../../utils/update-pattern.js';
 
 import {
     drawXAxis,
     drawYAxis,
     bindXAxisData,
     bindYAxisData,
-} from '../../utils/axis';
+} from '../../utils/axis.js';
 
 import {
     getUniqueColorByIndex,
-} from '../../utils/color';
+} from '../../utils/color.js';
 
 export default class Barchart extends Chart {
     constructor(data) {

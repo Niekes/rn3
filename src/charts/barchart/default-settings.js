@@ -2,7 +2,7 @@ import {
     extent,
 } from 'd3';
 
-import defaults from '../../utils/default-settings';
+import defaults from '../../utils/default-settings.js';
 
 export default {
     ...defaults,

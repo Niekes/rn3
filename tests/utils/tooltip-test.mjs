@@ -5,7 +5,7 @@ import {
     setTop,
     setTooltip,
     unsetTooltip,
-} from '../../src/utils/tooltip';
+} from '../../src/utils/tooltip.js';
 
 test('Top offset of tooltip', (t) => {
     select('body').html(null);

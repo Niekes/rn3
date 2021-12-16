@@ -4,11 +4,11 @@ import {
 
 import {
     updateSelection,
-} from './update-pattern';
+} from './update-pattern.js';
 
 import {
     transparentize,
-} from './color';
+} from './color.js';
 
 export function drawXAxis(ctx, parent, settings) {
     const {

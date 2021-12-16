@@ -1,41 +1,29 @@
 import {
+    select,
     selectAll,
 } from 'd3';
 
-import uuid from './uuid.js';
-
 import {
     mergeDeep,
-} from './object.js';
+} from '../utils/object';
 
-export default class Super {
+import uuid from '../utils/uuid';
+
+export default class Component extends HTMLElement {
     #events;
 
-    constructor(data, settings) {
-        /*
-            Set id
-        */
-        this.id = uuid(`rn3-${this.constructor.name}`).toLowerCase();
+    constructor() {
+        super();
 
         /*
-            Set data
+            Attach shadow DOM
         */
-        this.data = data;
+        this.attachShadow({ mode: 'open' });
 
         /*
             Setup pubsub events
         */
         this.#events = {};
-
-        /*
-            Merge settings
-        */
-        this.settings = Super.mergeSettings(settings, this.data.settings);
-
-        /*
-            Add event listener to document for outside click
-        */
-        document.addEventListener('click', Super.checkOutsideClick.bind(null, this.id, this.dispatch), true);
     }
 
     off = (eventName) => {
@@ -54,7 +42,7 @@ export default class Super {
         if (!event) {
             this.#events = {};
 
-            document.removeEventListener('click', Super.checkOutsideClick.bind(null, this.id, this.dispatch), true);
+            document.removeEventListener('click', Component.checkOutsideClick.bind(null, this.id, this.dispatch), true);
         }
 
         return this.#events;
@@ -74,7 +62,37 @@ export default class Super {
         return this.#events;
     }
 
+    connectedCallback() {
+        const id = this.getAttribute('id');
+
+        if (!id) {
+            throw new Error(`No id was set on "${this.constructor.name}"`);
+        }
+
+        /*
+            Set rn3 identifier
+        */
+        this.setAttribute(uuid('rn3'), '');
+
+        /*
+            Add event listener to document for outside click
+        */
+        document.addEventListener(
+            'click',
+            Component.checkOutsideClick.bind(null, this.getAttribute('id'), this.dispatch),
+            true,
+        );
+    }
+
+    disconnectedCallback() {
+        this.off();
+    }
+
     static mergeSettings = (oldSettings, newSetting) => mergeDeep(oldSettings, newSetting);
+
+    static getShadowRoot = () => this.shadowRoot;
+
+    static getShadowRootSelection = () => select(this.shadowRoot);
 
     static checkOutsideClick = (id, dispatch, event) => {
         const outside = selectAll(`#${id}, #${id} *`)

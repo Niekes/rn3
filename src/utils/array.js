@@ -1,6 +1,6 @@
 import {
     isObject,
-} from './object';
+} from './object.js';
 
 export function isArray(array) {
     return Array.isArray(array) && Object.prototype.toString.call(array) === '[object Array]';

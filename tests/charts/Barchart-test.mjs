@@ -1,6 +1,6 @@
 import { test } from 'tape';
 import { select } from 'd3';
-import Barchart from '../../src/charts/barchart';
+import Barchart from '../../src/charts/barchart/index.js';
 
 test('Barchart should be initialzed correctly', (t) => {
     select('body').html(null);

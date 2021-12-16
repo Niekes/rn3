@@ -1,7 +1,7 @@
 import {
     has,
     isEmpty,
-} from './object';
+} from './object.js';
 
 // eslint-disable-next-line import/prefer-default-export
 export function checkSpeechRecognition(sr) {

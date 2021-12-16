@@ -1,6 +1,6 @@
 import { test } from 'tape';
 import { select } from 'd3';
-import { setMultiAttributes, setMultiStyles } from '../../src/utils/selection';
+import { setMultiAttributes, setMultiStyles } from '../../src/utils/selection.js';
 
 test('Set multi attributes', (t) => {
     select('body').html(null);

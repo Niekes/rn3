@@ -4,7 +4,7 @@ import {
     createCanvas,
     updateCanvas,
     clearCanvas,
-} from '../../src/utils/canvas';
+} from '../../src/utils/canvas.js';
 
 test('Create and append canvas with correct attributes', (t) => {
     select('body').html(null);

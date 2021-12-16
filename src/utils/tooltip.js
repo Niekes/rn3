@@ -5,7 +5,7 @@ import {
 
 import {
     setMultiStyles,
-} from './selection';
+} from './selection.js';
 
 const TOLERANCE = 1.02;
 const SPACING = 20;

@@ -55,14 +55,28 @@
 <body>
 
 <div id="datepicker"></div>
+<rn3-dropdown id="dropdown"></rn3-dropdown>
 <div id="searchbar"></div>
-<div id="dropdown"></div>
 <div id="heatmap"></div>
 <div id="chart"></div>
 
 <script type="text/javascript">
 const datepicker = new rn3.Datepicker({
     el: '#datepicker',
+});
+
+const dropdown = document.querySelector('#dropdown');
+
+dropdown.update({
+    values: [
+        { id: 'A' },
+        { id: 'B' },
+        { id: 'C' },
+    ],
+});
+
+dropdown.on('test', (_) => {
+    console.log(_);
 });
 
 datepicker.update({
@@ -116,10 +130,6 @@ searchbar.on('added', (d) => {
 
 searchbar.on('removed', (d) => {
     console.log(d, searchbar.data.values);
-});
-
-const dropdown = new rn3.Dropdown({
-    el: '#dropdown',
 });
 
 const heatmap = new rn3.Heatmap({

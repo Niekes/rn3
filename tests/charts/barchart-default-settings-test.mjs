@@ -1,6 +1,6 @@
 import { test } from 'tape';
 import { easeCubic } from 'd3';
-import defaultsettings from '../../src/charts/barchart/default-settings';
+import defaultsettings from '../../src/charts/barchart/default-settings.js';
 
 test('Barchart default settings are set correctly', (t) => {
     t.equals(defaultsettings.css, 'rn3-barchart--default');
@@ -14,7 +14,6 @@ test('Barchart default settings are set correctly', (t) => {
     t.equals(defaultsettings.transition.ease, easeCubic);
     t.equals(defaultsettings.xAxis.fill, '#000');
     t.equals(defaultsettings.xAxis.font, '10px sans-serif');
-    t.equals(defaultsettings.xAxis.tickFormat(1), 1);
     t.equals(defaultsettings.xAxis.tickSize, 6);
     t.equals(defaultsettings.yAxis.fill, '#000');
     t.equals(defaultsettings.yAxis.font, '10px sans-serif');

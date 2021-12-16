@@ -1,6 +1,6 @@
 import { test } from 'tape';
 import { easeCubic } from 'd3';
-import defaultsettings from '../../src/utils/default-settings';
+import defaultsettings from '../../src/utils/default-settings.js';
 
 test('Default settings are set correctly', (t) => {
     t.equals(defaultsettings.identity, 'id');

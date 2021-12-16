@@ -4,34 +4,34 @@ import {
     rgb,
 } from 'd3';
 
-import Super from '../utils/super';
+import Super from '../utils/super.js';
 
 import {
     createCanvas,
     updateCanvas,
     createVirtualCanvas,
     updateVirtualCanvas,
-} from '../utils/canvas';
+} from '../utils/canvas.js';
 
 import {
     computeInnerHeight,
     computeInnerWidth,
     getHeight,
     getWidth,
-} from '../utils/dimension';
+} from '../utils/dimension.js';
 
 import {
     has,
-} from '../utils/object';
+} from '../utils/object.js';
 
 import {
     transparentize,
-} from '../utils/color';
+} from '../utils/color.js';
 
 import {
     setTooltip,
     unsetTooltip,
-} from '../utils/tooltip';
+} from '../utils/tooltip.js';
 
 export default class Chart extends Super {
     #virtualCanvas;

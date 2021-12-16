@@ -1,5 +1,5 @@
 import { test } from 'tape';
-import { transparentize, getContrast } from '../../src/utils/color';
+import { transparentize, getContrast } from '../../src/utils/color.js';
 
 test('Passed color is transparentized', (t) => {
     t.equals(transparentize('#000').opacity, 0);

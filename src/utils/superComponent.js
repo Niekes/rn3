@@ -2,16 +2,18 @@ import {
     selectAll,
 } from 'd3';
 
-import uuid from './uuid.js';
+import uuid from './uuid';
 
 import {
     mergeDeep,
-} from './object.js';
+} from './object';
 
-export default class Super {
+export default class SuperComponent extends HTMLElement {
     #events;
 
     constructor(data, settings) {
+        super();
+
         /*
             Set id
         */
@@ -30,12 +32,12 @@ export default class Super {
         /*
             Merge settings
         */
-        this.settings = Super.mergeSettings(settings, this.data.settings);
+        this.settings = SuperComponent.mergeSettings(settings, this.data.settings);
 
         /*
             Add event listener to document for outside click
         */
-        document.addEventListener('click', Super.checkOutsideClick.bind(null, this.id, this.dispatch), true);
+        document.addEventListener('click', SuperComponent.checkOutsideClick.bind(null, this.id, this.dispatch), true);
     }
 
     off = (eventName) => {
@@ -54,7 +56,11 @@ export default class Super {
         if (!event) {
             this.#events = {};
 
-            document.removeEventListener('click', Super.checkOutsideClick.bind(null, this.id, this.dispatch), true);
+            document.removeEventListener(
+                'click',
+                SuperComponent.checkOutsideClick.bind(null, this.id, this.dispatch),
+                true,
+            );
         }
 
         return this.#events;

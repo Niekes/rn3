@@ -1,5 +1,6 @@
 import {
     select,
+    create,
 } from 'd3';
 
 export function setMultiAttributes(selection, attrs) {
@@ -29,6 +30,15 @@ export function createContainer(el, id, cssClass) {
         .attr('class', cssClass)
         .style('height', '100%')
         .style('width', '100%');
+}
+
+export function createSelection(el, attrs, styles) {
+    let element = create(el);
+
+    element = setMultiAttributes(element, attrs);
+    element = setMultiStyles(element, styles);
+
+    return element;
 }
 
 export function appendSelection(parent, el, attrs, styles) {

@@ -1,7 +1,7 @@
 import { test } from 'tape';
 import {
     isEmpty, isArray, isArrayOfObjects,
-} from '../../src/utils/array';
+} from '../../src/utils/array.js';
 
 test('Check whether an array is an array', (t) => {
     t.equals(isArray(1), false);
