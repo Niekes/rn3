@@ -2,41 +2,41 @@ import {
     select,
 } from 'd3';
 
-import Element from '../Element';
+import Element from '../Element.js';
 
 import {
     setMultiStyles,
     appendSelection,
     getChildrenFromSelection,
-} from '../../utils/selection';
+} from '../../utils/selection.js';
 
 import {
     debounce,
-} from '../../utils/function';
+} from '../../utils/function.js';
 
 import {
     constructUrl,
-} from '../../utils/url';
+} from '../../utils/url.js';
 
 import {
     checkSpeechRecognition,
-} from '../../utils/speech-recognition';
+} from '../../utils/speech-recognition.js';
 
 import {
     has,
-} from '../../utils/object';
+} from '../../utils/object.js';
 
 import {
     isArrayOfObjects,
-} from '../../utils/array';
+} from '../../utils/array.js';
 
 import {
     isKey,
     isNavigatingVertically,
     isNavigatingHorizontally,
-} from '../../utils/keyboard';
+} from '../../utils/keyboard.js';
 
-import defaultSettings from './default-settings';
+import defaultSettings from './default-settings.js';
 
 export default class Searchbar extends Element {
     #initialKeyCount;
@@ -204,8 +204,8 @@ export default class Searchbar extends Element {
                 })
                 .style('pointer-events', 'none')
                 .classed('rn3-searchbar__dropdown-item--preselected', (d, i) => i === this.#keyCounter)
-                .classed('rn3-searchbar__dropdown-item--present', d => this.#getIndexOfDatum(d) !== -1)
-                .html(d => `<span class="rn3-searchbar__dropdown-item-content">${this.settings.dropdown.item.render(d)}</span>`);
+                .classed('rn3-searchbar__dropdown-item--present', (d) => this.#getIndexOfDatum(d) !== -1)
+                .html((d) => `<span class="rn3-searchbar__dropdown-item-content">${this.settings.dropdown.item.render(d)}</span>`);
 
             dropdownItems
                 .exit()
@@ -267,7 +267,7 @@ export default class Searchbar extends Element {
                         this.dispatch('removed', datum);
                     }
                 })
-                .html(d => `<span class="rn3-searchbar__form-item-content">${this.settings.form.item.render(d)}</span><span class="rn3-searchbar__form-item-remove"><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path stroke="currentColor" fill="currentColor" d="M13.41 12l4.3-4.29a1 1 0 10-1.42-1.42L12 10.59l-4.29-4.3a1 1 0 00-1.42 1.42l4.3 4.29-4.3 4.29a1 1 0 000 1.42 1 1 0 001.42 0l4.29-4.3 4.29 4.3a1 1 0 001.42 0 1 1 0 000-1.42z"/></svg></span>`)
+                .html((d) => `<span class="rn3-searchbar__form-item-content">${this.settings.form.item.render(d)}</span><span class="rn3-searchbar__form-item-remove"><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path stroke="currentColor" fill="currentColor" d="M13.41 12l4.3-4.29a1 1 0 10-1.42-1.42L12 10.59l-4.29-4.3a1 1 0 00-1.42 1.42l4.3 4.29-4.3 4.29a1 1 0 000 1.42 1 1 0 001.42 0l4.29-4.3 4.29 4.3a1 1 0 001.42 0 1 1 0 000-1.42z"/></svg></span>`)
                 .transition()
                 .duration(this.settings.transition.duration)
                 .ease(this.settings.transition.ease)
@@ -344,11 +344,11 @@ export default class Searchbar extends Element {
         }
     };
 
-    #speechRecognitionError = () => { console.log('ERROR'); };
+    #speechRecognitionError = () => { console.log('ERROR', this); };
 
-    #speechRecognitionNoMatch = () => { console.log('NO MATCH'); };
+    #speechRecognitionNoMatch = () => { console.log('NO MATCH', this); };
 
-    #speechRecognitionSpeechEnd = () => { console.log('SPEECH END'); };
+    #speechRecognitionSpeechEnd = () => { console.log('SPEECH END', this); };
 
     #handleKeyUp = (e) => {
         const keyCode = e.keyCode || e.which;
@@ -414,7 +414,6 @@ export default class Searchbar extends Element {
 
             const p = this.#getPreselectedDropdownItem().node();
             const h = Number.parseInt(this.#elements.dropdown.style('height'), 10);
-
 
             if (p && (p.offsetTop + h / 2 > h)) {
                 this.#elements.dropdown.node().scrollTop = p.offsetTop - h / 2;
@@ -528,7 +527,7 @@ export default class Searchbar extends Element {
             .append('div')
             .attr('class', 'rn3-searchbar__dropdown-item')
             .merge(dropdownItems)
-            .html(d => `<span class="rn3-searchbar__dropdown-item-content">${this.settings.dropdown.item.render(d)}</span>`);
+            .html((d) => `<span class="rn3-searchbar__dropdown-item-content">${this.settings.dropdown.item.render(d)}</span>`);
 
         dropdownItems
             .exit()
@@ -548,8 +547,8 @@ export default class Searchbar extends Element {
     #getPreselectedDropdownItem = () => this.#elements.dropdown
         .select('.rn3-searchbar__dropdown-item--preselected');
 
-    #getIndexOfDatum = datum => (this.data.values || [])
-        .findIndex(d => this.getIdentity(d) === this.getIdentity(datum));
+    #getIndexOfDatum = (datum) => (this.data.values || [])
+        .findIndex((d) => this.getIdentity(d) === this.getIdentity(datum));
 
     #hideBackspace = () => {
         this.#toggleBackspace(false);

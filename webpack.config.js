@@ -1,8 +1,16 @@
-const path = require('path');
-const TerserPlugin = require('terser-webpack-plugin');
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+import path, { dirname } from 'path';
+import { fileURLToPath } from 'url';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import TerserPlugin from 'terser-webpack-plugin';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import ESLintPlugin from 'eslint-webpack-plugin';
 
-module.exports = (env, options) => ({
+// eslint-disable-next-line no-underscore-dangle
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+export default (env, options) => ({
     entry: [
         './index.scss',
         './index.js',
@@ -18,12 +26,6 @@ module.exports = (env, options) => ({
     watch: options.mode === 'development',
     module: {
         rules: [
-            {
-                test: /\.js$/,
-                loader: 'eslint-loader',
-                enforce: 'pre',
-                exclude: /node_modules/,
-            },
             {
                 test: /.(js|jsx)$/,
                 exclude: /node_modules/,
@@ -62,6 +64,7 @@ module.exports = (env, options) => ({
             },
         ],
     },
+    plugins: [new ESLintPlugin()],
     optimization: {
         minimize: true,
         minimizer: [

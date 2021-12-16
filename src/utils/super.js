@@ -58,13 +58,13 @@ export default class Super {
         }
 
         return this.#events;
-    }
+    };
 
     on = (eventName, fn) => {
         this.#events[eventName] = fn;
 
         return this.#events;
-    }
+    };
 
     dispatch = (eventName, data) => {
         if (this.#events[eventName]) {
@@ -72,7 +72,7 @@ export default class Super {
         }
 
         return this.#events;
-    }
+    };
 
     static mergeSettings = (oldSettings, newSetting) => mergeDeep(oldSettings, newSetting);
 
@@ -88,5 +88,5 @@ export default class Super {
         return outside;
     };
 
-    getIdentity = d => d[this.settings.identity];
+    getIdentity = (d) => d[this.settings.identity];
 }

@@ -5,9 +5,9 @@ import {
 
 import {
     mergeDeep,
-} from '../utils/object';
+} from '../utils/object.js';
 
-import uuid from '../utils/uuid';
+import uuid from '../utils/uuid.js';
 
 export default class Component extends HTMLElement {
     #events;
@@ -46,13 +46,13 @@ export default class Component extends HTMLElement {
         }
 
         return this.#events;
-    }
+    };
 
     on = (eventName, fn) => {
         this.#events[eventName] = fn;
 
         return this.#events;
-    }
+    };
 
     dispatch = (eventName, data) => {
         if (this.#events[eventName]) {
@@ -60,7 +60,7 @@ export default class Component extends HTMLElement {
         }
 
         return this.#events;
-    }
+    };
 
     connectedCallback() {
         const id = this.getAttribute('id');
@@ -106,5 +106,5 @@ export default class Component extends HTMLElement {
         return outside;
     };
 
-    getIdentity = d => d[this.settings.identity];
+    getIdentity = (d) => d[this.settings.identity];
 }

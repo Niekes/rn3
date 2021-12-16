@@ -168,7 +168,7 @@ export default class Barchart extends Chart {
 
         drawXAxis(this.context, this.detachedContainer, this.settings);
         drawYAxis(this.context, this.detachedContainer, this.settings);
-    }
+    };
 
     #drawOnVirtualCanvas = () => {
         clearCanvas(this.virtualContext, this.settings.margin, this.height, this.width);
@@ -196,15 +196,15 @@ export default class Barchart extends Chart {
                 this.virtualContext.fill();
             }
         });
-    }
+    };
 
     #getYScale0 = () => this.yScale(0);
 
-    #getXPositionOfBars = d => this.xScale(this.getIdentity(d));
+    #getXPositionOfBars = (d) => this.xScale(this.getIdentity(d));
 
-    #getYPositionOfBars = d => Math.min(this.#getYScale0(), this.yScale(d.value));
+    #getYPositionOfBars = (d) => Math.min(this.#getYScale0(), this.yScale(d.value));
 
     #getWidthOfBars = () => this.xScale.bandwidth();
 
-    #getHeightOfBars = d => Math.abs(this.yScale(d.value) - this.#getYScale0());
+    #getHeightOfBars = (d) => Math.abs(this.yScale(d.value) - this.#getYScale0());
 }

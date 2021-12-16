@@ -1,4 +1,4 @@
-import defaults from '../../utils/default-settings';
+import defaults from '../../utils/default-settings.js';
 
 export default {
     ...defaults,
@@ -8,7 +8,7 @@ export default {
     },
     dropdown: {
         item: {
-            render: d => d.id,
+            render: (d) => d.id,
         },
     },
 };

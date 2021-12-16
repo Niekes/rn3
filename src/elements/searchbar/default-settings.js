@@ -1,4 +1,4 @@
-import defaults from '../../utils/default-settings';
+import defaults from '../../utils/default-settings.js';
 
 export default {
     ...defaults,
@@ -9,8 +9,8 @@ export default {
             method: 'GET',
         },
         params: {},
-        interceptor: options => options,
-        callback: response => response.json(),
+        interceptor: (options) => options,
+        callback: (response) => response.json(),
         error: 'An error occured. Please try again later',
         noResults: 'No results found',
         loading: 'loading...',
@@ -18,7 +18,7 @@ export default {
     form: {
         icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path fill="currentColor" d="M23.7 22.281l-6.887-6.89a9.318 9.318 0 002.171-5.98c0-5.184-4.254-9.4-9.488-9.4C4.266.012 0 4.232 0 9.415c0 5.184 4.254 9.399 9.488 9.399 2.223 0 4.27-.762 5.89-2.036l6.911 6.91a.975.975 0 001.41 0 .97.97 0 000-1.406zM2.015 9.414c0-4.074 3.355-7.383 7.472-7.383 4.117 0 7.473 3.309 7.473 7.383s-3.356 7.383-7.473 7.383-7.472-3.317-7.472-7.383zm0 0"/></svg>',
         item: {
-            render: d => d.display_name,
+            render: (d) => d.display_name,
         },
         freeText: true,
         placeholder: 'Type to search',
@@ -28,7 +28,7 @@ export default {
     },
     dropdown: {
         item: {
-            render: d => d.display_name,
+            render: (d) => d.display_name,
             clickToSelect: 'Click to select',
             clickToRemove: 'Click to remove',
             enterToSelect: 'Enter to select',

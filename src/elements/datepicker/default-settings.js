@@ -3,7 +3,7 @@ import {
     timeParse,
 } from 'd3';
 
-import defaults from '../../utils/default-settings';
+import defaults from '../../utils/default-settings.js';
 
 export default {
     ...defaults,
@@ -20,12 +20,12 @@ export default {
             from: {
                 icon: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M0 23.242h24V8.961H0Zm15.36-11.644.535-.551a.568.568 0 0 1 .816 0l4.687 4.805a.604.604 0 0 1 0 .84L16.711 21.5a.568.568 0 0 1-.816 0l-.536-.55a.606.606 0 0 1 .008-.848l2.906-2.84h-6.925a.585.585 0 0 1-.578-.594v-.79c0-.331.257-.593.578-.593h6.925l-2.906-2.84a.602.602 0 0 1-.008-.847Zm1.55-8.407V.758h-1.82V3.19H8.91V.758H7.09V3.19H0v3.95h24V3.19Zm0 0"/></svg>',
                 placeholder: 'mm/dd/yyyy',
-                timeParse: d => timeParse('%x')(d),
+                timeParse: (d) => timeParse('%x')(d),
             },
             to: {
                 icon: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M24 23.242H0V8.961h24ZM8.64 11.598l-.535-.551a.568.568 0 0 0-.816 0l-4.687 4.805a.604.604 0 0 0 0 .84L7.289 21.5c.227.23.594.23.816 0l.536-.55a.606.606 0 0 0-.008-.848l-2.906-2.84h6.925c.32 0 .578-.266.578-.594v-.79a.583.583 0 0 0-.578-.593H5.727l2.906-2.84a.602.602 0 0 0 .008-.847ZM7.09 3.19V.758h1.82V3.19h6.18V.758h1.82V3.19H24v3.95H0V3.19Zm0 0"/></svg>',
                 placeholder: 'mm/dd/yyyy',
-                timeParse: d => timeParse('%x')(d),
+                timeParse: (d) => timeParse('%x')(d),
             },
         },
     },
@@ -46,14 +46,14 @@ export default {
             label: 'Day',
             minDate: new Date(new Date().getFullYear(), 0, 1),
             maxDate: new Date(new Date().getFullYear(), 11, 31),
-            render: d => timeFormat('%x')(d),
+            render: (d) => timeFormat('%x')(d),
             weekStart: 0,
             daysHighlighted: [],
             daysDisabled: [],
         },
         month: {
             label: 'Month',
-            render: d => timeFormat('%x')(d),
+            render: (d) => timeFormat('%x')(d),
             monthsHighlighted: [],
             monthsDisabled: [],
         },

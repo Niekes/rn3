@@ -1,4 +1,4 @@
-import defaults from '../../utils/default-settings';
+import defaults from '../../utils/default-settings.js';
 
 export default {
     ...defaults,
@@ -12,7 +12,7 @@ export default {
     xAxis: {
         fill: '#000',
         font: '10px sans-serif',
-        tickFormat: d => d,
+        tickFormat: (d) => d,
         tickSize: 6,
         transform: () => 0,
         type: 'top',
@@ -20,17 +20,17 @@ export default {
     yAxis: {
         fill: '#000',
         font: '10px sans-serif',
-        tickFormat: d => d,
+        tickFormat: (d) => d,
         tickSize: 6,
         transform: () => 0,
         type: 'left',
     },
     xScale: {
-        domain: values => Array.from(new Set(values.map(d => d.x))),
+        domain: (values) => Array.from(new Set(values.map((d) => d.x))),
         padding: 0,
     },
     yScale: {
-        domain: values => Array.from(new Set(values.map(d => d.y))),
+        domain: (values) => Array.from(new Set(values.map((d) => d.y))),
         padding: 0,
     },
 };

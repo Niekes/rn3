@@ -1,13 +1,15 @@
-import Component from '../Component';
+import Component from '../Component.js';
 
-import defaultSettings from './default-settings';
+import defaultSettings from './default-settings.js';
 
 import {
     appendSelection,
     createSelection,
-} from '../../utils/selection';
+} from '../../utils/selection.js';
 
 export default class rn3Dropdown extends Component {
+    #elements;
+
     constructor(data) {
         super(data, defaultSettings);
 
@@ -41,6 +43,7 @@ export default class rn3Dropdown extends Component {
         input.on('keyup', this.#handleKeyUp);
     }
 
+    // eslint-disable-next-line react/no-unused-class-component-methods
     update = (updatedData) => {
         this.data = {
             ...this.data,
@@ -62,13 +65,11 @@ export default class rn3Dropdown extends Component {
         dropdownItems
             .exit()
             .remove();
-    }
+    };
 
     #handleKeyUp = (e) => {
         this.dispatch('test', e);
-    }
-
-    #elements;
+    };
 }
 
 // export class rn3Dropdown extends HTMLElement {
@@ -120,7 +121,6 @@ export default class rn3Dropdown extends Component {
 //         }
 //         // this.toggleDrawer();
 //     }
-
 
 // }
 

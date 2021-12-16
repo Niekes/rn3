@@ -122,7 +122,7 @@ export function bindXAxisData(join, xScale, settings, height, y0) {
     } = settings;
 
     const width = xScale.range()[1];
-    const x = d => xScale(join.identity(d)) + xScale.bandwidth() / 2;
+    const x = (d) => xScale(join.identity(d)) + xScale.bandwidth() / 2;
 
     /*
         Create, update and remove x-axis
@@ -190,8 +190,8 @@ export function bindYAxisData(join, yScale, settings, width) {
 
     const height = yScale.range()[0];
     const y = typeof yScale.bandwidth === 'function'
-        ? d => yScale(join.identity(d)) + yScale.bandwidth() / 2
-        : d => yScale(d);
+        ? (d) => yScale(join.identity(d)) + yScale.bandwidth() / 2
+        : (d) => yScale(d);
 
     /*
         Create, update and remove x-axis

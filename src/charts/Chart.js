@@ -126,7 +126,7 @@ export default class Chart extends Super {
         this.#clearTooltipData();
 
         unsetTooltip();
-    }
+    };
 
     #clearTooltipData = () => {
         if (this.tooltipData.size > 0) {
@@ -134,13 +134,13 @@ export default class Chart extends Super {
         }
 
         return this.tooltipData;
-    }
+    };
 
     setTooltipData(key, value) {
         this.tooltipData.set(key, value);
     }
 
-    static getFill = d => d.fill;
+    static getFill = (d) => d.fill;
 
-    static getFillTransparentized = d => transparentize(Chart.getFill(d));
+    static getFillTransparentized = (d) => transparentize(Chart.getFill(d));
 }

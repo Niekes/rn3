@@ -1,8 +1,8 @@
-import Super from '../utils/super';
+import Super from '../utils/super.js';
 
 import {
     createContainer,
-} from '../utils/selection';
+} from '../utils/selection.js';
 
 export default class Element extends Super {
     static container;

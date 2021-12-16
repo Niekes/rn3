@@ -3,34 +3,34 @@ import {
     scaleBand,
 } from 'd3';
 
-import Chart from '../Chart';
+import Chart from '../Chart.js';
 
-import defaultSettings from './default-settings';
+import defaultSettings from './default-settings.js';
 
 import {
     render,
     clearCanvas,
     renderOnVirtualCanvas,
-} from '../../utils/canvas';
+} from '../../utils/canvas.js';
 
 import {
     has,
-} from '../../utils/object';
+} from '../../utils/object.js';
 
 import {
     updateSelection,
-} from '../../utils/update-pattern';
+} from '../../utils/update-pattern.js';
 
 import {
     drawXAxis,
     drawYAxis,
     bindXAxisData,
     bindYAxisData,
-} from '../../utils/axis';
+} from '../../utils/axis.js';
 
 import {
     getUniqueColorByIndex,
-} from '../../utils/color';
+} from '../../utils/color.js';
 
 export default class Heatmap extends Chart {
     constructor(data) {
@@ -124,7 +124,7 @@ export default class Heatmap extends Chart {
             {
                 cssClass: 'x-ticks',
                 data: domainX,
-                identity: d => d,
+                identity: (d) => d,
                 parent: this.detachedContainer,
             },
             this.xScale,
@@ -140,7 +140,7 @@ export default class Heatmap extends Chart {
             {
                 cssClass: 'y-ticks',
                 data: domainY,
-                identity: d => d,
+                identity: (d) => d,
                 parent: this.detachedContainer,
             },
             this.yScale,
@@ -169,7 +169,7 @@ export default class Heatmap extends Chart {
 
         drawXAxis(this.context, this.detachedContainer, this.settings);
         drawYAxis(this.context, this.detachedContainer, this.settings);
-    }
+    };
 
     #drawOnVirtualCanvas = () => {
         clearCanvas(this.virtualContext, this.settings.margin, this.height, this.width);
@@ -198,11 +198,11 @@ export default class Heatmap extends Chart {
                 this.virtualContext.fill();
             }
         });
-    }
+    };
 
-    #getXPositionOfTiles = d => this.xScale(d.x);
+    #getXPositionOfTiles = (d) => this.xScale(d.x);
 
-    #getYPositionOfTiles = d => this.yScale(d.y);
+    #getYPositionOfTiles = (d) => this.yScale(d.y);
 
     #getWidthOfTiles = () => this.xScale.bandwidth();
 

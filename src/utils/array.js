@@ -11,5 +11,5 @@ export function isEmpty(array) {
 }
 
 export function isArrayOfObjects(array) {
-    return isArray(array) && !isEmpty(array) && array.every(arr => isObject(arr));
+    return isArray(array) && !isEmpty(array) && array.every((arr) => isObject(arr));
 }

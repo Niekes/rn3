@@ -64,13 +64,13 @@ export default class SuperComponent extends HTMLElement {
         }
 
         return this.#events;
-    }
+    };
 
     on = (eventName, fn) => {
         this.#events[eventName] = fn;
 
         return this.#events;
-    }
+    };
 
     dispatch = (eventName, data) => {
         if (this.#events[eventName]) {
@@ -78,7 +78,7 @@ export default class SuperComponent extends HTMLElement {
         }
 
         return this.#events;
-    }
+    };
 
     static mergeSettings = (oldSettings, newSetting) => mergeDeep(oldSettings, newSetting);
 
@@ -94,5 +94,5 @@ export default class SuperComponent extends HTMLElement {
         return outside;
     };
 
-    getIdentity = d => d[this.settings.identity];
+    getIdentity = (d) => d[this.settings.identity];
 }

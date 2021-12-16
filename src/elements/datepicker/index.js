@@ -8,11 +8,11 @@ import {
     timeMonth,
 } from 'd3';
 
-import Element from '../Element';
+import Element from '../Element.js';
 
 import {
     appendSelection,
-} from '../../utils/selection';
+} from '../../utils/selection.js';
 
 import {
     normalizeHours,
@@ -20,9 +20,9 @@ import {
     getLastOfMonth,
     isValidDate,
     getDaysInMonth,
-} from '../../utils/date';
+} from '../../utils/date.js';
 
-import defaultSettings from './default-settings';
+import defaultSettings from './default-settings.js';
 
 export default class Datepicker extends Element {
     #elements;
@@ -298,11 +298,11 @@ export default class Datepicker extends Element {
         this.#updateDateSelection();
     }
 
-    #renderDate = date => this.settings.modes[this.settings.activeMode].render(date)
+    #renderDate = (date) => this.settings.modes[this.settings.activeMode].render(date);
 
     #openDropdown = () => {
         this.#toggleDropdown(true);
-    }
+    };
 
     #closeDropdown = () => {
         this.#toggleDropdown(false);
@@ -318,12 +318,12 @@ export default class Datepicker extends Element {
         this.#elements.periodSelectionTo.classed('rn3-datepicker__dropdown-period-selection-to--focus', false);
         this.#elements.periodControl.classed('rn3-datepicker__dropdown-period-control--visible', false);
         this.#elements.periodsWrapper.classed('rn3-datepicker__dropdown-periods-wrapper--visible', false);
-    }
+    };
 
     #toggleDropdown = (open) => {
         this.#elements.dropdown
             .classed('rn3-datepicker__dropdown--open', open);
-    }
+    };
 
     #setView = (v) => {
         this.#periods[this.settings.activeMode].view = v;
@@ -352,7 +352,7 @@ export default class Datepicker extends Element {
             };
         }
         default: // day
-            return Object.assign({}, dates);
+            return { ...dates };
         }
     };
 
@@ -413,7 +413,7 @@ export default class Datepicker extends Element {
         }
 
         dayData = dayData
-            .map(d => ({
+            .map((d) => ({
                 value: typeof d === 'number'
                     ? new Date(pageMonthFloored.getFullYear(), pageMonthFloored.getMonth(), d)
                     : d,
@@ -435,7 +435,7 @@ export default class Datepicker extends Element {
         const pageYearFloored = timeYear.floor(activePeriod.view);
 
         monthData = range(0, 12)
-            .map(m => ({
+            .map((m) => ({
                 value: new Date(pageYearFloored.getFullYear(), m, 1),
             }));
 
@@ -458,7 +458,7 @@ export default class Datepicker extends Element {
         const decadeEnd = decadeStart + 10;
 
         yearData = range(decadeStart, decadeEnd)
-            .map(y => ({
+            .map((y) => ({
                 value: new Date(y, 0, 1),
             }));
 
@@ -565,10 +565,10 @@ export default class Datepicker extends Element {
     };
 
     #isChoosingFrom = () => this.#elements.periodSelectionFrom
-        .classed('rn3-datepicker__dropdown-period-selection-from--focus')
+        .classed('rn3-datepicker__dropdown-period-selection-from--focus');
 
     #isChoosingTo = () => this.#elements.periodSelectionTo
-        .classed('rn3-datepicker__dropdown-period-selection-to--focus')
+        .classed('rn3-datepicker__dropdown-period-selection-to--focus');
 
     #updateDateSelection = () => {
         /*
@@ -612,7 +612,6 @@ export default class Datepicker extends Element {
                 if (Object.keys(this.#periods).includes(d.value)) {
                     const { view } = this.#getActivePeriod();
 
-
                     this.#setActiveMode(d.value);
 
                     this.#setView(view);
@@ -629,8 +628,8 @@ export default class Datepicker extends Element {
                 this.#updateDateSelection();
             })
             .merge(controlItems)
-            .property('disabled', d => !d.value)
-            .html(d => d.text);
+            .property('disabled', (d) => !d.value)
+            .html((d) => d.text);
 
         controlItems
             .exit()
@@ -780,7 +779,7 @@ export default class Datepicker extends Element {
             .selectAll('button.rn3-datepicker__dropdown-custom-periods')
             .data(
                 this.settings.customPeriods,
-                d => d.label,
+                (d) => d.label,
             );
 
         customPeriods
@@ -796,7 +795,7 @@ export default class Datepicker extends Element {
                 });
             })
             .merge(customPeriods)
-            .text(d => d.label);
+            .text((d) => d.label);
 
         customPeriods
             .exit()
