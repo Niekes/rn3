@@ -20,14 +20,14 @@ export function getContrast(c, threshold = 50) {
     return '#000';
 }
 
-export function getUniqueColorByIndex(index) {
+export function getUniqueColorByInt(int) {
     return rgb(
         // eslint-disable-next-line no-bitwise
-        (index & 0b111111110000000000000000) >> 16,
+        (int & 0b111111110000000000000000) >> 16,
         // eslint-disable-next-line no-bitwise
-        (index & 0b000000001111111100000000) >> 8,
+        (int & 0b000000001111111100000000) >> 8,
         // eslint-disable-next-line no-bitwise
-        (index & 0b000000000000000011111111),
+        (int & 0b000000000000000011111111),
     )
         .toString();
 }

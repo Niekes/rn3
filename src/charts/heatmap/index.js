@@ -29,7 +29,7 @@ import {
 } from '../../utils/axis.js';
 
 import {
-    getUniqueColorByIndex,
+    getUniqueColorByInt,
 } from '../../utils/color.js';
 
 export default class Heatmap extends Chart {
@@ -188,7 +188,7 @@ export default class Heatmap extends Chart {
                 Draw to virtual context
             */
             if (has(datum, 'tooltip')) {
-                const uniqueColor = getUniqueColorByIndex(i);
+                const uniqueColor = getUniqueColorByInt(i);
 
                 this.setTooltipData(uniqueColor, datum.tooltip);
 
