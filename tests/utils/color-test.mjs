@@ -25,5 +25,7 @@ test('Get unique color by integer', (t) => {
     t.equals(getUniqueColorByInt(1), 'rgb(0, 0, 1)');
     t.equals(getUniqueColorByInt(2), 'rgb(0, 0, 2)');
     t.equals(getUniqueColorByInt(3), 'rgb(0, 0, 3)');
+    t.equals(getUniqueColorByInt(999999), 'rgb(15, 66, 63)');
+    t.equals(getUniqueColorByInt(256 ** 3 - 1), 'rgb(255, 255, 255)');
     t.end();
 });
