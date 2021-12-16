@@ -2,7 +2,7 @@ import { test } from 'tape';
 import { select, easeCubic } from 'd3';
 import { updateSelection } from '../../src/utils/update-pattern.js';
 
-test.only('updateSelection', (t) => {
+test('updateSelection', (t) => {
     select('body').html(null);
 
     const datum = {
