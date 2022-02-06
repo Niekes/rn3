@@ -1,3 +1,5 @@
+import { select } from 'd3';
+
 import Component from '../Component.js';
 
 import defaultSettings from './default-settings.js';
@@ -13,12 +15,15 @@ export default class rn3Dropdown extends Component {
     constructor(data) {
         super(data, defaultSettings);
 
+        this.settings = Component.mergeSettings(defaultSettings, {});
+
         /*
             Add necessary elements
         */
         const dropdown = createSelection('div', { part: 'dropdown' });
         const form = createSelection('div', { part: 'form' });
         const field = appendSelection(form, 'div', { part: 'form-field' });
+        const arrow = appendSelection(form, 'div', { part: 'form-arrow' });
         const input = appendSelection(field, 'input', { part: 'form-input' });
 
         /*
@@ -34,13 +39,41 @@ export default class rn3Dropdown extends Component {
             dropdown,
             form,
             field,
+            arrow,
             input,
         };
+
+        this.#elements.arrow.html(this.settings.form.arrow);
+        this.#elements.input.attr('placeholder', this.settings.form.placeholder);
 
         /*
             Add event listener
         */
-        input.on('keyup', this.#handleKeyUp);
+        this.#elements.input.on('keyup', this.#handleKeyUp);
+
+        this.#elements.form.on('click', () => {
+            const isOpen = select(this)
+                .classed('rn3-dropdown--open');
+
+            if (isOpen) {
+                this.#closeDropdown();
+            }
+
+            if (!isOpen) {
+                this.#openDropdown();
+            }
+        });
+
+        this.on('outside-click', () => {
+            const isOpen = select(this)
+                .classed('rn3-dropdown--open');
+
+            if (!isOpen) {
+                return;
+            }
+
+            this.#closeDropdown();
+        });
     }
 
     // eslint-disable-next-line react/no-unused-class-component-methods
@@ -69,6 +102,24 @@ export default class rn3Dropdown extends Component {
 
     #handleKeyUp = (e) => {
         this.dispatch('test', e);
+    };
+
+    #focusInput = () => {
+        this.#elements.input.node().focus();
+    };
+
+    #openDropdown = () => {
+        this.#focusInput();
+        this.#toggleDropdown(true);
+    };
+
+    #closeDropdown = () => {
+        this.#toggleDropdown(false);
+    };
+
+    #toggleDropdown = (open) => {
+        select(this)
+            .classed('rn3-dropdown--open', open);
     };
 }
 

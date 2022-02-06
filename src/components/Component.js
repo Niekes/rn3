@@ -7,8 +7,6 @@ import {
     mergeDeep,
 } from '../utils/object.js';
 
-import uuid from '../utils/uuid.js';
-
 export default class Component extends HTMLElement {
     #events;
 
@@ -70,9 +68,9 @@ export default class Component extends HTMLElement {
         }
 
         /*
-            Set rn3 identifier
+            Set rn3 class
         */
-        this.setAttribute(uuid('rn3'), '');
+        this.setAttribute('class', `${this.settings.css}`.toLowerCase());
 
         /*
             Add event listener to document for outside click

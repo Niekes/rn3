@@ -27,7 +27,7 @@ $rn3-searchbar-default: (
             line-height: var(--rn3-searchbar-form-input-color, #{$rn3-line-height}),
             margin-top: var(--rn3-searchbar-form-input-margin-top, #{$rn3-margin-y}),
             min-width: var(--rn3-searchbar-form-input-min-width, 6rem),
-            padding: var(--rn3-searchbar-form-input-padding, #{$rn3-padding-25}),
+            padding: var(--rn3-searchbar-form-input-padding, #{$rn3-padding-x-25} #{$rn3-padding-x-25} #{$rn3-padding-x-25} 0),
             placeholder: (
                 color: var(--rn3-searchbar-form-input-placeholder-color, #{$rn3-black-25}),
             ),

@@ -1,0 +1,55 @@
+$rn3-dropdown-default: (
+    background-color: var(--rn3-dropdown-background-color, #{$rn3-body-bg}),
+    border-radius: var(--rn3-dropdown-border-radius, #{$rn3-border-radius}),
+    border: var(--rn3-dropdown-border, #{$rn3-border}),
+    color: var(--rn3-dropdown-color, #{$rn3-black}),
+    font-family: var(--rn3-dropdown-font-family, #{$rn3-font-family}),
+    font-size: var(--rn3-dropdown-font-size, #{$rn3-font-size}),
+    font-weight: var(--rn3-dropdown-font-weight, #{$rn3-font-weight-light}),
+    padding: var(--rn3-dropdown-padding, #{$rn3-padding}),
+    form: (
+        background-color: var(--rn3-dropdown-form-background-color, var(--rn3-dropdown-background-color, #{$rn3-body-bg})),
+        border: var(--rn3-dropdown-form-border, var(--rn3-dropdown-border, #{$rn3-border})),
+        border-radius: var(--rn3-dropdown-form-border-radius, var(--rn3-dropdown-border-radius, #{$rn3-border-radius})),
+        color: var(--rn3-dropdown-form-color, var(--rn3-dropdown-color, #{$rn3-body-color})),
+        font-family: var(--rn3-dropdown-form-font-family, var(--rn3-dropdown-font-family, #{$rn3-font-family})),
+        font-size: var(--rn3-dropdown-form-font-size, var(--rn3-dropdown-font-size, #{$rn3-font-size})),
+        font-weight: var(--rn3-dropdown-form-font-weight, var(--rn3-dropdown-font-weight, #{$rn3-font-weight-light})),
+        padding: var(--rn3-dropdown-form-padding, #{$rn3-padding}),
+        input: (
+            color: var(--rn3-dropdown-form-input-color, var(--rn3-dropdown-color, #{$rn3-body-color})),
+            font-family: var(--rn3-dropdown-form-input-font-family, var(--rn3-dropdown-font-family, #{$rn3-font-family})),
+            font-size: var(--rn3-dropdown-form-input-font-size, var(--rn3-dropdown-font-size, #{$rn3-font-size})),
+            font-weight: var(--rn3-dropdown-form-input-font-weight, var(--rn3-dropdown-font-weight, #{$rn3-font-weight-light})),
+            line-height: var(--rn3-dropdown-form-input-color, #{$rn3-line-height}),
+            min-width: var(--rn3-dropdown-form-input-min-width, 6rem),
+            placeholder: (
+                color: var(--rn3-dropdown-form-input-placeholder-color, #{$rn3-black-25}),
+            ),
+        ),
+        arrow: (
+            background-color: var(--rn3-dropdown-form-arrow-background-color, var(--rn3-dropdown-background-color, #{$rn3-body-bg})),
+            color: var(--rn3-dropdown-form-arrow-color, var(--rn3-dropdown-color, #{$rn3-black-25})),
+            padding: var(--rn3-dropdown-form-arrow-padding-x, 0 var(--rn3-dropdown-padding-x, #{$rn3-padding-x})),
+            transition: var(--rn3-dropdown-form-arrow-transition, transform #{$rn3-transition-duration} #{$rn3-transition-timing-function}),
+        ),
+    ),
+    dropdown: (
+        background-color: var(--rn3-dropdown-dropdown-background-color, var(--rn3-dropdown-background-color, #{$rn3-body-bg})),
+        border: var(--rn3-dropdown-dropdown-border, var(--rn3-dropdown-border, #{$rn3-border})),
+        border-radius: var(--rn3-dropdown-dropdown-border-radius, var(--rn3-dropdown-border-radius, #{$rn3-border-radius})),
+        box-shadow: var(--rn3-dropdown-dropdown-box-shadow, #{$rn3-box-shadow}),
+        color: var(--rn3-dropdown-dropdown-color, var(--rn3-dropdown-color, #{$rn3-body-color})),
+        font-family: var(--rn3-dropdown-dropdown-font-family, var(--rn3-dropdown-font-family, #{$rn3-font-family})),
+        font-size: var(--rn3-dropdown-dropdown-font-size, var(--rn3-dropdown-font-size, #{$rn3-font-size})),
+        font-weight: var(--rn3-dropdown-dropdown-font-weight, var(--rn3-dropdown-font-weight, #{$rn3-font-weight-light})),
+        max-height: var(--rn3-dropdown-dropdown-max-height, 30rem),
+        z-index: var(--rn3-dropdown-dropdown-z-index, #{$rn3-z-index-dropdown}),
+    )
+);
+
+$rn3-dropdown-variants: (
+    default: $rn3-dropdown-default,
+) !default;
+
+$rn3-dropdown-variants: deep-merge($rn3-dropdown-default, $rn3-dropdown-variants);

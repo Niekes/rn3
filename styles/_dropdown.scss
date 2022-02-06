@@ -3,20 +3,99 @@ rn3-dropdown {
     padding: 0;
     position: relative;
 
-    &::part(dropdown) {
-        background-color: pink;
-        height: 100px;
-        left: 0;
-        position: absolute;
-        top: 100%;
-        width: 100%;
+    &::part(form) {
+        display: flex;
+        box-sizing: border-box;
+    }
+
+    &::part(form-field) {
+        flex: 1;
     }
 
     &::part(form-input) {
-        background-color: pink;
+        border: 0;
+        padding: 0;
+        width: 100%;
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    &::part(form-arrow) {
+        transform: rotate(0deg);
+    }
+
+    &::part(dropdown) {
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        left: 0;
+        min-width: 100%;
+        opacity: 0;
+        overflow: hidden;
+        pointer-events: none;
+        position: absolute;
+        top: 100%;
+        transform-origin: top left;
+        transform: scaleY(0.75);
+        transition:
+            opacity $rn3-transition-duration $rn3-transition-timing-function,
+            transform $rn3-transition-duration $rn3-transition-timing-function;
+        width: auto;
+
+        & ~ div {
+            color: pink !important;
+        }
+    }
+
+    &.rn3-dropdown--open {
+        &::part(dropdown) {
+            opacity: 1;
+            pointer-events: all;
+            transform: scaleY(1);
+        }
+
+        &::part(form-arrow) {
+            transform: rotate(180deg);
+        }
     }
 
     &::part(list-item) {
         color: grey;
+    }
+
+    @each $name, $dropdown in $rn3-dropdown-variants {
+        &.rn3-dropdown--#{$name} {
+            &::part(form) {
+                @each $property, $value in map-get($dropdown, 'form') {
+                    #{$property}: reveal-value($dropdown, $value);
+                }
+            }
+
+            &::part(form-input) {
+                @each $property, $value in map-get($dropdown, 'form', 'input') {
+                    #{$property}: reveal-value($dropdown, $value);
+                }
+            }
+
+            &::part(form-input)::placeholder {
+                @each $property, $value in map-get($dropdown, 'form', 'input', 'placeholder') {
+                    #{$property}: reveal-value($dropdown, $value);
+                }
+            }
+
+            &::part(form-arrow) {
+                @each $property, $value in map-get($dropdown, 'form', 'arrow') {
+                    #{$property}: reveal-value($dropdown, $value);
+                }
+            }
+
+            &::part(dropdown) {
+                @each $property, $value in map-get($dropdown, 'dropdown') {
+                    #{$property}: reveal-value($dropdown, $value);
+                }
+            }
+        }
     }
 }
