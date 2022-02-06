@@ -105,7 +105,11 @@ export default class rn3Dropdown extends Component {
     };
 
     #focusInput = () => {
-        this.#elements.input.node().focus();
+        const input = this.#elements.input.node();
+
+        input.focus();
+
+        console.log(this.#elements.input.node(), input.value);
     };
 
     #openDropdown = () => {
