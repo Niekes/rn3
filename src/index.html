@@ -38,8 +38,6 @@
 <div id="datepicker"></div>
 <rn3-dropdown id="dropdown"></rn3-dropdown>
 <div id="searchbar"></div>
-<div id="heatmap"></div>
-<div id="chart"></div>
 
 <script type="text/javascript">
 const datepicker = new rn3.Datepicker({
@@ -50,14 +48,15 @@ const dropdown = document.querySelector('#dropdown');
 
 dropdown.update({
     values: [
-        { id: 'A' },
-        { id: 'B' },
-        { id: 'C' },
+        { id: 'Brazil' },
+        { id: 'Germany' },
+        { id: 'Spain' },
+        { id: 'USA' },
     ],
 });
 
-dropdown.on('test', (_) => {
-    console.log(_);
+dropdown.on('added', (d) => {
+    console.log(d, dropdown.data);
 });
 
 datepicker.update({

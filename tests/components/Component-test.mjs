@@ -1,8 +1,11 @@
 import { test } from 'tape';
 import { select } from 'd3';
+import Dropdown from '../../src/components/dropdown/index.js';
 
-test.skip('Component should be initialzed correctly', (t) => {
+test.only('Component should be initialzed correctly', (t) => {
     select('body').html(null);
+
+    window.customElements.define('rn3-dropdown', Dropdown);
 
     const rn3Dropdown = document.createElement('rn3-dropdown');
 

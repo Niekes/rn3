@@ -43,26 +43,19 @@ rn3-dropdown {
             opacity $rn3-transition-duration $rn3-transition-timing-function,
             transform $rn3-transition-duration $rn3-transition-timing-function;
         width: auto;
-
-        & ~ div {
-            color: pink !important;
-        }
     }
 
-    &.rn3-dropdown--open {
-        &::part(dropdown) {
-            opacity: 1;
-            pointer-events: all;
-            transform: scaleY(1);
-        }
+    &::part(item) {
+        display: flex;
+        justify-content: space-between;
 
-        &::part(form-arrow) {
-            transform: rotate(180deg);
+        &:hover::after {
+            align-self: center;
+            content: attr(data-click-to-select);
+            display: flex;
+            font-size: 0.75rem;
+            text-decoration: underline;
         }
-    }
-
-    &::part(list-item) {
-        color: grey;
     }
 
     @each $name, $dropdown in $rn3-dropdown-variants {
@@ -94,6 +87,50 @@ rn3-dropdown {
             &::part(dropdown) {
                 @each $property, $value in map-get($dropdown, 'dropdown') {
                     #{$property}: reveal-value($dropdown, $value);
+                }
+            }
+
+            &::part(item) {
+                @each $property, $value in map-get($dropdown, 'dropdown', 'item') {
+                    #{$property}: reveal-value($dropdown, $value);
+                }
+            }
+
+            &::part(item--selected) {
+                @each $property, $value in map-get($dropdown, 'dropdown', 'item', 'selected') {
+                    #{$property}: reveal-value($dropdown, $value);
+                }
+            }
+
+            &::part(item):hover {
+                @each $property, $value in map-get($dropdown, 'dropdown', 'item', 'hover') {
+                    #{$property}: reveal-value($dropdown, $value);
+                }
+            }
+        }
+
+        &.rn3-dropdown--open {
+            &::part(dropdown) {
+                opacity: 1;
+                pointer-events: all;
+                transform: scaleY(1);
+            }
+
+            &::part(form-arrow) {
+                transform: rotate(180deg);
+            }
+
+            &.rn3-dropdown--#{$name} {
+                &::part(dropdown) {
+                    $br: get-value($dropdown, 'dropdown', 'border-radius');
+
+                    border-radius: 0 0 $br $br;
+                }
+
+                &::part(form) {
+                    $br: get-value($dropdown, 'form', 'border-radius');
+
+                    border-radius: $br $br 0 0;
                 }
             }
         }

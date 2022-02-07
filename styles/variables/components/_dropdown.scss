@@ -30,6 +30,7 @@ $rn3-dropdown-default: (
         arrow: (
             background-color: var(--rn3-dropdown-form-arrow-background-color, var(--rn3-dropdown-background-color, #{$rn3-body-bg})),
             color: var(--rn3-dropdown-form-arrow-color, var(--rn3-dropdown-color, #{$rn3-black-25})),
+            cursor: var(--rn3-dropdown-form-arrow-cursor, pointer),
             padding: var(--rn3-dropdown-form-arrow-padding-x, 0 var(--rn3-dropdown-padding-x, #{$rn3-padding-x})),
             transition: var(--rn3-dropdown-form-arrow-transition, transform #{$rn3-transition-duration} #{$rn3-transition-timing-function}),
         ),
@@ -45,6 +46,19 @@ $rn3-dropdown-default: (
         font-weight: var(--rn3-dropdown-dropdown-font-weight, var(--rn3-dropdown-font-weight, #{$rn3-font-weight-light})),
         max-height: var(--rn3-dropdown-dropdown-max-height, 30rem),
         z-index: var(--rn3-dropdown-dropdown-z-index, #{$rn3-z-index-dropdown}),
+        item: (
+            border-left: var(--rn3-dropdown-dropdown-item-border-left, 2px solid transparent),
+            color: var(--rn3-dropdown-dropdown-list-item-color, #{$rn3-black}),
+            cursor: var(--rn3-dropdown-dropdown-list-item-cursor, pointer),
+            padding: var(--rn3-dropdown-dropdown-list-item-padding, #{$rn3-padding-y-50} #{$rn3-padding-x-50}),
+            selected: (
+                background-color: var(--rn3-dropdown-dropdown-list-item-selected-background-color, #{$rn3-black-10}),
+            ),
+            hover: (
+                background-color: var(--rn3-dropdown-dropdown-item-hover-background-color, #{$rn3-black-10}),
+                border-left: var(--rn3-dropdown-dropdown-item-hover-border-left, 2px solid #{$rn3-blue}),
+            ),
+        )
     )
 );
 

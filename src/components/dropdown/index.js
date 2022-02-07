@@ -65,6 +65,12 @@ export default class rn3Dropdown extends Component {
         });
 
         this.on('outside-click', () => {
+            const selectedItem = this.data.values.find((d) => d.selected === true);
+
+            if (selectedItem) {
+                this.#addInputItem(selectedItem);
+            }
+
             const isOpen = select(this)
                 .classed('rn3-dropdown--open');
 
@@ -85,15 +91,43 @@ export default class rn3Dropdown extends Component {
 
         this.settings = Component.mergeSettings(defaultSettings, this.data.settings);
 
+        const selectedItem = this.data.values.find((d) => d.selected === true);
+
+        if (selectedItem) {
+            this.#addInputItem(selectedItem);
+        }
+
+        this.#updateDropdownList();
+    };
+
+    #updateDropdownList = () => {
+        const {
+            dropdown,
+        } = this.settings;
+
         const dropdownItems = this.#elements.dropdown
-            .selectAll('span[part="list-item"]').data(this.data.values);
+            .selectAll('span.item').data(this.data.values);
 
         dropdownItems
             .enter()
             .append('span')
-            .attr('part', 'list-item')
+            .attr('class', 'item')
+            .attr('part', 'item')
+            .attr('data-click-to-select', dropdown.item.clickToSelect)
+            .attr('data-click-to-remove', dropdown.item.clickToRemove)
+            .attr('data-enter-to-select', dropdown.item.enterToSelect)
+            .attr('data-enter-to-remove', dropdown.item.enterToRemove)
             .merge(dropdownItems)
-            .html(this.settings.dropdown.item.render);
+            .on('click', (e, d) => {
+                this.#deselectAllItems();
+                this.#selectItem(d);
+                this.#addInputItem(d);
+                this.#updateDropdownList();
+                this.dispatch('added', d);
+                this.#closeDropdown();
+            })
+            .attr('part', (d) => (d.selected === true ? 'item item--selected' : 'item'))
+            .html(dropdown.item.render);
 
         dropdownItems
             .exit()
@@ -104,12 +138,38 @@ export default class rn3Dropdown extends Component {
         this.dispatch('test', e);
     };
 
+    #addInputItem = (d) => {
+        this.#elements.input.node().value = this.settings.form.item.render(d);
+    };
+
+    #selectItem = (datum) => this.data.values.map((d) => {
+        if (this.getIdentity(d) === this.getIdentity(datum)) {
+            const j = d;
+
+            j.selected = true;
+
+            return j;
+        }
+
+        return this.data;
+    });
+
+    #deselectAllItems = () => this.data.values.map((datum) => {
+        const d = datum;
+
+        d.selected = false;
+
+        return d;
+    });
+
     #focusInput = () => {
         const input = this.#elements.input.node();
 
         input.focus();
 
-        console.log(this.#elements.input.node(), input.value);
+        if (input.value.length) {
+            input.setSelectionRange(0, input.value.length);
+        }
     };
 
     #openDropdown = () => {
